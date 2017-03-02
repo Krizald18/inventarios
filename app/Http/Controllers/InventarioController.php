@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Localidad;
+use App\Inventario;
 
-class LocalidadController extends Controller
+class InventarioController extends Controller
 {
     public function __construct()
     {
@@ -13,7 +13,7 @@ class LocalidadController extends Controller
 
     public function index()
     {
-        return Localidad::with('municipio')->get();
+        return Inventario::all();
     }
 
     public function create()
@@ -28,7 +28,7 @@ class LocalidadController extends Controller
 
     public function show($id)
     {
-        return Localidad::with('municipio')->find($id);
+        return Inventario::find($id);
     }
 
     public function edit($id)

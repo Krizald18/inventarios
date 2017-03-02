@@ -21,7 +21,6 @@ Route::post('auth/password/email', 'Auth\PasswordResetController@sendResetLinkEm
 Route::get('auth/password/verify', 'Auth\PasswordResetController@verify');
 Route::post('auth/password/reset', 'Auth\PasswordResetController@reset');
 
-
 //protected API routes with JWT (must be logged in)
 Route::group(['prefix' => 'user'], function()
 {
@@ -36,5 +35,6 @@ Route::resource('marca', 'MarcaController', ['only' => ['index', 'store', 'show'
 Route::resource('modelo', 'ModeloController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('municipio', 'MunicipioController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('oficialia', 'OficialiaController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+Route::resource('inventario', 'InventarioController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 
 //unprotected API routes, no JWT (must not be logged in)
