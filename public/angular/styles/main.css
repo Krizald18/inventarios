@@ -115,6 +115,7 @@ body {
   }
   /* Remove the bottom border on the jumbotron for visual effect */
   .jumbotron {
+    background-color: #f7f7f7;
     border-bottom: 0;
   }
 }

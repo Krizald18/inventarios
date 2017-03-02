@@ -8,6 +8,15 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
     	Eloquent::unguard();
-        //$this->call('ResponsablesTableSeeder');
+        /*
+        $this->call('MunicipiosTableSeeder');
+//      $this->call('LocalidadesTableSeeder');	// precaución! este seeder tarda mas de 20 minutos en completar
+        $this->call('OficialiasTableSeeder');
+        $this->call('MarcasTableSeeder');
+        $this->call('ModelosTableSeeder');
+        $this->call('DescripcionesTableSeeder');
+        $this->call('CaracteristicasTableSeeder');
+        $this->call('TiposTableSeeder');
+        */
     }
 }

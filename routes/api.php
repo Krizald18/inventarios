@@ -28,4 +28,13 @@ Route::group(['prefix' => 'user'], function()
 	Route::get('', ['uses' => 'UserController@allUsers']);
 	Route::get('{id}', ['uses' => 'UserController@getUser']);
 });
+Route::resource('descripcion', 'DescripcionController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+Route::resource('caracteristica', 'CaracteristicaController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+Route::resource('tipo', 'TipoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+Route::resource('localidad', 'LocalidadController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+Route::resource('marca', 'MarcaController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+Route::resource('modelo', 'ModeloController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+Route::resource('municipio', 'MunicipioController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+Route::resource('oficialia', 'OficialiaController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+
 //unprotected API routes, no JWT (must not be logged in)
