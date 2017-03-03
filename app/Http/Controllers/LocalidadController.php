@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Localidad;
+use Response;
 
 class LocalidadController extends Controller
 {
@@ -13,7 +14,11 @@ class LocalidadController extends Controller
 
     public function index()
     {
-        return Localidad::with('municipio')->get();
+        $x = Localidad::with('municipio')
+            ->orderBy('municipio_id', 'asc')
+            ->orderBy('localidad', 'asc')
+            ->paginate(10);
+        return Response::json($x, 300);
     }
 
     public function create()

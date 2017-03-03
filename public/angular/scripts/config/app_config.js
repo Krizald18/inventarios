@@ -34,11 +34,11 @@ angular.module('app.config')
 				controller: 'RegisterCtrl',
 				middleware: 'resize'
 			})
-			/*.when('/matriz_estructura/metricas', {
-				templateUrl: 'angular/views/metricas.html',
-				controller: 'MetricasCtrl',
+			.when('/inventario', {
+				templateUrl: 'angular/views/inventario.html',
+				controller: 'InventarioCtrl',
 				middleware: 'AuthenticatedOnly'
-			})*/
+			})
 			.otherwise({
 				redirectTo: '/'
 			});

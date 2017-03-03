@@ -15,6 +15,7 @@ angular
     'satellizer',
     'app.config',
     'ui.bootstrap',
-    'ui.select'
+    'ui.select',
+    'md.data.table'
   ]);
   angular.module('app.config', []);

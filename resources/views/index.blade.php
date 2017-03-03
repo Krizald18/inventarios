@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/bootstrap.css" />
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/angular-material.css" />
+    <link rel="stylesheet" href="css/md-data-table.min.css" />
     <link rel="stylesheet" href="css/select.css" />
     <!-- endbower -->
     <!-- endbuild -->
@@ -96,8 +97,8 @@
   </div>
 <!-- /#sidebar-wrapper -->
   <div id="push"></div>
-    <div class="container" style="margin-top: 15px; margin-left: 10%;">
-      <div id="contdiv" ng-view=""></div>
+    <div class="container" style="margin-top: 15px; margin-left: 2%;">
+      <div id="contdiv" ng-view="" style="width: 900px"></div>
     </div>
   </div>
     <div id="footer">
@@ -119,13 +120,13 @@
     <script src="js/angular-resource.js"></script>
     <script src="js/angular-route.js"></script>
     <script src="js/angular-sanitize.js"></script>
-    <script src="js/angular-ui-router.js"></script>    
+    <script src="js/angular-ui-router.js"></script> 
+    <script src="js/md-data-table.min.js"></script>
     <script src="js/satellizer.js"></script>    
     <script src="js/select.js"></script>    
     <script src="js/ui-bootstrap-tpls-2.5.0.js"></script>    
 
     <!--<script src="bower_components/angular-touch/angular-touch.js"></script>--><!-- conflict with material-->
-
     <!-- required by restangular-->
     <script src="js/lodash.js"></script>
     <!-- required by restangular-->
@@ -139,6 +140,7 @@
     <script src="angular/scripts/config/app_config.js"></script>
     <script src="angular/scripts/controllers/sidebar.js"></script>
     <script src="angular/scripts/controllers/main.js"></script>
+    <script src="angular/scripts/controllers/inventario.js"></script>
     <script src="angular/scripts/controllers/login.js"></script>
     <script src="angular/scripts/controllers/register.js"></script>
     <script src="angular/scripts/controllers/about.js"></script>

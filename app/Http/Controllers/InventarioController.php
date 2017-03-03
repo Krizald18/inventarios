@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Inventario;
+use Response;
 
 class InventarioController extends Controller
 {
@@ -13,7 +14,11 @@ class InventarioController extends Controller
 
     public function index()
     {
-        return Inventario::all();
+        $x = Inventario::with('caracteristica')
+                            ->orderBy('numero_inventario', 'asc')
+                            ->orderBy('numero_serie', 'asc')
+                            ->paginate(10);
+        return Response::json($x, 300);
     }
 
     public function create()
