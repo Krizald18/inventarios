@@ -12,12 +12,36 @@ class InventarioController extends Controller
         $this->middleware(['cors', 'auth:api']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $x = Inventario::with('caracteristica')
-                            ->orderBy('numero_inventario', 'asc')
-                            ->orderBy('numero_serie', 'asc')
-                            ->paginate(10);
+        $desc = false;
+        $order = 'numero_inventario';
+        $limit = 5;
+        if($request->has('order'))
+        {
+            if($request->order{0} == "-")
+            {
+                $order = substr($request->order, 1, strlen($request->order)-1);
+                $desc = true;
+            }
+            if(strcmp($order,'numero_inventario') !== 0 && strcmp($order,'numero_serie') !== 0 && strcmp($order,'cantidad') !== 0 )
+                $order = $order.'_id';
+        }
+        if($request->has('limit'))
+            $limit = intval($request->limit);
+        if($desc)
+        {
+            $x = Inventario::with('descripcion','caracteristica','tipo','marca','modelo','oficialia','municipio','municipio_fisico', 'localidad_fisica')
+                        ->orderBy($order, 'desc')
+                        ->paginate($limit);
+        }
+        else
+        {
+            $x = Inventario::with('descripcion','caracteristica','tipo','marca','modelo','oficialia','municipio','municipio_fisico', 'localidad_fisica')
+                        ->orderBy($order, 'asc')
+                        ->paginate($limit);
+        }
+
         return Response::json($x, 300);
     }
 

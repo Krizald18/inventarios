@@ -100,4 +100,6 @@ angular.module('app.config')
 				this.next();
 			}
 		});
-	});
+	}).config(function($mdThemingProvider) {
+  	
+  	});

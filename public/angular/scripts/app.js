@@ -11,7 +11,7 @@ angular
     'ngRoute.middleware',
     'ngSanitize',
     'restangular',
-    'ui.router',
+//  'ui.router',
     'satellizer',
     'app.config',
     'ui.bootstrap',

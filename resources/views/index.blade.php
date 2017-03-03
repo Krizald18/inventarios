@@ -8,20 +8,25 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="css/fonts.css" />
-    <link rel="stylesheet" href="css/bootstrap.css" />
-    <link rel="stylesheet" href="css/sidebar.css">
-    <link rel="stylesheet" href="css/angular-material.css" />
+    <link rel="stylesheet" href="css/fonts.min.css" />
+    <link rel="stylesheet" href="css/font-awesome.min.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/sidebar.min.css">
+    <link rel="stylesheet" href="css/angular-material.min.css" />
     <link rel="stylesheet" href="css/md-data-table.min.css" />
-    <link rel="stylesheet" href="css/select.css" />
+    <link rel="stylesheet" href="css/select.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="angular/styles/main.css">
     <!-- endbuild -->
     <style type="text/css">
+      .label{
+        color: rgba(0,0,0,.54);
+      }
       #contdiv
       {
+        margin-left: -350px;
         font-family: 'Raleway', sans-serif;
         font-weight: 500;
       }
@@ -32,10 +37,6 @@
         margin: 0 auto -30px;
         min-height: 94%; 
         height: auto !important;
-      }
-      #sidebar-wrapper{
-        font-family: 'Raleway', sans-serif;
-        font-weight: 600;
       }
       #bottom, #push { height:30px;}
       #footer { margin-top: 30px; height:50px;}
@@ -53,7 +54,7 @@
     <!-- Add your site or application content here -->
     <div id="wrapper">
     <div class="header" ng-controller="SidebarCtrl">
-      <nav class="navbar navbar-inverse bg-inverse navbar-fixed-top" style="width: 100%;">
+      <nav class="navbar navbar-inverse navbar-fixed-top" style="width: 100%;">
         <div class="container" style="margin-left: 150px;">
           <div class="navbar-header">            
             <a class="navbar-brand" href="/#/"></a>
@@ -61,8 +62,6 @@
           <div class="collapse navbar-collapse" id="js-navbar-collapse">
             <ul class="nav navbar-nav">
               <li class="active"><a href="/#/">Home</a></li>
-              <li><a ng-href="/#/about">About</a></li>
-              <li><a ng-href="/#/" ng-click ="$event.preventDefault();">Contact</a></li>
             </ul>
             <ul id="ulauth" class="nav navbar-nav" style="position: fixed; right: 10%;" hidden>
               <li ng-if="!autenticado"><a ng-href="/#/register">Registrarse</a></li>
@@ -73,65 +72,89 @@
         </div>
       </nav>
     </div>
- <!-- Sidebar -->
-    <div ng-controller="SidebarCtrl">
-      <div id="sidebar-wrapper" ng-if="autenticado" hidden>
-        <ul class="sidebar-nav">
-          <li class="sidebar-brand">
-            <a href="">Inventarios</a>
-          </li>
+    <div class="area"></div>
+      <nav class="main-menu" ng-controller="SidebarCtrl">
+        <ul style="margin-top: 75px">
           <li>
-            <a href="/#/xx">xx</a> <!--MATRIZ A EVALUAR-->
+            <a href="#">
+              <i class="fa fa-home fa-2x"></i>
+              <span class="nav-text">
+                Inicio
+              </span>
+            </a>
           </li>
-          <li>
-            <a href="/#/xx">xx</a> <!--EDITAR INDICADORES DE MATRIZ ESTRUCTURA-->
+          <li ng-if="autenticado">
+           <a href="#/inventario">
+             <i class="fa fa-book fa-2x"></i>
+              <span class="nav-text">
+                Inventario
+              </span>
+            </a>
           </li>
-          <li>
-            <a href="/#/xx">xx</a> <!--AGREAR METRICAS A INDICADORES DE MATRIZ ESTRUCTURA-->
+          <li ng-if="autenticado" class="has-subnav"> 
+            <a href="#/municipios">
+              <i class="fa fa-archive fa-2x"></i>
+              <span class="nav-text">
+                Municipios
+              </span>
+            </a>
           </li>
-          <li>
-            <a href="/#/xx">xx</a> <!--ADMIN ZONE-->
+          <li class="has-subnav">
+            <a href="#/localidades">
+             <i class="fa fa-archive fa-2x"></i>
+              <span class="nav-text">
+                Localidades
+              </span>
+            </a>
           </li>
         </ul>
-    </div>
-  </div>
-<!-- /#sidebar-wrapper -->
+        <ul class="logout" ng-if="autenticado">
+          <li>
+            <a href="#" ng-click ="$event.preventDefault(); logout();">
+              <i class="fa fa-power-off fa-2x"></i>
+              <span class="nav-text">
+                  Salir
+              </span>
+            </a>
+          </li>  
+        </ul>
+    </nav>  
   <div id="push"></div>
-    <div class="container" style="margin-top: 15px; margin-left: 2%;">
-      <div id="contdiv" ng-view="" style="width: 900px"></div>
+    <div class="container" style="margin-top: 15px;">
+      <div id="contdiv" ng-view="" style="width: 1200px"></div>
     </div>
   </div>
     <div id="footer">
-      <div class="footer" style="margin-left:250px">
-          <p>FOOTER</p>
+      <div class="footer">
+          FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
       </div>
     </div>
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
-    <script src="js/jquery.js"></script>
-    <script src="js/angular.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/angular-animate.js"></script>
-    <script src="js/angular-aria.js"></script>
-    <script src="js/angular-cookies.js"></script>
-    <script src="js/angular-material.js"></script>
-    <script src="js/angular-messages.js"></script>
-    <script src="js/angular-middleware.js"></script>
-    <script src="js/angular-resource.js"></script>
-    <script src="js/angular-route.js"></script>
-    <script src="js/angular-sanitize.js"></script>
-    <script src="js/angular-ui-router.js"></script> 
+    <script src="js/jquery.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/angular-animate.min.js"></script>
+    <script src="js/angular-aria.min.js"></script>
+    <script src="js/angular-cookies.min.js"></script>
+    <script src="js/angular-material.min.js"></script>
+    <script src="js/angular-messages.min.js"></script>
+    <script src="js/angular-middleware.min.js"></script>
+    <script src="js/angular-resource.min.js"></script>
+    <script src="js/angular-route.min.js"></script>
+    <script src="js/angular-sanitize.min.js"></script>
+    <!--<script src="js/angular-ui-router.min.js"></script>-->
     <script src="js/md-data-table.min.js"></script>
-    <script src="js/satellizer.js"></script>    
-    <script src="js/select.js"></script>    
-    <script src="js/ui-bootstrap-tpls-2.5.0.js"></script>    
+    <script src="js/satellizer.min.js"></script>    
+    <script src="js/select.min.js"></script>    
+    <script src="js/ui-bootstrap-2.5.0.min.js"></script>    
 
     <!--<script src="bower_components/angular-touch/angular-touch.js"></script>--><!-- conflict with material-->
     <!-- required by restangular-->
-    <script src="js/lodash.js"></script>
+    <script src="js/lodash.min.js"></script>
     <!-- required by restangular-->
 
-    <script src="js/restangular.js"></script>
+    <script src="js/restangular.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
