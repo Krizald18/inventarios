@@ -52,21 +52,22 @@ class AreaTableSeeder extends Seeder {
 		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [43,'DIF',$now]);
 		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [44,'DIRECCION',$now]);
 		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [45,'GOBIERNO',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [46,'IMSS',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [47,'INNOVATECNOLOGIA Y PROCESOS ',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [48,'MATRIMONIOS',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [49,'NACIMIENTOS',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [50,'OFICIAL MATRIMONIOS',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [51,'OFICIAL REGISTRO DE NACIMIENTOS',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [52,'REGISTRO DE NACIMIENTOS',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [53,'REGISTRO NACIMIENTOS',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [54,'SISTEMAS',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [55,'SISTEMAS(DAÑADA)',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [56,'SISTEMAS(SERVIDORES)',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [57,'SISTEMAS(SOPORTE TECNICO)',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [58,'SOPORTE',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [59,'UNIDAD ADMINISTRATIVA',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [60,'USE',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [61,'VISITADORA',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [46,'HOSPITAL DE LA MUJER',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [47,'IMSS',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [48,'INNOVATECNOLOGIA Y PROCESOS ',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [49,'MATRIMONIOS',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [50,'NACIMIENTOS',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [51,'OFICIAL MATRIMONIOS',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [52,'OFICIAL REGISTRO DE NACIMIENTOS',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [53,'REGISTRO DE NACIMIENTOS',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [54,'REGISTRO NACIMIENTOS',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [55,'SISTEMAS',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [56,'SISTEMAS(DAÑADA)',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [57,'SISTEMAS(SERVIDORES)',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [58,'SISTEMAS(SOPORTE TECNICO)',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [59,'SOPORTE',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [60,'UNIDAD ADMINISTRATIVA',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [61,'USE',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [62,'VISITADORA',$now]);
 	}
 }

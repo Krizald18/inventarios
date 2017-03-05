@@ -24,6 +24,5 @@ class DatabaseSeeder extends Seeder
 //        $this->call('ResponsableTableSeeder');     
         $this->call('InventariosTableSeeder');
         */
-        $this->call('InventariosTableSeeder');
     }
 }
