@@ -671,5 +671,10 @@ class InventariosTableSeeder extends Seeder {
 		DB::insert('insert into inventarios(numero_inventario,numero_serie,cantidad,descripcion_id,caracteristica_id,tipo_id,modelo_id,marca_id,oficialia_id,municipio_id,municipio_fisico_id,localidad_fisica_id, created_at) values(?,?,?,?,?,?,?,?,?,?,?,?,?)',['395083','FCH1444AGCJ',1,22,22,null,null,8,null,null,11,29133,$now]);
 		DB::insert('insert into inventarios(numero_inventario,numero_serie,cantidad,descripcion_id,caracteristica_id,tipo_id,modelo_id,marca_id,oficialia_id,municipio_id,municipio_fisico_id,localidad_fisica_id, created_at) values(?,?,?,?,?,?,?,?,?,?,?,?,?)',['395086','FCH1444AGCZ',1,22,22,null,null,8,null,null,10,25543,$now]);
 		DB::insert('insert into inventarios(numero_inventario,numero_serie,cantidad,descripcion_id,caracteristica_id,tipo_id,modelo_id,marca_id,oficialia_id,municipio_id,municipio_fisico_id,localidad_fisica_id, created_at) values(?,?,?,?,?,?,?,?,?,?,?,?,?)',['395087','FCH1444AH2C',1,22,22,null,null,8,null,null,7,20479,$now]);
+
+		DB::table('inventarios')
+            ->where('id', '>', 1)
+            ->where('id', '<', 665) // hay 664 articulos
+            ->update(['grupo_id' => 1]);
 	}
 }

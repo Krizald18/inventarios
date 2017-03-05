@@ -1,13 +1,10 @@
 <?php
 
 namespace App;
-
 use Illuminate\Database\Eloquent\Model;
 
 class Localidad extends Model
 {
-    protected $table = 'localidades';
-
     protected $fillable = [
     	'id', 'localidad', 'municipio_id'
     ]; 

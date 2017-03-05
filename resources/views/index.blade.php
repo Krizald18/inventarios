@@ -61,7 +61,7 @@
           </div>
           <div class="collapse navbar-collapse" id="js-navbar-collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="/#/">Home</a></li>
+              <li><a href="/#/">Inicio</a></li>
             </ul>
             <ul id="ulauth" class="nav navbar-nav" style="position: fixed; right: 10%;" hidden>
               <li ng-if="!autenticado"><a ng-href="/#/register">Registrarse</a></li>

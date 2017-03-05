@@ -14,6 +14,7 @@ class CreateInventariosTable extends Migration
             $table->string('numero_inventario')->nullable()->unique();
             $table->string('numero_serie')->nullable()->unique();
             $table->integer('cantidad');
+            $table->date('fecha_baja')->nullable();
 
             $table->integer('descripcion_id')->nullable();
             $table->integer('caracteristica_id')->nullable();
@@ -24,6 +25,14 @@ class CreateInventariosTable extends Migration
             $table->integer('municipio_id')->nullable();
             $table->integer('municipio_fisico_id')->nullable();
             $table->integer('localidad_fisica_id')->nullable();
+
+            $table->integer('grupo_id')->nullable();
+            $table->integer('area_id')->nullable();
+            $table->integer('responsable_id')->nullable();
+
+            $table->foreign('grupo_id')
+                  ->references('id')->on('grupos')
+                  ->onDelete('cascade');
 
             $table->foreign('descripcion_id')
                   ->references('id')->on('descripciones')
@@ -59,6 +68,14 @@ class CreateInventariosTable extends Migration
             
             $table->foreign('localidad_fisica_id')
                   ->references('id')->on('localidades')
+                  ->onDelete('cascade');
+
+            $table->foreign('area_id')
+                  ->references('id')->on('areas')
+                  ->onDelete('cascade');
+
+            $table->foreign('responsable_id')
+                  ->references('id')->on('responsables')
                   ->onDelete('cascade');
 
             $table->timestamps();

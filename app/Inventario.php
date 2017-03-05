@@ -10,11 +10,11 @@ class Inventario extends Model
     ];
 
     protected $fillable = [
-    	'id','numero_inventario','numero_serie','cantidad','descripcion_id','caracteristica_id','tipo_id','modelo_id','marca_id','oficialia_id','municipio_id','municipio_fisico_id','localidad_fisica_id'
+    	'id','numero_inventario','numero_serie','cantidad','fecha_baja','descripcion_id','caracteristica_id','tipo_id','modelo_id','marca_id','oficialia_id','municipio_id','municipio_fisico_id','localidad_fisica_id', 'area_id', 'responsable_id', 'grupo_id'
     ]; 
 
     protected $hidden = [
-		'descripcion_id','caracteristica_id','tipo_id','modelo_id','marca_id','oficialia_id','municipio_id','municipio_fisico_id','localidad_fisica_id'
+		'descripcion_id','caracteristica_id','tipo_id','modelo_id','marca_id','oficialia_id','municipio_id','municipio_fisico_id','localidad_fisica_id', 'area_id', 'responsable_id', 'grupo_id'
     ];
 
     public function getNumeroInventarioAttribute($value)
@@ -64,5 +64,17 @@ class Inventario extends Model
     public function localidad_fisica()
     {        
         return $this->hasOne('App\Localidad', 'id', 'localidad_fisica_id');
+    }
+    public function responsable()
+    {        
+        return $this->hasOne('App\Responsable', 'id', 'responsable_id');
+    }
+    public function grupo()
+    {        
+        return $this->belongsTo('App\Grupo', 'grupo_id', 'id');
+    }
+    public function area()
+    {        
+        return $this->belongsTo('App\Area', 'area_id', 'id');
     }
 }
