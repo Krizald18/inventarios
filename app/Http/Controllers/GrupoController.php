@@ -13,7 +13,7 @@ class GrupoController extends Controller
 
     public function index()
     {
-        return Grupo::all();
+        return Grupo::orderBy('grupo', 'asc')->get();
     }
 
     public function create()

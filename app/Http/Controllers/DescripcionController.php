@@ -13,7 +13,7 @@ class DescripcionController extends Controller
 
     public function index()
     {
-        return Descripcion::all();
+        return Descripcion::orderBy('descripcion', 'asc')->get();
     }
 
     public function create()

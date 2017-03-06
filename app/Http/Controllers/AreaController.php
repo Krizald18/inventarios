@@ -13,7 +13,7 @@ class AreaController extends Controller
 
     public function index()
     {
-        return Area::all();
+        return Area::orderBy('area', 'asc')->get();
     }
 
     public function create()

@@ -12,7 +12,7 @@ class CaracteristicaController extends Controller
     }
     public function index()
     {
-        return Caracteristica::all();
+        return Caracteristica::orderBy('caracteristica', 'asc')->get();
     }
 
     public function create()

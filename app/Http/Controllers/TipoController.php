@@ -13,7 +13,7 @@ class TipoController extends Controller
 
     public function index()
     {
-        return Tipo::all();
+        return Tipo::orderBy('tipo', 'asc')->get();
     }
 
     public function create()

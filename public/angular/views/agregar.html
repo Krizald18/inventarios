@@ -1,0 +1,229 @@
+<div layout="column" ng-cloak="" class="inputdxErrors">
+  <md-content layout-padding="">
+    <form name="projectForm">
+      <div layout="row">
+        <md-input-container flex="50" class="md-block">
+          <label>Número de Inventario</label>
+          <input md-maxlength="50" md-no-asterisk="" name="numero_inventario" ng-model="project.numero_inventario" ng-change = "serie_o_numeronventario()">
+          <div ng-messages="projectForm.numero_inventario.$error">
+            <div ng-message="md-maxlength">El campo Número de Inventario debe ser máximo 50 caracteres</div>
+          </div>
+        </md-input-container>
+        <md-input-container flex="50" class="md-block">
+          <label>Número de Serie</label>
+          <input md-maxlength="50" md-no-asterisk="" name="numero_serie" ng-model="project.numero_serie" ng-change = "serie_o_numeronventario()">
+          <div ng-messages="projectForm.numero_serie.$error">
+            <div ng-message="md-maxlength">El campo Número de Serie debe ser máximo 50 caracteres</div>
+          </div>
+        </md-input-container>
+      </div>
+
+      <div layout="row">
+        <md-input-container flex="33" ng-if = "project.tipo_id != 2">
+          <label>Cantidad</label>
+          <input type="number" required="" name="cantidad" ng-model="project.cantidad" ng-disabled = "project.numero_inventario.length > 0 || project.numero_serie.length > 0">
+          <div ng-messages="projectForm.cantidad.$error">
+            <div ng-message="required">El campo Cantidad es requerido</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container flex="33" ng-if="project.tipo_id != 0 && project.tipo_id != 2">
+          <label>Tipo</label>
+          <md-select ng-model="project.tipo_id">
+            <md-option ng-repeat="x in tipos track by x.id" value="{{x.id}}">{{x.tipo}}</md-option>
+            <md-option value="0">OTRO</md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container flex="33" ng-if="project.tipo_id == 0">
+          <label>Tipo</label>
+          <input md-maxlength="50" md-no-asterisk="" name="nuevo_tipo" ng-model="project.tipo_nuevo">
+          <div ng-messages="projectForm.nuevo_tipo.$error">
+            <div ng-message="md-maxlength">El campo Tipo debe ser máximo 50 caracteres</div>
+          </div>
+        </md-input-container>
+
+
+        <md-input-container flex="22" ng-if = "project.tipo_id == 2">
+          <label>Cantidad</label>
+          <input type="number" required="" name="cantidad" ng-model="project.cantidad" ng-disabled = "project.numero_inventario.length > 0 || project.numero_serie.length > 0">
+          <div ng-messages="projectForm.cantidad.$error">
+            <div ng-message="required">El campo Cantidad es requerido</div>
+          </div>
+        </md-input-container>
+        <md-input-container flex="22" ng-if="project.tipo_id == 2" style="width: 22%;">
+          <label>Tipo</label>
+          <md-select ng-model="project.tipo_id">
+            <md-option ng-repeat="x in tipos track by x.id" value="{{x.id}}">{{x.tipo}}</md-option>
+            <md-option value="0">OTRO</md-option>
+          </md-select>
+        </md-input-container>
+        
+        <md-input-container flex="22" ng-if="project.tipo_id == 2">
+          <label>Fecha de Baja</label>
+          <md-datepicker ng-model="project.fecha_baja" md-placeholder="Fecha de Baja" md-open-on-focus="" ng-required="project.tipo_id == 2"></md-datepicker>
+          <div ng-messages="projectForm.nuevo_tipo.$error">
+            <div ng-message="md-maxlength">El campo Fecha de Baja es requerido</div>
+          </div>
+        </md-input-container>
+
+
+        <md-input-container flex="33">
+          <label>Grupo</label>
+          <md-select ng-model="project.grupo_id">
+            <md-option ng-repeat="x in grupos track by x.id" value="{{x.id}}">{{x.grupo}}</md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+      <div layout="row">
+        <md-input-container flex="50" ng-if="project.descripcion_id != 0">
+          <label>Descripción</label>
+          <md-select name="descripcionx" ng-model="project.descripcion_id" required>
+            <md-option ng-repeat="x in descripciones track by x.id" value="{{x.id}}">{{x.descripcion}}</md-option>
+            <md-option value="0">OTRA</md-option>
+          </md-select>
+          <div ng-messages="projectForm.descripcionx.$error">
+            <div ng-message="required">El campo Descripción es requerido</div>
+          </div>
+        </md-input-container>
+        <md-input-container flex="50" class="md-block" ng-if="project.descripcion_id == 0">
+          <label>Descripción</label>
+          <input md-maxlength="100" md-no-asterisk="" name="descripcion_nueva" ng-model="project.descripcion_nueva" ng-required="project.descripcion_id == 0">
+          <div ng-messages="projectForm.descripcion_nueva.$error">
+            <div ng-message="md-maxlength">El campo Descripcion debe ser máximo 100 caracteres</div>
+          </div>
+          <div ng-show="projectForm.descripcion_nueva.$error.required">
+            <div style="color: rgb(221,44,0)">El campo Descripcion es requerido</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container flex="50" ng-if="project.caracteristica_id != 0">
+          <label>Caracteristicas</label>
+          <md-select ng-model="project.caracteristica_id">
+            <md-option ng-repeat="x in caracteristicas track by x.id" value="{{x.id}}">{{x.caracteristica}}</md-option>
+            <md-option value="0">OTRA</md-option>
+          </md-select>
+          <div ng-messages="projectForm.caracteristica.$error">
+            <div ng-message="required">El campo Caracteristicas es requerido</div>
+          </div>
+        </md-input-container>
+        <md-input-container flex="50" ng-if="project.caracteristica_id == 0">
+          <label>Caracteristicas</label>
+          <input md-maxlength="200" md-no-asterisk="" name="carcateristica_nueva" ng-model="project.carcateristica_nueva">
+          <div ng-messages="projectForm.carcateristica_nueva.$error">
+            <div ng-message="md-maxlength">El campo Caracteristicas debe ser máximo 200 caracteres</div>
+          </div>
+        </md-input-container>
+      </div>
+
+      <div layout="row">
+        <md-input-container flex="50" ng-if="project.marca_id != 0">
+          <label>Marca</label>
+          <md-select ng-model="project.marca_id">
+            <md-option ng-repeat="x in marcas track by x.id" value="{{x.id}}">{{x.marca}}</md-option>
+            <md-option value="0">OTRA</md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container flex="50" ng-if="project.marca_id == 0">
+          <label>Marca</label>
+          <input md-maxlength="100" md-no-asterisk="" name="marca" ng-model="project.marca">
+          <div ng-messages="projectForm.marca.$error">
+            <div ng-message="md-maxlength">El campo Marca debe ser máximo 100 caracteres</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container flex="50" ng-if="project.modelo_id != 0">
+          <label>Modelo</label>
+          <md-select ng-model="project.modelo_id">
+            <md-option ng-repeat="x in modelos track by x.id" value="{{x.id}}">{{x.modelo}}</md-option>
+            <md-option value="0">OTRO</md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container flex="50" ng-if="project.modelo_id == 0">
+          <label>Modelo</label>
+          <input md-maxlength="100" md-no-asterisk="" name="modelo" ng-model="project.modelo">
+          <div ng-messages="projectForm.modelo.$error">
+            <div ng-message="md-maxlength">El campo Modelo debe ser máximo 100 caracteres</div>
+          </div>
+        </md-input-container>
+      </div>
+
+      <div layout="row">
+        <md-input-container flex="50">
+          <label>Oficialia</label>
+          <md-select ng-model="project.oficialia_id">
+            <md-option ng-repeat="x in oficialias track by x.id" value="{{x.id}}">{{x.id}} - {{x.oficialia}}</md-option>
+          </md-select>
+        </md-input-container>
+
+        <md-input-container flex="50">
+          <label>Municipio</label>
+          <md-select ng-model="project.municipio_id">
+            <md-option ng-repeat="x in municipios track by x.id" value="{{x.id}}">{{x.municipio}}</md-option>
+          </md-select>
+        </md-input-container>        
+      </div>
+
+      <div layout="row">
+        <md-input-container flex="50" ng-if="project.area_id != 0">
+          <label>Área</label>
+          <md-select ng-model="project.area_id">
+            <md-option ng-repeat="x in areas track by x.id" value="{{x.id}}">{{x.area}}</md-option>
+            <md-option value="0">OTRA</md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container flex="50" ng-if="project.area_id == 0">
+          <label>Área</label>
+          <input md-maxlength="100" md-no-asterisk="" name="nueva_area" ng-model="project.nueva_area">
+          <div ng-messages="projectForm.nueva_area.$error">
+            <div ng-message="md-maxlength">El campo Área debe ser máximo 100 caracteres</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container flex="50" ng-if="project.responsable_id != 0">
+          <label>Responsable</label>
+          <md-select ng-model="project.responsable_id">
+            <md-option ng-repeat="x in responsables track by x.id" value="{{x.id}}">{{x.responsable}}</md-option>
+            <md-option value="0">OTRO</md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container flex="50" ng-if="project.responsable_id == 0">
+          <label>Responsable</label>
+          <input md-maxlength="100" md-no-asterisk="" name="nuevo_responsable" ng-model="project.nuevo_responsable">
+          <div ng-messages="projectForm.nuevo_responsable.$error">
+            <div ng-message="md-maxlength">El campo Responsable debe ser máximo 100 caracteres</div>
+          </div>
+        </md-input-container>
+      </div>
+
+      <div layout="row">
+        <md-input-container flex="50">
+          <label>Municipio Fisico</label>
+          <md-select ng-model="project.municipio_fisico_id" ng-change="setLocalidades();">
+            <md-option ng-repeat="x in municipios track by x.id" value="{{x.id}}">{{x.municipio}}</md-option>
+          </md-select>
+        </md-input-container>
+
+        <md-input-container flex="50">
+          <label ng-show="project.localidad_fisica_id != undefined">Localidad Fisica</label>
+          <ui-select ng-model="project.localidad_fisica_id">
+            <ui-select-match placeholder="Localidad Fisica">
+              {{$select.selected.localidad}}
+            </ui-select-match>
+            <ui-select-choices refresh="buscarLocalidades($select)" refresh-delay="200" repeat="x in localidades | filter: $select.search" >
+              <span ng-bind-html="x.localidad | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+        </md-input-container>
+      </div>
+
+      <md-input-container class="md-block">
+        <md-switch class="md-primary" name="keefForm" ng-model="project.keefForm">
+          No borrar formulario al guardar
+        </md-switch>
+      </md-input-container>
+      <div>
+        <md-button type="submit" ng-click="$event.preventDefault(); guardar();">Guardar</md-button>
+      </div>
+    </form>
+  </md-content>
+</div>

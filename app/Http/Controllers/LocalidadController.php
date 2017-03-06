@@ -12,12 +12,24 @@ class LocalidadController extends Controller
         $this->middleware(['cors', 'auth:api']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $x = Localidad::with('municipio')
-            ->orderBy('municipio_id', 'asc')
-            ->orderBy('localidad', 'asc')
-            ->paginate(10);
+        if($request->has('municipio') && $request->has('search'))
+        {
+            $search = $request->search;
+            $x = Localidad::with('municipio')
+                ->where('municipio_id', '=', $request->municipio)
+                ->where('localidad', 'LIKE', '%'.$search.'%')
+                ->orderBy('localidad', 'asc')
+                ->paginate(100);
+        }
+        else
+        {
+            $x = Localidad::with('municipio')
+                ->orderBy('municipio_id', 'asc')
+                ->orderBy('localidad', 'asc')
+                ->paginate(10);
+        }
         return Response::json($x, 300);
     }
 

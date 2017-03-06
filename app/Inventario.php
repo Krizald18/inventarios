@@ -16,6 +16,7 @@ class Inventario extends Model
     protected $hidden = [
 		'descripcion_id','caracteristica_id','tipo_id','modelo_id','marca_id','oficialia_id','municipio_id','municipio_fisico_id','localidad_fisica_id', 'area_id', 'responsable_id', 'grupo_id'
     ];
+
     public function getNumeroInventarioAttribute($value)
     {
         return is_null($value)? '': $value;

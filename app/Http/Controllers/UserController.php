@@ -12,7 +12,7 @@ class UserController extends Controller
     }
     public function allUsers()
     {
-        return User::all();
+        return User::orderBy('nombre', 'asc')->get();
     }
     public function getUser($id)
     {

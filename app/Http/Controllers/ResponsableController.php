@@ -13,7 +13,7 @@ class ResponsableController extends Controller
 
     public function index()
     {
-        return Responsable::with('usuario')->get();
+        return Responsable::orderBy('responsable', 'asc')->with('usuario')->get();
     }
 
     public function create()

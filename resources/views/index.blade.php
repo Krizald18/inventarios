@@ -83,7 +83,7 @@
               </span>
             </a>
           </li>
-          <li ng-if="autenticado">
+          <li id="liauth" ng-if="autenticado" hidden>
            <a href="#/inventario">
              <i class="fa fa-book fa-2x"></i>
               <span class="nav-text">
@@ -91,19 +91,35 @@
               </span>
             </a>
           </li>
-          <li ng-if="autenticado" class="has-subnav"> 
-            <a href="#/municipios">
-              <i class="fa fa-archive fa-2x"></i>
+          <li id="liauth" ng-if="autenticado" hidden>
+           <a href="#/agregar">
+             <i class="fa fa-plus fa-2x"></i>
               <span class="nav-text">
-                Municipios
+                Agregar Articulos
               </span>
             </a>
           </li>
-          <li class="has-subnav">
-            <a href="#/localidades">
-             <i class="fa fa-archive fa-2x"></i>
+          <li id="liauth" ng-if="autenticado" hidden>
+           <a href="#/eliminar">
+             <i class="fa fa-remove fa-2x"></i>
               <span class="nav-text">
-                Localidades
+                Eliminar Articulos
+              </span>
+            </a>
+          </li>
+          <li id="liauth" ng-if="autenticado" hidden>
+           <a href="#/baja">
+             <i class="fa fa-minus fa-2x"></i>
+              <span class="nav-text">
+                Baja de Articulos
+              </span>
+            </a>
+          </li>
+          <li id="liauth" ng-if="autenticado" hidden>
+           <a href="#/editar">
+             <i class="fa fa-pencil fa-2x"></i>
+              <span class="nav-text">
+                Editar Articulos
               </span>
             </a>
           </li>
@@ -126,7 +142,7 @@
   </div>
     <div id="footer">
       <div class="footer">
-          FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USE/Inventarios Powered by YottaLabs ©2017–2019
       </div>
     </div>
     <!-- build:js(.) scripts/vendor.js -->
@@ -147,8 +163,8 @@
     <script src="js/md-data-table.min.js"></script>
     <script src="js/satellizer.min.js"></script>    
     <script src="js/select.min.js"></script>    
-    <script src="js/ui-bootstrap-2.5.0.min.js"></script>    
-
+    <script src="js/ui-bootstrap-2.5.0.min.js"></script>
+    <script src="js/svg-assets-cache.js"></script>
     <!--<script src="bower_components/angular-touch/angular-touch.js"></script>--><!-- conflict with material-->
     <!-- required by restangular-->
     <script src="js/lodash.min.js"></script>
@@ -164,6 +180,7 @@
     <script src="angular/scripts/controllers/sidebar.js"></script>
     <script src="angular/scripts/controllers/main.js"></script>
     <script src="angular/scripts/controllers/inventario.js"></script>
+    <script src="angular/scripts/controllers/agregar.js"></script>
     <script src="angular/scripts/controllers/login.js"></script>
     <script src="angular/scripts/controllers/register.js"></script>
     <script src="angular/scripts/controllers/about.js"></script>
@@ -173,10 +190,13 @@
 </body>
 <script type="text/javascript">
   $( document ).ready(function() {
-    if(document.getElementById("sidebar-wrapper") != undefined)
-      document.getElementById("sidebar-wrapper").removeAttribute("hidden");
     if(document.getElementById("ulauth") != undefined)
       document.getElementById("ulauth").removeAttribute("hidden");
+    if(document.getElementById("liauth") != undefined)
+      document.getElementById("liauth").removeAttribute("hidden");
+    var body = document.body,
+        html = document.documentElement;
+    body.style.height = 100 + "%";
   });
 </script>
 </html>

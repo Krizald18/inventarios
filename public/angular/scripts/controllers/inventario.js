@@ -13,7 +13,7 @@ angular.module('App').controller('InventarioCtrl', function (API, $scope, $inter
 		body.style.height = 100 + "%";
 		setTimeout(function(){
 			var height = Math.max( body.scrollHeight, body.offsetHeight, 
-		                       html.clientHeight, html.scrollHeight, html.offsetHeight );
+		        html.clientHeight, html.scrollHeight, html.offsetHeight );
 			body.style.height = height + "px";
 		}, 500);
 		$scope.loading = false;

@@ -13,7 +13,7 @@ class ModeloController extends Controller
 
     public function index()
     {
-        return Modelo::all();
+        return Modelo::orderBy('modelo', 'asc')->get();
     }
 
     public function create()
