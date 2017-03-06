@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Caracteristica;
+use Response;
 
 class CaracteristicaController extends Controller
 {
@@ -22,7 +23,27 @@ class CaracteristicaController extends Controller
 
     public function store(Request $request)
     {
-        //
+        if($request->has('data'))
+        {
+            $o = (object) $request->input('data');
+
+            $nextid = \DB::table('caracteristicas')->max('id');
+            if(isset($nextid))
+                $nextid = $nextid + 1;
+            else
+                $nextid = 1;
+
+            $j = new Caracteristica;
+
+            $j->id = $nextid;
+            $j->caracteristica = $o->caracteristica;
+
+            $j->save();
+
+            return Caracteristica::orderBy('caracteristica', 'asc')->get();
+        }
+        else
+            return $request;
     }
 
     public function show($id)
@@ -42,6 +63,9 @@ class CaracteristicaController extends Controller
 
     public function destroy($id)
     {
-        //
+        $obj = Caracteristica::find($id);
+        $obj->delete();
+
+        return Caracteristica::orderBy('descripcion', 'asc')->get();
     }
 }

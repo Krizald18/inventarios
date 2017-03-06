@@ -23,7 +23,27 @@ class MarcaController extends Controller
 
     public function store(Request $request)
     {
-        //
+        if($request->has('data'))
+        {
+            $o = (object) $request->input('data');
+
+            $nextid = \DB::table('marcas')->max('id');
+            if(isset($nextid))
+                $nextid = $nextid + 1;
+            else
+                $nextid = 1;
+
+            $j = new Marca;
+
+            $j->id = $nextid;
+            $j->marca = $o->marca;
+
+            $j->save();
+
+            return Marca::orderBy('marca', 'asc')->get();
+        }
+        else
+            return $request;
     }
 
     public function show($id)
@@ -43,6 +63,9 @@ class MarcaController extends Controller
 
     public function destroy($id)
     {
-        //
+        $obj = Marca::find($id);
+        $obj->delete();
+
+        return Marca::orderBy('marca', 'asc')->get();
     }
 }

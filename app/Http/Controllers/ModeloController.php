@@ -23,7 +23,27 @@ class ModeloController extends Controller
 
     public function store(Request $request)
     {
-        //
+        if($request->has('data'))
+        {
+            $o = (object) $request->input('data');
+
+            $nextid = \DB::table('modelos')->max('id');
+            if(isset($nextid))
+                $nextid = $nextid + 1;
+            else
+                $nextid = 1;
+
+            $j = new Modelo;
+
+            $j->id = $nextid;
+            $j->modelo = $o->modelo;
+
+            $j->save();
+
+            return Modelo::orderBy('modelo', 'asc')->get();
+        }
+        else
+            return $request;
     }
 
     public function show($id)
@@ -43,6 +63,9 @@ class ModeloController extends Controller
 
     public function destroy($id)
     {
-        //
+        $obj = Modelo::find($id);
+        $obj->delete();
+
+        return Modelo::orderBy('modelo', 'asc')->get();
     }
 }

@@ -23,7 +23,27 @@ class AreaController extends Controller
 
     public function store(Request $request)
     {
-        //
+        if($request->has('data'))
+        {
+            $o = (object) $request->input('data');
+
+            $nextid = \DB::table('areas')->max('id');
+            if(isset($nextid))
+                $nextid = $nextid + 1;
+            else
+                $nextid = 1;
+
+            $j = new Area;
+
+            $j->id = $nextid;
+            $j->area = $o->area;
+
+            $j->save();
+
+            return Area::orderBy('area', 'asc')->get();
+        }
+        else
+            return $request;
     }
 
     public function show($id)
@@ -43,6 +63,9 @@ class AreaController extends Controller
 
     public function destroy($id)
     {
-        //
+        $obj = Area::find($id);
+        $obj->delete();
+
+        return Area::orderBy('area', 'asc')->get();
     }
 }

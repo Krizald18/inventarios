@@ -10,7 +10,7 @@ class CreateGruposTable extends Migration
     {
         Schema::create('grupos', function (Blueprint $table) {
             $table->integer('id')->unique();
-            $table->string('grupo');
+            $table->string('grupo')->unique();
             $table->timestamps();
         });
     }

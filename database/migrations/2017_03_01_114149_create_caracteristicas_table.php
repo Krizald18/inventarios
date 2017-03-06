@@ -10,7 +10,7 @@ class CreateCaracteristicasTable extends Migration
     {
         Schema::create('caracteristicas', function (Blueprint $table) {
             $table->integer('id')->unique();
-            $table->string('caracteristica');
+            $table->string('caracteristica')->unique();
             $table->timestamps();
         });
     }

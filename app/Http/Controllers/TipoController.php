@@ -23,7 +23,27 @@ class TipoController extends Controller
 
     public function store(Request $request)
     {
-        //
+        if($request->has('data'))
+        {
+            $o = (object) $request->input('data');
+
+            $nextid = \DB::table('tipos')->max('id');
+            if(isset($nextid))
+                $nextid = $nextid + 1;
+            else
+                $nextid = 1;
+
+            $j = new Tipo;
+
+            $j->id = $nextid;
+            $j->tipo = $o->tipo;
+
+            $j->save();
+
+            return Tipo::orderBy('tipo', 'asc')->get();
+        }
+        else
+            return $request;
     }
 
     public function show($id)
@@ -43,6 +63,9 @@ class TipoController extends Controller
 
     public function destroy($id)
     {
-        //
+        $obj = Tipo::find($id);
+        $obj->delete();
+
+        return Tipo::orderBy('tipo', 'asc')->get();
     }
 }

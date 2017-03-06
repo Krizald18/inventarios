@@ -10,7 +10,7 @@ class CreateModelosTable extends Migration
     {
         Schema::create('modelos', function (Blueprint $table) {
             $table->integer('id')->unique();
-            $table->string('modelo');
+            $table->string('modelo')->unique();
             $table->timestamps();
         });
     }

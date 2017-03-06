@@ -10,7 +10,7 @@ class CreateDescripcionesTable extends Migration
     {
         Schema::create('descripciones', function (Blueprint $table) {
             $table->integer('id')->unique();
-            $table->string('descripcion');
+            $table->string('descripcion')->unique();
             $table->timestamps();
         });
     }

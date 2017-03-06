@@ -23,7 +23,27 @@ class ResponsableController extends Controller
 
     public function store(Request $request)
     {
-        //
+        if($request->has('data'))
+        {
+            $o = (object) $request->input('data');
+
+            $nextid = \DB::table('responsables')->max('id');
+            if(isset($nextid))
+                $nextid = $nextid + 1;
+            else
+                $nextid = 1;
+
+            $j = new Responsable;
+
+            $j->id = $nextid;
+            $j->responsable = $o->responsable;
+
+            $j->save();
+
+            return Responsable::orderBy('responsable', 'asc')->get();
+        }
+        else
+            return $request;
     }
 
     public function show($id)
@@ -43,6 +63,9 @@ class ResponsableController extends Controller
 
     public function destroy($id)
     {
-        //
+        $obj = Responsable::find($id);
+        $obj->delete();
+
+        return Responsable::orderBy('responsable', 'asc')->get();
     }
 }

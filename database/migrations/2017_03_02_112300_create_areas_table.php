@@ -10,7 +10,7 @@ class CreateAreasTable extends Migration
     {
         Schema::create('areas', function (Blueprint $table) {
             $table->integer('id')->unique();
-            $table->string('area');
+            $table->string('area')->unique();
             $table->timestamps();
         });
     }

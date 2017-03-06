@@ -10,7 +10,7 @@ class CreateResponsablesTable extends Migration
     {
         Schema::create('responsables', function (Blueprint $table) {
             $table->integer('id')->unique();
-            $table->string('responsable');
+            $table->string('responsable')->unique();
 
             $table->integer('usuario_id')->unsigned()->nullable();
             $table->foreign('usuario_id')
