@@ -13,7 +13,7 @@ class OficialiaController extends Controller
 
     public function index()
     {
-        return Oficialia::orderBy('oficialia', 'asc')->get();
+        return Oficialia::orderBy('id', 'asc')->get();
     }
 
     public function create()

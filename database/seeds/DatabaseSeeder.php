@@ -23,6 +23,6 @@ class DatabaseSeeder extends Seeder
 //        $this->call('AreaTableSeeder');
 //        $this->call('ResponsableTableSeeder');     
         $this->call('InventariosTableSeeder');
-        */
+        */        
     }
 }

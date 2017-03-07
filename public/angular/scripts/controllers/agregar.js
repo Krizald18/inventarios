@@ -10,6 +10,35 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
   	$scope.saveOrder = "";
   	$scope.next = 0;
 
+  	$scope.$watch('project.nuevo_tipo', function(val){
+  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  			$scope.project.tipo_id = null;
+  	});
+  	$scope.$watch('project.descripcion_nueva', function(val){
+  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  			$scope.project.descripcion_id = null;
+  	});
+  	$scope.$watch('project.caracteristica_nueva', function(val){
+  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  			$scope.project.caracteristica_id = null;
+  	});
+  	$scope.$watch('project.marca', function(val){
+  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  			$scope.project.marca_id = null;
+  	});
+  	$scope.$watch('project.modelo', function(val){
+  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  			$scope.project.modelo_id = null;
+  	});
+  	$scope.$watch('project.nueva_area', function(val){
+  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  			$scope.project.area_id = null;
+  	});
+  	$scope.$watch('project.nuevo_responsable', function(val){
+  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  			$scope.project.responsable_id = null;
+  	});
+
 	$scope.refreshbodyheight = function(){
 		var body = document.body,
 		    html = document.documentElement;
@@ -78,7 +107,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 		$scope.saveOrder = "";
 		$scope.next = 0;
 
-		if(frmObj.numero_inventario != undefined)
+		if(frmObj.numero_inventario != undefined && frmObj.numero_inventario.length > 0)
 			obj.numero_inventario = frmObj.numero_inventario;	
 		else
 		{
@@ -86,7 +115,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 			obj.cantidad = 1;
 		}
 		
-		if(frmObj.numero_serie != undefined)		
+		if(frmObj.numero_serie != undefined && frmObj.numero_serie.length > 0)
 			obj.numero_serie = frmObj.numero_serie			
 		else
 		{
@@ -94,7 +123,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 			obj.cantidad = 1;
 		}
 
-		if(frmObj.numero_inventario != undefined || frmObj.numero_serie != undefined)
+		if(obj.numero_inventario == null && obj.numero_serie == null)
 		{
 			if(frmObj.cantidad != undefined)
 				obj.cantidad = parseInt(frmObj.cantidad);
@@ -506,16 +535,21 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 				}
 			break
 			default:
-			// verifica numero de serie y numero de inventario			
-				API.all("inventario?numero_inventario=" + obj.numero_inventario + "&numero_serie=" + obj.numero_serie).customGET("", "")
-				.then(rs => {
-					console.log(rs);
-					if(2 == 0)
-					{
+			// verifica numero de serie y numero de inventario
 
-					}
-					else{
-						var data = angular.copy(obj);
+				let getUrl = window.location;
+				let baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+				let urlval = baseUrl;
+				
+				urlval += "api/inventario?numero_inventario=" + obj.numero_inventario;
+				urlval += "&numero_serie=" + obj.numero_serie;
+
+				API.oneUrl('validador', urlval).get()
+				.then(tn =>{
+					let a = tn.plain();
+					let x = a.response;
+					if(x == 0)
+					{
 						API.all('inventario').post({data}).then(ad => {
 							ToastService.show("El articulo se ha guardado en inventario");
 							
@@ -541,9 +575,22 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 								$scope.project.responsable_id = null;
 								$scope.project.tipo_id = null;
 							}
+							$scope.projectForm.$setPristine();
+							$scope.projectForm.$setUntouched();
 						});
 					}
+					else if(x == 1)
+						ToastService.show("El Número de inventario ya existe en el sistema, inserte otro numero");
+					else if(x == 2)
+						ToastService.show("El Número de serie ya existe en el sistema, inserte otro numero");
+					else
+						ToastService.show("Los Números de inventario y Serie ya existen en el sistema, inserte otros numeros");
+
+					console.log("tn");
 				});
+				var data = angular.copy(obj);
+				/*
+				*/
 			break;
 		}
 	}

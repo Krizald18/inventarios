@@ -14,15 +14,30 @@ class InventarioController extends Controller
 
     public function index(Request $request)
     {
-        if($request->has('numero_inventario') && $request->has('numero_serie'))
-        {
+        if($request->has('numero_inventario') && $request->has('numero_serie')) 
+        {   // recive numero de serie y numero de inventario, regresa 1 si existe numero_inventario, 2 si existe numero_serie, 3 si existen los dos
             $inventario = \DB::table('inventarios')
-                     ->select(\DB::raw('count(*) as conteo'))
+                     ->select(\DB::raw('count(*) as response'))
                      ->where('numero_inventario', '=', $request->numero_inventario)
-                     ->orwhere('numero_serie', '=', $request->numero_serie)
                      ->get();
-            $obj = (object) $inventario[0];
-            return Response::json($obj->conteo,200);
+
+            $serie = \DB::table('inventarios')
+                     ->select(\DB::raw('count(*) as response'))
+                     ->where('numero_serie', '=', $request->numero_serie)
+                     ->get();
+
+            $numero_inventario = (object) $inventario[0];
+            $numero_serie = (object) $serie[0];
+
+            $resp = (object) array('response' => 0);
+
+            if($numero_inventario->response > 0)
+                $resp->response = 1;
+
+            if($numero_serie->response > 0) // 3 both
+                $resp->response = $resp->response + 2;
+            
+            return Response::json($resp, 200);
         }
         else
         {
@@ -80,7 +95,10 @@ class InventarioController extends Controller
             if(isset($o->area_id) && !is_null($o->area_id))
                 $j->area_id = $o->area_id;
             
-            $j->cantidad = $o->cantidad;
+            if(isset($o->cantidad))
+                $j->cantidad = $o->cantidad;
+            else
+                $j->cantidad = 1;
             
             if(isset($o->caracteristica_id) && !is_null($o->caracteristica_id))
                 $j->caracteristica_id = $o->caracteristica_id;

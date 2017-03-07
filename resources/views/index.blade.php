@@ -44,6 +44,17 @@
         font-family: 'Raleway', sans-serif;
         font-weight: 500;
       }
+      span.ui-select-match-text.pull-left{
+        font-family: 'Raleway', sans-serif;
+        font-weight: 500;
+      }
+      div.ui-select-match.ng-scope{
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        color: rgba(0,0,0,0.12);
+        margin-right: -2px;
+        margin-top: -5px;
+      }
     </style>
   </head>
   <body ng-app="App">    

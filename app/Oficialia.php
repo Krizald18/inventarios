@@ -12,4 +12,8 @@ class Oficialia extends Model
     protected $hidden = [
         
     ];
+    public function getIdAttribute($value)
+    {
+        return (string) $value;
+    }
 }

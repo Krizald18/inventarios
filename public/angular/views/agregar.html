@@ -210,7 +210,7 @@
               {{$select.selected.localidad}}
             </ui-select-match>
             <ui-select-choices refresh="buscarLocalidades($select)" refresh-delay="200" repeat="x in localidades | filter: $select.search" >
-              <span ng-bind-html="x.localidad | highlight: $select.search" style="margin-left: 2px;"></span>
+              <span ng-bind-html="x.localidad | highlight: $select.search"></span>
             </ui-select-choices>
           </ui-select>
         </md-input-container>
