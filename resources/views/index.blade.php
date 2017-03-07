@@ -84,68 +84,68 @@
       </nav>
     </div>
     <div class="area"></div>
-      <nav class="main-menu" ng-controller="SidebarCtrl">
-        <ul style="margin-top: 75px">
-          <li>
-            <a href="#">
-              <i class="fa fa-home fa-2x"></i>
-              <span class="nav-text">
-                Inicio
-              </span>
-            </a>
-          </li>
-          <li id="liauth" ng-if="autenticado" hidden>
-           <a href="#/inventario">
-             <i class="fa fa-book fa-2x"></i>
-              <span class="nav-text">
-                Inventario
-              </span>
-            </a>
-          </li>
-          <li id="liauth" ng-if="autenticado" hidden>
-           <a href="#/agregar">
-             <i class="fa fa-plus fa-2x"></i>
-              <span class="nav-text">
-                Agregar Articulos
-              </span>
-            </a>
-          </li>
-          <li id="liauth" ng-if="autenticado" hidden>
-           <a href="#/eliminar">
-             <i class="fa fa-remove fa-2x"></i>
-              <span class="nav-text">
-                Eliminar Articulos
-              </span>
-            </a>
-          </li>
-          <li id="liauth" ng-if="autenticado" hidden>
-           <a href="#/baja">
-             <i class="fa fa-minus fa-2x"></i>
-              <span class="nav-text">
-                Baja de Articulos
-              </span>
-            </a>
-          </li>
-          <li id="liauth" ng-if="autenticado" hidden>
-           <a href="#/editar">
-             <i class="fa fa-pencil fa-2x"></i>
-              <span class="nav-text">
-                Editar Articulos
-              </span>
-            </a>
-          </li>
-        </ul>
-        <ul class="logout" ng-if="autenticado">
-          <li>
-            <a href="#" ng-click ="$event.preventDefault(); logout();">
-              <i class="fa fa-power-off fa-2x"></i>
-              <span class="nav-text">
-                  Salir
-              </span>
-            </a>
-          </li>  
-        </ul>
-    </nav>  
+    <nav class="main-menu" ng-controller="SidebarCtrl">
+      <ul style="margin-top: 75px">
+        <li>
+          <a href="#">
+            <i class="fa fa-home fa-2x"></i>
+            <span class="nav-text">
+              Inicio
+            </span>
+          </a>
+        </li>
+        <li id="liauth" ng-if="autenticado" hidden>
+         <a href="#/inventario">
+           <i class="fa fa-book fa-2x"></i>
+            <span class="nav-text">
+              Inventario
+            </span>
+          </a>
+        </li>
+        <li id="liauth" ng-if="autenticado" hidden>
+         <a href="#/agregar">
+           <i class="fa fa-plus fa-2x"></i>
+            <span class="nav-text">
+              Agregar Articulos
+            </span>
+          </a>
+        </li>
+        <li id="liauth" ng-if="autenticado" hidden>
+         <a href="#/eliminar">
+           <i class="fa fa-remove fa-2x"></i>
+            <span class="nav-text">
+              Eliminar Articulos
+            </span>
+          </a>
+        </li>
+        <li id="liauth" ng-if="autenticado" hidden>
+         <a href="#/baja">
+           <i class="fa fa-minus fa-2x"></i>
+            <span class="nav-text">
+              Baja de Articulos
+            </span>
+          </a>
+        </li>
+        <li id="liauth" ng-if="autenticado" hidden>
+         <a href="#/editar">
+           <i class="fa fa-pencil fa-2x"></i>
+            <span class="nav-text">
+              Editar Articulos
+            </span>
+          </a>
+        </li>
+      </ul>
+      <ul class="logout" ng-if="autenticado">
+        <li>
+          <a href="#" ng-click ="$event.preventDefault(); logout();">
+            <i class="fa fa-power-off fa-2x"></i>
+            <span class="nav-text">
+                Salir
+            </span>
+          </a>
+        </li>  
+      </ul>
+  </nav>  
   <div id="push"></div>
     <div class="container" style="margin-top: 15px;">
       <div id="contdiv" ng-view="" style="width: 1200px"></div>
@@ -197,6 +197,7 @@
     <script src="angular/scripts/controllers/about.js"></script>
     <script src="angular/scripts/services/api.js"></script>
     <script src="angular/scripts/services/toastservice.js"></script>
+    <script src="angular/scripts/services/alertservice.js"></script>
     <!-- endbuild -->
 </body>
 <script type="text/javascript">
@@ -205,8 +206,7 @@
       document.getElementById("ulauth").removeAttribute("hidden");
     if(document.getElementById("liauth") != undefined)
       document.getElementById("liauth").removeAttribute("hidden");
-    var body = document.body,
-        html = document.documentElement;
+    var body = document.body;
     body.style.height = 100 + "%";
   });
 </script>

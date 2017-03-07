@@ -216,14 +216,15 @@
         </md-input-container>
       </div>
 
-      <md-input-container class="md-block">
+      <md-input-container class="md-block" style="margin-left: 5px">
         <md-switch class="md-primary" name="keefForm" ng-model="project.keefForm">
           No borrar formulario al guardar
         </md-switch>
       </md-input-container>
       <div>
-        <md-button type="submit" ng-click="guardar();">Guardar</md-button>
+        <md-button aria-label="agregar" class="md-raised md-warn" ng-click="guardar();">Guardar <span class="glyphicon glyphicon-upload" aria-hidden="true"></span></md-button>
       </div>
     </form>
   </md-content>
+  <br><br><br>
 </div>

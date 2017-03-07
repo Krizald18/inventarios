@@ -1,5 +1,5 @@
 'use strict';
-angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastService) {	
+angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertService, ToastService) {	
 	$scope.selected = [];
 	$scope.localidades =  [];
 	$scope.loading = true;
@@ -11,32 +11,53 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
   	$scope.next = 0;
 
   	$scope.$watch('project.nuevo_tipo', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  		if(val != undefined && val.toUpperCase() == "ZZZ")
+  		{
   			$scope.project.tipo_id = null;
+  			$scope.project.nuevo_tipo = "";
+  		}
   	});
   	$scope.$watch('project.descripcion_nueva', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  		if(val != undefined && val.toUpperCase() == "ZZZ")
+  		{
   			$scope.project.descripcion_id = null;
+  			$scope.project.descripcion_nueva = "";
+  		}
   	});
   	$scope.$watch('project.caracteristica_nueva', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  		if(val != undefined && val.toUpperCase() == "ZZZ")
+  		{
   			$scope.project.caracteristica_id = null;
+  			$scope.project.caracteristica_nueva = "";
+  		}
   	});
   	$scope.$watch('project.marca', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  		if(val != undefined && val.toUpperCase() == "ZZZ")
+  		{
   			$scope.project.marca_id = null;
+  			$scope.project.marca = "";
+  		}
   	});
   	$scope.$watch('project.modelo', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  		if(val != undefined && val.toUpperCase() == "ZZZ")
+  		{
   			$scope.project.modelo_id = null;
+  			$scope.project.modelo = "";
+  		}
   	});
   	$scope.$watch('project.nueva_area', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  		if(val != undefined && val.toUpperCase() == "ZZZ")
+  		{
   			$scope.project.area_id = null;
+  			$scope.project.nueva_area = "";
+  		}
   	});
   	$scope.$watch('project.nuevo_responsable', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")  	
+  		if(val != undefined && val.toUpperCase() == "ZZZ")
+  		{
   			$scope.project.responsable_id = null;
+  			$scope.project.nuevo_responsable = "";
+  		}
   	});
 
 	$scope.refreshbodyheight = function(){
@@ -50,6 +71,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 		}, 500);
 		$scope.loading = false;
 	}
+
 	$scope.serie_o_numeronventario = function(){
 		if(($scope.project.numero_inventario != undefined && $scope.project.numero_inventario.length > 0) || ($scope.project.numero_serie != undefined && $scope.project.numero_serie.length > 0))
 			$scope.project.cantidad = 1;
@@ -129,7 +151,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 				obj.cantidad = parseInt(frmObj.cantidad);
 			else
 			{
-				ToastService.error("El campo Cantidad es requerido");
+				AlertService.error("El campo Cantidad es requerido");
 				return;
 			}
 		}
@@ -159,7 +181,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 		}
 		if(frmObj.descripcion_id == undefined) // 1
 		{
-			ToastService.error("El campo Descripción es requerido");
+			AlertService.error("El campo Descripción es requerido");
 			return;	
 		}
 		else
@@ -290,8 +312,9 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 					}
 					else
 					{
-						ToastService.error('No se puede guardar el Tipo ingresado por que ya existe, seleccione un Tipo');
-						$scope.project.tipo_id = null;
+						AlertService.error('No se puede guardar el Tipo ingresado por que ya existe, seleccione un Tipo');
+						delete($scope.project.tipo_id);
+						delete($scope.project.nuevo_tipo);
 						return
 					}
 				}
@@ -328,8 +351,9 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 					}
 					else
 					{
-						ToastService.error('No se puede guardar la Descripción ingresada por que ya existe, seleccione una Descripción');
+						AlertService.error('No se puede guardar la Descripción ingresada por que ya existe, seleccione una Descripción');
 						delete($scope.project.descripcion_id);
+						delete($scope.project.descripcion_nueva);
 						return
 					}
 				}
@@ -366,8 +390,9 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 					}
 					else
 					{
-						ToastService.error('No se puede guardar la Caracteristica ingresada por que ya existe, seleccione una Caracteristica');
+						AlertService.error('No se puede guardar la Caracteristica ingresada por que ya existe, seleccione una Caracteristica');
 						delete($scope.project.caracteristica_id);
+						delete($scope.project.caracteristica_nueva);
 						return
 					}
 				}
@@ -404,8 +429,9 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 					}
 					else
 					{
-						ToastService.error('No se puede guardar la Marca ingresada por que ya existe, seleccione una Marca');
+						AlertService.error('No se puede guardar la Marca ingresada por que ya existe, seleccione una Marca');
 						delete($scope.project.marca_id);
+						delete($scope.project.marca);
 						return
 					}
 				}
@@ -442,8 +468,9 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 					}
 					else
 					{
-						ToastService.error('No se puede guardar el Modelo ingresado por que ya existe, seleccione un Modelo');
+						AlertService.error('No se puede guardar el Modelo ingresado por que ya existe, seleccione un Modelo');
 						delete($scope.project.modelo_id);
+						delete($scope.project.modelo);
 						return
 					}
 				}
@@ -480,8 +507,9 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 					}
 					else
 					{						
-						ToastService.error('No se puede guardar el Área ingresada por que ya existe, seleccione una Área');
+						AlertService.error('No se puede guardar el Área ingresada por que ya existe, seleccione una Área');
 						delete($scope.project.area_id);
+						delete($scope.project.nueva_area);
 						return
 					}
 				}
@@ -518,8 +546,9 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 					}
 					else
 					{
-						ToastService.error('No se puede guardar el Responsable ingresado por que ya existe, seleccione un Responsable');
+						AlertService.error('No se puede guardar el Responsable ingresado por que ya existe, seleccione un Responsable');
 						delete($scope.project.responsable_id);
+						delete($scope.project.nuevo_responsable);
 						return
 					}
 				}
@@ -550,8 +579,9 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 					let x = a.response;
 					if(x == 0)
 					{
+						let data = angular.copy(obj);
 						API.all('inventario').post({data}).then(ad => {
-							ToastService.show("El articulo se ha guardado en inventario");
+							AlertService.show("Listo!","El Artículo se ha guardado en inventario");
 							
 							$scope.project.numero_serie = null;
 							$scope.project.numero_inventario = null;
@@ -580,17 +610,12 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, ToastServ
 						});
 					}
 					else if(x == 1)
-						ToastService.show("El Número de inventario ya existe en el sistema, inserte otro numero");
+						AlertService.error("El Número de inventario ya existe en el sistema, ingrese otro número");
 					else if(x == 2)
-						ToastService.show("El Número de serie ya existe en el sistema, inserte otro numero");
+						AlertService.error("El Número de serie ya existe en el sistema, ingrese otro número");
 					else
-						ToastService.show("Los Números de inventario y Serie ya existen en el sistema, inserte otros numeros");
-
-					console.log("tn");
+						AlertService.error("El Número de inventario y El Número de serie proporcionados ya existen en el sistema, ingrese otros números");
 				});
-				var data = angular.copy(obj);
-				/*
-				*/
 			break;
 		}
 	}

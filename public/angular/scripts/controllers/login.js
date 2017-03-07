@@ -22,7 +22,7 @@ angular.module('App').controller('LoginCtrl', function ($scope, $auth, ToastServ
 				}
 				else
 					window.location = '/';
-				ToastService.show('Logged in successfully.');
+				ToastService.show('Sesión iniciada');
 			})
 			.catch($scope.failedLogin.bind());
 	}
