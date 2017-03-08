@@ -12,8 +12,8 @@ class CaracteristicaController extends Controller
         $this->middleware(['cors', 'auth:api']);
     }
     public function index()
-    {
-        return Caracteristica::orderBy('caracteristica', 'asc')->get();
+    {        
+        return Caracteristica::with('subgrupo')->orderBy('caracteristica', 'asc')->get();
     }
 
     public function create()
@@ -40,7 +40,7 @@ class CaracteristicaController extends Controller
 
             $j->save();
 
-            return Caracteristica::orderBy('caracteristica', 'asc')->get();
+            return Caracteristica::with('subgrupo')->orderBy('caracteristica', 'asc')->get();
         }
         else
             return $request;
@@ -66,6 +66,6 @@ class CaracteristicaController extends Controller
         $obj = Caracteristica::find($id);
         $obj->delete();
 
-        return Caracteristica::orderBy('descripcion', 'asc')->get();
+        return Caracteristica::with('subgrupo')->orderBy('descripcion', 'asc')->get();
     }
 }

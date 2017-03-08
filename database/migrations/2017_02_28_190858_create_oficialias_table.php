@@ -11,6 +11,12 @@ class CreateOficialiasTable extends Migration
         Schema::create('oficialias', function (Blueprint $table) {
             $table->string('id')->unique();
             $table->string('oficialia');
+
+            $table->integer('municipio_id')->nullable();
+            $table->foreign('municipio_id')
+                  ->references('id')->on('municipios')
+                  ->onDelete('cascade');
+
             $table->timestamps();
         });
     }

@@ -13,7 +13,7 @@ class ModeloController extends Controller
 
     public function index()
     {
-        return Modelo::orderBy('modelo', 'asc')->get();
+        return Modelo::with('marca', 'caracteristica','subgrupo')->orderBy('modelo', 'asc')->get();
     }
 
     public function create()
@@ -40,7 +40,7 @@ class ModeloController extends Controller
 
             $j->save();
 
-            return Modelo::orderBy('modelo', 'asc')->get();
+            return Modelo::with('marca', 'caracteristica','subgrupo')->orderBy('modelo', 'asc')->get();
         }
         else
             return $request;
@@ -66,6 +66,6 @@ class ModeloController extends Controller
         $obj = Modelo::find($id);
         $obj->delete();
 
-        return Modelo::orderBy('modelo', 'asc')->get();
+        return Modelo::with('marca', 'caracteristica','subgrupo')->orderBy('modelo', 'asc')->get();
     }
 }

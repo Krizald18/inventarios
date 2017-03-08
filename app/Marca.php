@@ -12,4 +12,8 @@ class Marca extends Model
     protected $hidden = [
         
     ];
+    public function modelos()
+    {        
+        return $this->hasMany('App\Modelo');
+    }
 }

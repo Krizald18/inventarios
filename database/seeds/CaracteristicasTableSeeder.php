@@ -7,6 +7,26 @@ class CaracteristicasTableSeeder extends Seeder {
 	public function run(){
 		$now = Carbon::now();
 		DB::table('caracteristicas')->delete();
+
+// datos de prueba
+		/*
+		DB::insert('insert into caracteristicas (id, caracteristica, subgrupo_id, created_at) values (?, ?, ?)', [5,'8 PUERTOS',$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [8,'C/CONEXION Y FUENTE DE PODER C/M.O',$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [9,'C/REGULADOR DE VOLTAJE INTEGRADO 4 CONTACTOS',$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [11,'DE 4 CONTACTOS',$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [12,'DE 5 CONTACTOS',$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [13,'MONITOR 14"',$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [14,'MONITOR 14" VGA MONOCROMATICO',$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [15,'MONITOR 15"',$now]);		
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [16,'MONITOR 17"',$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [17,'PROCESADOR INTEL PENTIUM, MEMORIA RAM DE 512MB, DISCO DURO DE 80GB, UNIDAD DE CD-RW, WINDO WS XP PROFESIONAL',$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [18,'SWITCH HUP 4400 DE 24 PUERTOS',$now]);
+		*/
+		DB::insert('insert into caracteristicas (id, caracteristica, subgrupo_id, created_at) values (?,?,?,?)', [19,'TONER ULTRAPRECISE, 14ppm, 1200 dpi',7,$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, subgrupo_id, created_at) values (?,?,?,?)', [20,'TONER ULTRAPRECISE, 14ppm, 1100 dpi',7,$now]);
+
+
+		/* datos reales sin procesar 
 		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [1,'1100',$now]);
 		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [2,'(DONADA)',$now]);
 		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [3,'(INCLUYE MOUSE) SIN MULTILINEA',$now]);
@@ -57,5 +77,6 @@ class CaracteristicasTableSeeder extends Seeder {
 		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [48,'T.C. 2115',$now]);
 		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [49,'T.C. 2116',$now]);
 		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [50,'TERMICA',$now]);
+		*/
 	}
 }

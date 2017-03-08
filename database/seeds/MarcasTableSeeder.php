@@ -37,11 +37,10 @@ class MarcasTableSeeder extends Seeder {
 		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [28,'PUSH',$now]);
 		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [29,'Q-MATIC',$now]);
 		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [30,'SIN MARCA',$now]);
-		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [31,'SOLA',$now]);
-		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [32,'SOLA BASIC',$now]);
-		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [33,'TATUNG',$now]);
-		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [34,'TREKKER',$now]);
-		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [35,'VICA',$now]);
-		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [36,'VIEW SONIC',$now]);
+		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [31,'SOLA BASIC',$now]);
+		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [32,'TATUNG',$now]);
+		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [33,'TREKKER',$now]);
+		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [34,'VICA',$now]);
+		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [35,'VIEW SONIC',$now]);
 	}
 }

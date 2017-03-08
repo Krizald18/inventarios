@@ -13,7 +13,7 @@ class MarcaController extends Controller
 
     public function index()
     {
-        return Marca::orderBy('marca', 'asc')->get();
+        return Marca::with('modelos')->orderBy('marca', 'asc')->get();
     }
 
     public function create()

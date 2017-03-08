@@ -12,9 +12,4 @@ class Municipio extends Model
     protected $hidden = [
         
     ];
-
-   	public function localidades()
-    {        
-        return $this->hasMany('App\Localidad', 'municipio_id');
-    }
 }

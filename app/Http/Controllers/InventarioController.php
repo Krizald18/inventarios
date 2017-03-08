@@ -59,13 +59,33 @@ class InventarioController extends Controller
                 $limit = intval($request->limit);
             if($desc)
             {
-                $x = Inventario::with('area', 'grupo', 'responsable', 'descripcion','caracteristica','tipo','marca','modelo','oficialia','municipio','municipio_fisico', 'localidad_fisica')
-                            ->orderBy($order, 'desc')
-                            ->paginate($limit);
+                $x = Inventario::with('area', 'responsable')
+                        ->with(array('subgrupo' => function($q){
+                            $q->with('grupo');
+                        }))
+                        ->with(array('oficialia' => function($q){
+                            $q->with('municipio');
+                        }))
+                        ->with(array('modelo' => function($q){
+                            $q->with('marca');
+                            $q->with('caracteristica');
+                        }))
+                        ->orderBy($order, 'desc')
+                        ->paginate($limit);
             }
             else
             {
-                $x = Inventario::with('area', 'grupo', 'responsable','descripcion','caracteristica','tipo','marca','modelo','oficialia','municipio','municipio_fisico', 'localidad_fisica')
+                $x = Inventario::with('area', 'responsable')
+                        ->with(array('subgrupo' => function($q){
+                            $q->with('grupo');
+                        }))
+                        ->with(array('oficialia' => function($q){
+                            $q->with('municipio');
+                        }))
+                        ->with(array('modelo' => function($q){
+                            $q->with('marca');
+                            $q->with('caracteristica');
+                        }))
                             ->orderBy($order, 'asc')
                             ->paginate($limit);
             }
@@ -156,7 +176,17 @@ class InventarioController extends Controller
 
     public function show($id)
     {
-        return Inventario::with('area', 'grupo', 'responsable','descripcion','caracteristica','tipo','marca','modelo','oficialia','municipio','municipio_fisico', 'localidad_fisica')->find($id);
+        return Inventario::with('area', 'responsable')
+                        ->with(array('subgrupo' => function($q){
+                            $q->with('grupo');
+                        }))
+                        ->with(array('oficialia' => function($q){
+                            $q->with('municipio');
+                        }))
+                        ->with(array('modelo' => function($q){
+                            $q->with('marca');
+                            $q->with('caracteristica');
+                        }))->find($id);
     }
 
     public function edit($id)

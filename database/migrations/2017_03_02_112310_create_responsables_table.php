@@ -14,8 +14,7 @@ class CreateResponsablesTable extends Migration
 
             $table->integer('usuario_id')->unsigned()->nullable();
             $table->foreign('usuario_id')
-                  ->references('id')->on('users')
-                  ->onDelete('cascade');
+                  ->references('id')->on('users');
 
             $table->timestamps();
         });

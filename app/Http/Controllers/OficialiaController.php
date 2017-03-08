@@ -13,7 +13,7 @@ class OficialiaController extends Controller
 
     public function index()
     {
-        return Oficialia::orderBy('id', 'asc')->get();
+        return Oficialia::with('municipio')->orderBy('id', 'asc')->get();
     }
 
     public function create()
@@ -28,7 +28,7 @@ class OficialiaController extends Controller
 
     public function show($id)
     {
-        return Oficialia::find($id);
+        return Oficialia::with('municipio')->find($id);
     }
 
     public function edit($id)
