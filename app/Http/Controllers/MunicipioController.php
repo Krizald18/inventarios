@@ -43,6 +43,9 @@ class MunicipioController extends Controller
 
     public function destroy($id)
     {
-        //
+        $obj = Municipio::find($id);
+        $obj->delete();
+
+        return Municipio::orderBy('id', 'asc')->get();
     }
 }

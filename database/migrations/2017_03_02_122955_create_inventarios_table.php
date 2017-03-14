@@ -28,20 +28,16 @@ class CreateInventariosTable extends Migration
       $table->integer('responsable_id')->nullable();
 
       $table->foreign('area_id')
-            ->references('id')->on('areas')
-            ->onDelete('cascade');
+            ->references('id')->on('areas');
 
       $table->foreign('responsable_id')
-            ->references('id')->on('responsables')
-            ->onDelete('cascade');
+            ->references('id')->on('responsables');
 
       $table->foreign('modelo_id')
-            ->references('id')->on('modelos')
-            ->onDelete('cascade');
+            ->references('id')->on('modelos');
 
       $table->foreign('oficialia_id')
-            ->references('id')->on('oficialias')
-            ->onDelete('cascade');
+            ->references('id')->on('oficialias');
 
       $table->timestamps();
 

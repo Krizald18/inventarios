@@ -43,6 +43,9 @@ class OficialiaController extends Controller
 
     public function destroy($id)
     {
-        //
+        $obj = Oficialia::find($id);
+        $obj->delete();
+
+        return Oficialia::with('municipio', 'responsable')->orderBy('id', 'asc')->get();
     }
 }
