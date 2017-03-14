@@ -6,7 +6,8 @@ angular.module('App').controller('InventarioCtrl', function (API, $scope, $inter
 		order: 'name',
 		limit: 5,
 		page: 1
-	};	
+	};
+
 	$scope.refreshbodyheight = function(){
 		var body = document.body,
 		    html = document.documentElement;
@@ -21,6 +22,7 @@ angular.module('App').controller('InventarioCtrl', function (API, $scope, $inter
 
 	var dt = function(response){
 		$scope.inventario = response.data;
+		$scope.total = response.data.total;
 		$scope.refreshbodyheight()
 	}
 

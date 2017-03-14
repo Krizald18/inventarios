@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call('OficialiasTableSeeder');
         $this->call('CaracteristicasTableSeeder');
         $this->call('MarcasTableSeeder');
+        $this->call('MarcasSubgruposTableSeeder');
         $this->call('ModelosTableSeeder');
         $this->call('AreaTableSeeder');
         $this->call('ResponsableTableSeeder');     

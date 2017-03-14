@@ -60,15 +60,13 @@ class InventarioController extends Controller
             if($desc)
             {
                 $x = Inventario::with('area', 'responsable')
-                        ->with(array('subgrupo' => function($q){
-                            $q->with('grupo');
-                        }))
                         ->with(array('oficialia' => function($q){
                             $q->with('municipio');
                         }))
                         ->with(array('modelo' => function($q){
                             $q->with('marca');
                             $q->with('caracteristica');
+                            $q->with('subgrupo');
                         }))
                         ->orderBy($order, 'desc')
                         ->paginate($limit);
@@ -76,15 +74,13 @@ class InventarioController extends Controller
             else
             {
                 $x = Inventario::with('area', 'responsable')
-                        ->with(array('subgrupo' => function($q){
-                            $q->with('grupo');
-                        }))
                         ->with(array('oficialia' => function($q){
                             $q->with('municipio');
                         }))
                         ->with(array('modelo' => function($q){
                             $q->with('marca');
                             $q->with('caracteristica');
+                            $q->with('subgrupo');
                         }))
                             ->orderBy($order, 'asc')
                             ->paginate($limit);
@@ -104,48 +100,7 @@ class InventarioController extends Controller
         if($request->has('data'))
         {
             $o = (object) $request->input('data');
-
-            if(isset($nextid))
-                $nextid = $nextid + 1;
-            else
-                $nextid = 1;
-
             $j = new Inventario;
-
-            if(isset($o->area_id) && !is_null($o->area_id))
-                $j->area_id = $o->area_id;
-            
-            if(isset($o->cantidad))
-                $j->cantidad = $o->cantidad;
-            else
-                $j->cantidad = 1;
-            
-            if(isset($o->caracteristica_id) && !is_null($o->caracteristica_id))
-                $j->caracteristica_id = $o->caracteristica_id;
-
-            if(isset($o->descripcion_id) && !is_null($o->descripcion_id))
-                $j->descripcion_id = $o->descripcion_id;
-
-            if(isset($o->fecha_baja) && !is_null($o->fecha_baja))
-                $j->fecha_baja = date('Y-m-d',strtotime($o->fecha_baja));
-
-            if(isset($o->grupo_id) && !is_null($o->grupo_id))
-                $j->grupo_id = $o->grupo_id;
-
-            if(isset($o->marca_id) && !is_null($o->marca_id))
-                $j->marca_id = $o->marca_id;
-
-            if(isset($o->modelo_id) && !is_null($o->modelo_id))
-                $j->modelo_id = $o->modelo_id;
-
-            if(isset($o->municipio_fisico_id) && !is_null($o->municipio_fisico_id))
-                $j->municipio_fisico_id = $o->municipio_fisico_id;
-
-            if(isset($o->municipio_id) && !is_null($o->municipio_id))
-                $j->municipio_id = $o->municipio_id;
-
-            if(isset($o->localidad_fisica_id) && !is_null($o->localidad_fisica_id))
-                $j->localidad_fisica_id = $o->localidad_fisica_id;
 
             if(isset($o->numero_inventario) && !is_null($o->numero_inventario))
                 $j->numero_inventario = $o->numero_inventario;
@@ -153,19 +108,23 @@ class InventarioController extends Controller
             if(isset($o->numero_serie) && !is_null($o->numero_serie))
                 $j->numero_serie = $o->numero_serie;
 
+            if(isset($o->fecha_baja) && !is_null($o->fecha_baja))
+                $j->fecha_baja = date('Y-m-d',strtotime($o->fecha_baja));
+
+            if(isset($o->status) && !is_null($o->status))
+                $j->status = $o->status;
+
+            if(isset($o->modelo_id) && !is_null($o->modelo_id))
+                $j->modelo_id = $o->modelo_id;
+
             if(isset($o->oficialia_id) && !is_null($o->oficialia_id))
-            {
-                if(strlen($o->oficialia_id) == 4)
-                    $j->oficialia_id = "0".$o->oficialia_id;
-                else
-                    $j->oficialia_id = $o->oficialia_id;
-            }
+                $j->oficialia_id = strlen($o->oficialia_id) == 4 ? "0".$o->oficialia_id : $o->oficialia_id;
+
+            if(isset($o->area_id) && !is_null($o->area_id))
+                $j->area_id = $o->area_id;
 
             if(isset($o->responsable_id) && !is_null($o->responsable_id))
                 $j->responsable_id = $o->responsable_id;
-
-            if(isset($o->tipo_id) && !is_null($o->tipo_id))
-                $j->tipo_id = $o->tipo_id;
             
             $j->save();
             return self::show($j->id);
@@ -177,15 +136,13 @@ class InventarioController extends Controller
     public function show($id)
     {
         return Inventario::with('area', 'responsable')
-                        ->with(array('subgrupo' => function($q){
-                            $q->with('grupo');
-                        }))
                         ->with(array('oficialia' => function($q){
                             $q->with('municipio');
                         }))
                         ->with(array('modelo' => function($q){
                             $q->with('marca');
                             $q->with('caracteristica');
+                            $q->with('subgrupo');
                         }))->find($id);
     }
 

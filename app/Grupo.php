@@ -16,4 +16,9 @@ class Grupo extends Model
     protected $hidden = [
 
     ];
+    
+    public function subgrupos()
+    {        
+        return $this->hasMany('App\Subgrupo');
+    }
 }

@@ -12,8 +12,14 @@ class Subgrupo extends Model
     protected $hidden = [
         'grupo_id'
     ];
+
     public function grupo()
     {        
         return $this->belongsTo('App\Grupo', 'grupo_id', 'id');
+    }
+
+    public function marcas()
+    {
+        return $this->belongsToMany('App\Marca');
     }
 }

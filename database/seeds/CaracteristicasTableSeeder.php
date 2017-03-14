@@ -22,8 +22,11 @@ class CaracteristicasTableSeeder extends Seeder {
 		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [17,'PROCESADOR INTEL PENTIUM, MEMORIA RAM DE 512MB, DISCO DURO DE 80GB, UNIDAD DE CD-RW, WINDO WS XP PROFESIONAL',$now]);
 		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?, ?, ?)', [18,'SWITCH HUP 4400 DE 24 PUERTOS',$now]);
 		*/
-		DB::insert('insert into caracteristicas (id, caracteristica, subgrupo_id, created_at) values (?,?,?,?)', [19,'TONER ULTRAPRECISE, 14ppm, 1200 dpi',7,$now]);
-		DB::insert('insert into caracteristicas (id, caracteristica, subgrupo_id, created_at) values (?,?,?,?)', [20,'TONER ULTRAPRECISE, 14ppm, 1100 dpi',7,$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?,?,?)', [16,'1 TB HDD, 8 GB RAM, 3.2 GHZ',$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?,?,?)', [17,'500 GB HDD, 8 GB RAM, 3.3 GHZ',$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?,?,?)', [18,'ECOTANK A COLOR',$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?,?,?)', [19,'TONER ULTRAPRECISE, 14ppm, 1200 dpi',$now]);
+		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?,?,?)', [20,'TONER ULTRAPRECISE, 14ppm, 1100 dpi',$now]);
 
 
 		/* datos reales sin procesar 

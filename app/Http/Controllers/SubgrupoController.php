@@ -12,9 +12,16 @@ class SubgrupoController extends Controller
         $this->middleware(['cors', 'auth:api']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return Subgrupo::with('grupo')->orderBy('subgrupo', 'asc')->get();
+        if($request->has('grupo'))
+        {
+            return Subgrupo::with('grupo')
+                    ->where('grupo_id', '=', $request->input('grupo'))
+                    ->orderBy('subgrupo', 'asc')->get();
+        }
+        else
+            return "";
     }
 
     public function create()

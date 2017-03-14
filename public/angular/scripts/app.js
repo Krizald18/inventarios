@@ -16,6 +16,7 @@ angular
     'app.config',
     'ui.bootstrap',
     'ui.select',
-    'md.data.table'
+    'md.data.table',
+    'material.svgAssetsCache'
   ]);
   angular.module('app.config', []);

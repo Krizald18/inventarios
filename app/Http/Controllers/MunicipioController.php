@@ -13,7 +13,7 @@ class MunicipioController extends Controller
 
     public function index()
     {
-        return Municipio::orderBy('municipio', 'asc')->get();
+        return Municipio::orderBy('id', 'asc')->get();
     }
 
     public function create()

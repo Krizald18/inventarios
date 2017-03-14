@@ -10,7 +10,7 @@ class Oficialia extends Model
     ]; 
 
     protected $hidden = [
-        'municipio_id'
+        
     ];
     public function getIdAttribute($value)
     {
@@ -19,5 +19,9 @@ class Oficialia extends Model
     public function municipio()
     {        
         return $this->hasOne('App\Municipio', 'id', 'municipio_id');
+    }
+    public function responsable()
+    {        
+        return $this->hasOne('App\Responsable');
     }
 }

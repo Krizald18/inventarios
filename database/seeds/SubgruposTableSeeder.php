@@ -10,14 +10,14 @@ class SubgruposTableSeeder extends Seeder {
 		// datos de prueba
 		// grupo 1 -> equipo de computo
 		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [1,'CPU', 1, $now]);
-		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [2,'COMPUTADORA PORTATIL', 1, $now]);
+		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [2,'COMPUTADORA ESCRITORIO', 1, $now]);
 		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [3,'DETECTOR HUELLA DP', 1, $now]);
 		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [4,'DISPLAY', 1, $now]);
 		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [6,'HUB', 1, $now]);
 		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [7,'IMPRESORA', 1, $now]);
 		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [8,'KIT DE COMUNICACION', 1, $now]);
 		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [9,'KIT DE COMUNICACION INALAMBRICA', 1, $now]);
-		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [10,'LAPTOP', 1, $now]);
+		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [10,'COMPUTADORA PORTATIL', 1, $now]);
 		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [11,'MONITOR', 1, $now]);
 		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [12,'MOUSE', 1, $now]);
 		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [13,'NO BREAK', 1, $now]);

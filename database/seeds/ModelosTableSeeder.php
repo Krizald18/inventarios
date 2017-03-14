@@ -10,6 +10,10 @@ class ModelosTableSeeder extends Seeder {
 		// datos de prueba
 		DB::insert('insert into modelos (id, marca_id, modelo, caracteristica_id, subgrupo_id, created_at) values (?,?,?,?,?,?)', [1,17,'LASERJET 1100 / 1100A', 20, 7, $now]);
 		DB::insert('insert into modelos (id, marca_id, modelo, caracteristica_id, subgrupo_id, created_at) values (?,?,?,?,?,?)', [2,17,'LASERJET 1200', 19, 7, $now]);
+		DB::insert('insert into modelos (id, marca_id, modelo, caracteristica_id, subgrupo_id, created_at) values (?,?,?,?,?,?)', [3,15,'L220', 18, 7, $now]);
+		DB::insert('insert into modelos (id, marca_id, modelo, caracteristica_id, subgrupo_id, created_at) values (?,?,?,?,?,?)', [4,9,'6200 CORE', 17, 1, $now]);
+		DB::insert('insert into modelos (id, marca_id, modelo, caracteristica_id, subgrupo_id, created_at) values (?,?,?,?,?,?)', [5,17,'PAVILION 14-E015LA', 16, 10, $now]);
+
 		/*
 		DB::insert('insert into modelos (id, marca, modelo, created_at) values (?,?,?,?)', [1,'1100',$now]);
 		DB::insert('insert into modelos (id, marca, modelo, created_at) values (?,?,?,?)', [2,'1200',$now]);

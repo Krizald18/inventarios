@@ -239,7 +239,5 @@ class OficialiasTableSeeder extends Seeder {
 		DB::insert('insert into oficialias (id, municipio_id, oficialia, created_at) values (?,?,?,?)', ['18005',18,'ALTATA',$now]);
 		DB::insert('insert into oficialias (id, municipio_id, oficialia, created_at) values (?,?,?,?)', ['18006',18,'SATAYA',$now]);
 		DB::insert('insert into oficialias (id, municipio_id, oficialia, created_at) values (?,?,?,?)', ['18007',18,'JUAN ALDAMA',$now]);
-
-
 	}
 }

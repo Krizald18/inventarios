@@ -15,6 +15,8 @@ angular.module('App')
 						case 401:
 							if(localStorage.satellizer_token)
 								localStorage.removeItem('satellizer_token');
+							window.location('/');
+							break;
 						case 422:
 							if(response.data.errors == undefined)
 								return ToastService.error(response.data.error);

@@ -11,12 +11,13 @@ class CreateSubgruposTable extends Migration
         Schema::create('subgrupos', function (Blueprint $table) {
             $table->integer('id')->unique();
             $table->string('subgrupo')->unique();
-            $table->timestamps();
            
             $table->integer('grupo_id')->nullable();
             $table->foreign('grupo_id')
                   ->references('id')->on('grupos')
                   ->onDelete('cascade');
+
+            $table->timestamps();
         });
     }
 

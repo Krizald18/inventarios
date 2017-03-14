@@ -10,7 +10,7 @@ class Responsable extends Model
     ];
 
     protected $fillable = [
-    	'id', 'responsable', 'usuario_id'
+    	'id', 'responsable', 'usuario_id', 'oficialia_id'
     ]; 
 
     protected $hidden = [

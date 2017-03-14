@@ -16,6 +16,10 @@ class CreateResponsablesTable extends Migration
             $table->foreign('usuario_id')
                   ->references('id')->on('users');
 
+            $table->string('oficialia_id')->nullable();
+            $table->foreign('oficialia_id')
+                  ->references('id')->on('oficialias');
+
             $table->timestamps();
         });
     }

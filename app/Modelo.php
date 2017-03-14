@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 class Modelo extends Model
 {
     protected $fillable = [
-    	'id', 'modelo', 'marca_id', 'caracteristica_id', 'subgrupo_id'
+    	'id', 'modelo', 'marca_id', 'caracteristica_id'
     ]; 
 
     protected $hidden = [
-        'marca_id', 'caracteristica_id', 'subgrupo_id'
+        
     ];
     public function marca()
     {

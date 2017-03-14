@@ -1,65 +1,491 @@
 'use strict';
 angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertService, ToastService) {	
 	$scope.selected = [];
-	$scope.localidades =  [];
 	$scope.loading = true;
 	$scope.project = {};
-	$scope.project.fecha_baja = new Date();
+	$scope.project.status = true;
 	$scope.project.keefForm = true;
   	$scope.isOpen = false;
+  	$scope.firstTime = true;
+  	$scope.ttimes = 0;
   	$scope.saveOrder = "";
-  	$scope.next = 0;
+	
+	API.all("grupo?full=true").getList().then(grp => {
+		$scope.grupos = grp.plain();
+		if($scope.grupos.length == 1)
+			$scope.project.grupo_id = $scope.grupos[0].id;		
+	});
+	$scope.oficialias = API.all("oficialia").getList().then(response => {
+		$scope.oficialias = response.plain();
+		$scope.oficialias_bk = angular.copy($scope.oficialias);
+	});
+	$scope.municipios = API.all("municipio").getList().$object;
+	$scope.areas = API.all("area").getList().$object;
+	$scope.responsables = API.all("responsable").getList().$object;
 
-  	$scope.$watch('project.nuevo_tipo', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")
-  		{
-  			$scope.project.tipo_id = null;
-  			$scope.project.nuevo_tipo = "";
-  		}
-  	});
-  	$scope.$watch('project.descripcion_nueva', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")
-  		{
-  			$scope.project.descripcion_id = null;
-  			$scope.project.descripcion_nueva = "";
-  		}
-  	});
-  	$scope.$watch('project.caracteristica_nueva', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")
-  		{
-  			$scope.project.caracteristica_id = null;
-  			$scope.project.caracteristica_nueva = "";
-  		}
-  	});
-  	$scope.$watch('project.marca', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")
-  		{
-  			$scope.project.marca_id = null;
-  			$scope.project.marca = "";
-  		}
-  	});
-  	$scope.$watch('project.modelo', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")
-  		{
-  			$scope.project.modelo_id = null;
-  			$scope.project.modelo = "";
-  		}
-  	});
-  	$scope.$watch('project.nueva_area', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")
-  		{
-  			$scope.project.area_id = null;
-  			$scope.project.nueva_area = "";
-  		}
-  	});
-  	$scope.$watch('project.nuevo_responsable', function(val){
-  		if(val != undefined && val.toUpperCase() == "ZZZ")
-  		{
-  			$scope.project.responsable_id = null;
-  			$scope.project.nuevo_responsable = "";
-  		}
+	$scope.$watch('project.numero_inventario', function(val){
+		if(val && val.length > 0)
+			$scope.project.numero_inventario = val.replace(/\D/g,'');
   	});
 
+	$scope.$watch('project.numero_serie', function(val){
+		if(val && val.length > 0)
+  			$scope.project.numero_serie = val.toUpperCase();
+  	});
+	
+	$scope.$watch('project.grupo_id', function(val){
+		if(!val) return;
+
+		delete($scope.subgrupos);
+		delete($scope.marcas);
+		delete($scope.modelos);
+
+		$scope.grupo = $.grep($scope.grupos, function(g){
+			return g.id == val;
+		})[0]; // encuentra el grupo
+
+		$scope.subgrupos = $scope.grupo.subgrupos.filter(function(sgr){
+			return sgr.marcas && sgr.marcas.length > 0 && tienenModelos(sgr.marcas);
+		}); // saca todos los subgrupos
+		setMarcas();
+		refreshCaracteristicas();
+		// mostrar solo marcas sin msodelos o marcas con modelos de ese GRUPO
+		// y solo mostrar los modelos de ese GRUPO
+		if(!$scope.caracteristicas)
+			$scope.caracteristicas = [];
+
+		$scope.projectForm.$setPristine();
+		$scope.projectForm.$setUntouched();
+  	});
+	
+	var tienenModelos =  function(marcas){
+		var tiene = false;
+		$.each(marcas, function(i,o){
+			if(o.modelos && o.modelos.length > 0)
+			{
+				tiene = true;
+				return false;
+			}
+		});
+		return tiene;
+	};
+	var buscaMarca = function(modelo, marca){
+		// regresa true si la marca contiene a ese modelo
+		if(marca.modelos && marca.modelos.length == 0)
+			return false;
+		let x = $.grep(marca.modelos, function(mod){
+			return mod.id == modelo
+		});
+		return x.length != 0;
+	};
+	var refreshCaracteristicas = function(){
+		delete($scope.caracteristicas);
+		if($scope.modelos && $scope.modelos.length > 0)
+			$scope.caracteristicas = $scope.modelos.map(function(modelo){
+				return modelo.caracteristica;
+			});
+	};
+  	$scope.cambioSubgrupo = function(val){
+  		var val = $scope.project.subgrupo_id;
+		// y solo mostrar los modelos de ese subgrupo
+		if(val)
+		{
+			delete($scope.project.modelo);
+			delete($scope.project.modelo_id);
+			delete($scope.project.caracteristica_id);
+		}
+		else 
+			return;
+
+		$scope.subgrupo = $.grep($scope.subgrupos, function(s){
+				return s.id == $scope.project.subgrupo_id;
+			})[0];
+
+		if($scope.project.marca_id)
+		{
+			$scope.marca = $.grep($scope.subgrupo.marcas, function(mr){
+				return mr.id == $scope.project.marca_id;
+			})[0];
+
+			if($scope.marca) // si encuentra la marca en las marcas de este subgrupo
+				$scope.modelos = $scope.marca.modelos.filter(function(mod){
+					return mod.subgrupo_id == val;
+				});
+			else
+				$scope.modelos = [];
+		}
+		if($scope.modelos.length == 0)
+		{
+			delete($scope.project.marca_id);
+			// buscar marcas y modelos
+			$scope.marcas = [];
+			if($scope.subgrupo.marcas && $scope.subgrupo.marcas.length > 0)
+			{
+				$.each($scope.subgrupo.marcas, function(j, o) {
+					var ob = {};
+					ob.id = o.id;
+					ob.marca = o.marca;
+					ob.modelos = o.modelos.filter(function(modf){
+						return modf.subgrupo_id = $scope.project.subgrupo_id;
+					});
+
+					if($scope.marcas.length == 0)
+					{
+						if(ob.modelos.length > 0)
+							$scope.marcas.push(ob);
+					}
+					else {
+						let c = $.grep($scope.marcas, function(mx){
+							return mx.marca == ob.marca;
+						}); // buscar que no exista
+						if(c.length == 0)
+							if(ob.modelos.length > 0)
+								$scope.marcas.push(ob);
+					}
+				});
+				$scope.modelos = [];
+				if($scope.marcas && $scope.marcas.length > 0)
+				{
+					if($scope.marcas.length == 1)
+						$scope.project.marca_id = $scope.marcas[0].id;
+					$.each($scope.marcas, function(i, marca){
+						// buscar todos los modelos de todas las marcas, solo para este subgrupo
+						if(marca.modelos && marca.modelos.length > 0)
+							$.each(marca.modelos, function(l, modelo){
+								if(modelo.subgrupo_id == $scope.subgrupo.id)
+									$scope.modelos.push(modelo);
+							});
+					});
+				}
+			}
+			else
+				$scope.modelos = [];
+		}
+		else
+		{
+			$scope.marcas = [];
+			$.each($scope.subgrupo.marcas, function(j, o) {
+				var ob = {};
+				ob.id = o.id;
+				ob.marca = o.marca;
+				ob.modelos = o.modelos.filter(function(modf){
+					return modf.subgrupo_id = $scope.project.subgrupo_id;
+				});
+
+				if($scope.marcas.length == 0)
+				{
+					if(ob.modelos.length > 0)
+						$scope.marcas.push(ob);
+				}
+				else {
+					let c = $.grep($scope.marcas, function(mx){
+						return mx.marca == ob.marca;
+					}); // buscar que no exista
+					if(c.length == 0)
+						if(ob.modelos.length > 0)
+							$scope.marcas.push(ob);
+				}
+			});
+			$scope.modelos = [];
+			if($scope.marcas && $scope.marcas.length > 0)
+			$.each($scope.marcas, function(i, marca){
+				// buscar todos los modelos de todas las marcas, solo para este subgrupo, o de la marca seleccionada y de ese grupo
+				if($scope.project.marca_id)
+				{
+					if(marca.id == $scope.project.marca_id && marca.modelos && marca.modelos.length > 0)
+						$.each(marca.modelos, function(l, modelo){
+							if(modelo.subgrupo_id == $scope.subgrupo.id)
+								$scope.modelos.push(modelo);
+						});
+				}
+				else
+				{
+					$.each(marca.modelos, function(l, modelo){
+						if(modelo.subgrupo_id == $scope.subgrupo.id)
+							$scope.modelos.push(modelo);
+					});
+				}
+			});
+		}
+
+		refreshCaracteristicas();
+
+		if($scope.marcas.length == 1)
+			$scope.project.marca_id = $scope.marcas[0].id
+		if($scope.modelos.length == 1)
+		{
+			$scope.project.modelo = JSON.stringify($scope.modelos[0]);
+			$scope.project.modelo_id = $scope.modelos[0].id;
+			$scope.project.caracteristica_id = $scope.modelos[0].caracteristica.id;
+		}
+		
+		if($scope.ttimes < 2)
+		{
+			$scope.ttimes++;
+			if($scope.ttimes > 1)
+				$scope.firstTime = false;
+		}
+		$scope.projectForm.$setPristine();
+		$scope.projectForm.$setUntouched();
+  	};
+  	var setMarcas =  function(subgrupo, marca)
+  	{
+  		// si tiene subgrupo pone solo marcas con modelos de ese subgrupo
+  		// si tiene subgrupo filtra los modelos
+  		// si no tiene subgrupo le pone todos los modelos de la marca
+  		// actualiza modelos
+  		// refesh caracteristicas;
+  		// si tiene marca filtrar solo modelos de esa marcaa
+  		if(subgrupo || marca)
+  		{
+  			console.log('tiene subgrupo o marca');
+  			if(!$scope.project.subgrupo || ($scope.project.subgrupo && $scope.project.subgrupo.id != subgrupo))
+  			{
+  			// tenia puesto el subgrupo
+  				$scope.project.subgrupo_id = subgrupo;
+  				$scope.subgrupo = $.grep($scope.subgrupos, function(s){
+					return s.id == subgrupo;
+				})[0];
+				subgrupo = $scope.subgrupo;
+
+				$scope.marcas = [];
+  				$scope.modelos = [];
+  				if(subgrupo)
+  				{
+  					console.log('tiene subgrupo');
+  					if(subgrupo.marcas && subgrupo.marcas.length > 0)
+						$.each(subgrupo.marcas, function(j, o) {
+							var ob = {};
+							ob.id = o.id;
+							ob.marca = o.marca;
+							
+							if(marca)
+							{
+								console.log('tiene subgrupo y marca');
+								if(o.id == marca)
+								{
+									ob.modelos = o.modelos.filter(function(modf){
+										return (modf.subgrupo_id == subgrupo.id) && (modf.marca_id == marca);
+									});
+									if(ob.modelos && ob.modelos.length > 0)
+									{
+										$.each(ob.modelos, function(k,oo){
+											$scope.modelos.push(oo);
+										});
+									}
+								}						
+								if($scope.marcas.length == 0)				
+									$scope.marcas.push(ob);
+								else {
+									let c = $.grep($scope.marcas, function(mx){
+										return mx.marca == ob.marca;
+									}); // buscar que no exista
+									if(c.length == 0)
+										$scope.marcas.push(ob);
+								}
+							}
+							else
+							{
+								console.log('tiene solo subgrupo');
+								ob.modelos = o.modelos.filter(function(mdl){
+									mdl.subgrupo_id == subgrupo.id;
+								});
+
+								if(o.modelos && o.modelos.length > 0)
+									$.each(o.modelos, function(l, modelo){
+										$scope.modelos.push(modelo);
+									});
+
+								if($scope.marcas.length == 0)
+								{
+									if(o.modelos.length > 0)
+										$scope.marcas.push(ob);
+								}
+								else {
+									let c = $.grep($scope.marcas, function(mx){
+										return mx.marca == ob.marca;
+									});
+									if(c.length == 0)
+										if(o.modelos.length > 0)
+											$scope.marcas.push(ob);
+								}
+							}
+						});
+  				}
+  				else
+  				{
+  					console.log('tiene solo marca');
+					$.each($scope.subgrupos, function(i, subgrupo) {
+						if(subgrupo.marcas && subgrupo.marcas.length > 0)
+						$.each(subgrupo.marcas, function(j, o) {
+							var ob = {};
+							ob.id = o.id;
+							ob.marca = o.marca;
+							
+							if(marca)
+							{
+								if(o.id == marca)
+								{
+									ob.modelos = o.modelos.filter(function(modf){
+										return modf.marca_id == marca;
+									});
+									if(ob.modelos && ob.modelos.length > 0)
+									{
+										$.each(ob.modelos, function(k,oo){
+											$scope.modelos.push(oo);
+										});
+									}
+								}						
+								if($scope.marcas.length == 0)				
+									$scope.marcas.push(ob);
+								else {
+									let c = $.grep($scope.marcas, function(mx){
+										return mx.marca == ob.marca;
+									}); // buscar que no exista
+									if(c.length == 0)
+										$scope.marcas.push(ob);
+								}
+							}
+						});
+					});
+				}
+  			}
+  			else
+  			{
+  				// si tenia puesto el subgrupo
+				$scope.marcas = [];
+  				$scope.modelos = [];
+				if(subgrupo.marcas && subgrupo.marcas.length > 0)
+				{
+					$.each(subgrupo.marcas, function(j, o) {
+						var ob = {};
+						ob.id = o.id;
+						ob.marca = o.marca;
+						
+						if(marca)
+						{
+							console.log('tiene subgrupo y marca');
+							if(o.id == marca)
+							{
+								ob.modelos = o.modelos.filter(function(modf){
+									return (modf.subgrupo_id == subgrupo) && (modf.marca_id == marca);
+								});
+								if(ob.modelos && ob.modelos.length > 0)
+								{
+									$.each(ob.modelos, function(k,oo){
+										$scope.modelos.push(oo);
+									});
+								}
+							}						
+							if($scope.marcas.length == 0)				
+								$scope.marcas.push(ob);
+							else {
+								let c = $.grep($scope.marcas, function(mx){
+									return mx.marca == ob.marca;
+								}); // buscar que no exista
+								if(c.length == 0)
+									$scope.marcas.push(ob);
+							}
+						}
+						else
+						{
+							console.log('tiene solo subgrupo');
+							ob.modelos = o.modelos.filter(function(mdl){
+								mdl.subgrupo_id == subgrupo;
+							});
+
+							if(o.modelos && o.modelos.length > 0)
+								$.each(o.modelos, function(l, modelo){
+									$scope.modelos.push(modelo);
+								});
+
+							if($scope.marcas.length == 0)
+							{
+								if(o.modelos.length > 0)
+									$scope.marcas.push(ob);
+							}
+							else {
+								let c = $.grep($scope.marcas, function(mx){
+									return mx.marca == ob.marca;
+								});
+								if(c.length == 0)
+									if(o.modelos.length > 0)
+										$scope.marcas.push(ob);
+							}
+						}
+					});
+				}
+			}
+  		}
+  		else
+		{
+			console.log('ni subgrupo ni marca');
+			$scope.marcas = [];
+			$scope.modelos = [];
+			$.each($scope.subgrupos, function(i, subgrupo) {
+				if(subgrupo.marcas && subgrupo.marcas.length > 0)
+					$.each(subgrupo.marcas, function(j, o) {
+						var ob = {};
+						ob.id = o.id;
+						ob.marca = o.marca;
+						ob.modelos = o.modelos;
+
+						if(o.modelos && o.modelos.length > 0)
+							$.each(o.modelos, function(l, modelo){									
+								$scope.modelos.push(modelo);
+							});
+
+						if($scope.marcas.length == 0)
+						{
+							if(o.modelos.length > 0)
+								$scope.marcas.push(ob);
+						}
+						else {
+							let c = $.grep($scope.marcas, function(mx){
+								return mx.marca == ob.marca;
+							});
+							if(c.length == 0)
+								if(o.modelos.length > 0)
+									$scope.marcas.push(ob);
+						}
+					});
+			});
+		}
+  		refreshCaracteristicas();
+  	}
+  	$scope.cambioMarca = function(){
+  		// mostrar solo modelos de esta marca
+  		// modelos de este subgrupo
+  		// mostrar solo caracteristicas de modelos de esta marca y subgrupo
+  		// delete($scope.project.subgrupo_id);// filtrar modelos para ese subgrupo
+		delete($scope.project.modelo);
+		delete($scope.project.modelo_id);
+		delete($scope.project.caracteristica_id);
+		if($scope.project.marca_id)
+		{
+			setMarcas($scope.project.subgrupo_id, $scope.project.marca_id);
+			if($scope.modelos.length == 1)
+			{
+				if($scope.ttimes < 2)
+				{
+					$scope.ttimes++;
+					if($scope.ttimes > 1)
+						$scope.firstTime = false;
+				}
+				$scope.project.modelo = JSON.stringify($scope.modelos[0]);
+				$scope.project.modelo_id = $scope.modelos[0].id;
+				$scope.project.caracteristica_id = $scope.modelos[0].caracteristica.id;
+				if(!$scope.project.subgrupo_id)
+					$scope.project.subgrupo_id = $scope.modelos[0].subgrupo_id;
+				setMarcas($scope.project.subgrupo_id, $scope.project.marca_id);
+			}
+		}
+		else
+			return;
+
+		$scope.projectForm.$setPristine();
+		$scope.projectForm.$setUntouched();
+	};
 	$scope.refreshbodyheight = function(){
 		var body = document.body,
 		    html = document.documentElement;
@@ -72,12 +498,6 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
 		$scope.loading = false;
 	}
 
-	$scope.serie_o_numeronventario = function(){
-		if(($scope.project.numero_inventario != undefined && $scope.project.numero_inventario.length > 0) || ($scope.project.numero_serie != undefined && $scope.project.numero_serie.length > 0))
-			$scope.project.cantidad = 1;
-		else
-			delete($scope.project.cantidad);
-	}
 	$scope.refreshbodyheight();
 	
 	setTimeout(function(){
@@ -92,531 +512,219 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
 		$scope.refreshbodyheight();
 	}, 900);
 
-	API.all("grupo").getList().then(grp => {
-		$scope.grupos = grp.plain();
-		if($scope.grupos.length == 1)
-			$scope.project.grupo_id = $scope.grupos[0].id;
-	});
-
-	$scope.tipos = API.all("tipo").getList().$object;
-	$scope.marcas = API.all("marca").getList().$object;
-	$scope.modelos = API.all("modelo").getList().$object;
-	$scope.descripciones = API.all("descripcion").getList().$object;
-	$scope.caracteristicas = API.all("caracteristica").getList().$object;
-	$scope.oficialias = API.all("oficialia").getList().$object;
-	$scope.municipios = API.all("municipio").getList().$object;
-	$scope.areas = API.all("area").getList().$object;
-	$scope.responsables = API.all("responsable").getList().$object;
-
- 	var rs = function(response){
-		$scope.localidades = response.data.data;
-	}
-
-	$scope.buscarLocalidades = function(sr){
-		if(sr == undefined || (sr != undefined && (sr.search == undefined || sr.length == 0)) )
+	$scope.cambioMunicipio =  function(){
+		if(!$scope.project.municipio)
 			return;
-		var loc = sr.search;
-		if($scope.project.municipio_fisico_id != undefined && loc.length > 0)		
-			API.all("localidad?municipio="+$scope.project.municipio_fisico_id+"&search="+loc).getList().then(rs).catch(rs);		
+		$scope.project.municipio_id = JSON.parse($scope.project.municipio).id;
+		if(!$scope.project.municipio_id)
+			return;
+		delete($scope.project.oficialia_id);
+		var strSearch = $scope.project.municipio_id < 10 ? "0" + $scope.project.municipio_id: $scope.project.municipio_id;
+		$scope.oficialias = $scope.oficialias_bk.filter(function(ofs){
+			return ofs.id.substr(0,2) == strSearch;
+		});
+		$scope.projectForm.$setPristine();
+		$scope.projectForm.$setUntouched();
+	};
+	$scope.cambioOficialia = function(){
+		if(!$scope.project.oficialia_id)
+			return;
+		if($scope.project.municipio)
+			var mun = JSON.parse($scope.project.municipio);
+		var oficialia = $.grep($scope.oficialias_bk, function(o){
+			return o.id == $scope.project.oficialia_id;
+		})[0];
+
+		if(oficialia.responsable && oficialia.responsable.id)
+			$scope.project.responsable_id = oficialia.responsable.id;
+
+		var municipio = $.grep($scope.municipios, function(mn){
+				return mn.id == oficialia.municipio_id;
+			})[0];
+		if(!mun)
+		{
+			$scope.oficialias = $scope.oficialias_bk.filter(function(ofi){
+				return ofi.id.substr(0,2) == oficialia.id.substr(0,2);
+			});
+			$scope.project.municipio = JSON.stringify(municipio);
+			$scope.project.municipio_id = municipio.id;
+		}
 		else
-			$scope.localidades =  [];
-	}
+			if(mun.id != municipio.id)
+			{
+				$scope.project.municipio = JSON.stringify(municipio);
+				$scope.project.municipio_id = municipio.id;
+			}
+		$scope.projectForm.$setPristine();
+		$scope.projectForm.$setUntouched();
+	};
+	$scope.cambioCaracteristica = function(){
+		if(!$scope.project.caracteristica_id)
+			return;
+		
+		var modelo = $.grep($scope.modelos, function(md){
+			return md.caracteristica_id == $scope.project.caracteristica_id;
+		})[0];
+
+		if(modelo)
+		{
+			if($scope.project.modelo_id)
+			{
+				if($scope.project.modelo_id != modelo.id)
+				{
+					if($scope.firstTime)
+					{
+						$scope.project.modelo = JSON.stringify(modelo);
+						$scope.project.modelo_id = modelo.id;
+					}
+					else
+						$scope.project.modelo_id = modelo.id;
+				}
+			}
+		}
+
+		var marca =  $.grep($scope.marcas, function(m){
+				return m.id == modelo.marca_id;
+			})[0];
+
+		if($scope.project.marca_id)
+		{
+			if($scope.project.marca_id != marca.id)
+				$scope.project.marca_id = marca.id;
+		}
+		else
+			$scope.project.marca_id = marca.id;
+
+		if($scope.project.subgrupo_id)
+		{
+			if($scope.project.subgrupo_id != modelo.subgrupo_id)
+				$scope.project.subgrupo_id = modelo.subgrupo_id;
+		}
+		else
+			$scope.project.subgrupo_id = modelo.subgrupo_id;
+
+		setMarcas($scope.project.subgrupo_id, $scope.project.marca_id);
+		// poner modelos que tengan el subgrupo de esta caracteristica
+		$scope.project.modelo = JSON.stringify(modelo);
+		$scope.project.modelo_id = modelo.id;
+	};
+	$scope.cambioModelo = function(){
+		if(!$scope.project.modelo_id)
+			return;
+		if($scope.firstTime)
+		{
+			$scope.project.modelo = JSON.stringify($.grep($scope.modelos, function(m){
+				return m.id == $scope.project.modelo_id;
+			})[0]);
+		}
+		
+		$scope.project.modelo_id =  JSON.parse($scope.project.modelo).id;
+		if(!$scope.project.marca_id)
+		{
+			var marca = $.grep($scope.marcas, function(marca) {
+				return buscaMarca($scope.project.modelo_id, marca);
+			})[0];
+			$scope.project.marca_id = marca.id;
+		}
+		if(!$scope.project.subgrupo_id)
+			$scope.project.subgrupo_id = JSON.parse($scope.project.modelo).subgrupo_id;
+		$scope.project.caracteristica_id = JSON.parse($scope.project.modelo).caracteristica.id;
+		setMarcas($scope.project.subgrupo_id, $scope.project.marca_id);
+	};
+
 	$scope.guardar = function(){
-		//console.log();
 		var frmObj = $scope.project;
 		var obj = {};
 		
 		$scope.saveOrder = "";
 		$scope.next = 0;
 
-		if(frmObj.numero_inventario != undefined && frmObj.numero_inventario.length > 0)
-			obj.numero_inventario = frmObj.numero_inventario;	
-		else
+		if(!$scope.projectForm.$valid)
 		{
+			console.log($scope.projectForm);
+			return;
+		}
+
+		if(frmObj.numero_inventario && frmObj.numero_inventario.length > 0)
+			obj.numero_inventario = parseInt(frmObj.numero_inventario);
+		else
 			obj.numero_inventario = null;
-			obj.cantidad = 1;
-		}
 		
-		if(frmObj.numero_serie != undefined && frmObj.numero_serie.length > 0)
-			obj.numero_serie = frmObj.numero_serie			
+		if(frmObj.numero_serie && frmObj.numero_serie.length > 0)
+			obj.numero_serie = frmObj.numero_serie;
 		else
-		{
 			obj.numero_serie = null;
-			obj.cantidad = 1;
-		}
 
-		if(obj.numero_inventario == null && obj.numero_serie == null)
-		{
-			if(frmObj.cantidad != undefined)
-				obj.cantidad = parseInt(frmObj.cantidad);
-			else
-			{
-				AlertService.error("El campo Cantidad es requerido");
-				return;
-			}
-		}
-		
-		if(frmObj.tipo_id != undefined) // 0
-		{
-			if(frmObj.tipo_id == 0)
-			{
-				$scope.saveOrder += "0";
-				obj.fecha_baja = null;
-			}
-			else
-			{
-				obj.tipo_id = parseInt(frmObj.tipo_id);
-				if(obj.tipo_id == 2)
-					obj.fecha_baja = frmObj.fecha_baja;
-				else
-					obj.fecha_baja = null;
-				$scope.saveOrder += "x";
-			}
-		}
-		else
-		{
-			$scope.saveOrder += "x";
-			obj.tipo_id = null;
-			obj.fecha_baja = null;
-		}
-		if(frmObj.descripcion_id == undefined) // 1
-		{
-			AlertService.error("El campo Descripción es requerido");
-			return;	
-		}
-		else
-		{
-			if(frmObj.descripcion_id == 0)
-				$scope.saveOrder += "0";
-			else
-			{
-				obj.descripcion_id = parseInt(frmObj.descripcion_id);
-				$scope.saveOrder += "x";
-			}
-		}
-		if(frmObj.caracteristica_id != undefined) // 2
-		{
-			if(frmObj.caracteristica_id == 0)
-				$scope.saveOrder += "0";
-			else
-			{
-				obj.caracteristica_id = parseInt(frmObj.caracteristica_id);
-				$scope.saveOrder += "x";
-			}
-		}
-		else
-		{
-			$scope.saveOrder += "x";
-			obj.caracteristica_id = null;
-		}
+		if(frmObj.modelo_id)
+			obj.modelo_id = parseInt(frmObj.modelo_id);
 
-		if(frmObj.marca_id != undefined) // 3
-		{
-			if(frmObj.marca_id == 0)
-				$scope.saveOrder += "0";
-			else
-			{
-				obj.marca_id = parseInt(frmObj.marca_id);
-				$scope.saveOrder += "x";
-			}
-		}
-		else
-		{
-			$scope.saveOrder += "x";
-			obj.marca_id = null;
-		}
-
-		if(frmObj.modelo_id != undefined) // 4
-		{
-			if(frmObj.modelo_id == 0)
-				$scope.saveOrder += "0";
-			else
-			{
-				obj.modelo_id = parseInt(frmObj.modelo_id);
-				$scope.saveOrder += "x";
-			}
-		}
-		else
-		{
-			$scope.saveOrder += "x";
-			obj.modelo_id = null;
-		}
-
-		if(frmObj.oficialia_id != undefined)
+		if(frmObj.oficialia_id)
 			obj.oficialia_id = frmObj.oficialia_id;
-		if(frmObj.municipio_id != undefined)
-			obj.municipio_id = parseInt(frmObj.municipio_id);
-		if(frmObj.municipio_fisico_id != undefined)
-			obj.municipio_fisico_id = parseInt(frmObj.municipio_fisico_id);
-		if(frmObj.localidad_fisica_id != undefined && frmObj.localidad_fisica_id.id != undefined)
-			obj.localidad_fisica_id = parseInt(frmObj.localidad_fisica_id.id);
-		if(frmObj.grupo_id != undefined)
-			obj.grupo_id = parseInt(frmObj.grupo_id);
 		
-		if(frmObj.area_id != undefined) // 5
-		{
-			if(frmObj.area_id == 0)
-				$scope.saveOrder += "0";
-			else
-			{
-				obj.area_id = parseInt(frmObj.area_id);
-				$scope.saveOrder += "x";
-			}
-		}
-		else
-		{
-			$scope.saveOrder += "x";
-			obj.area_id = null;
-		}
+		if(frmObj.area_id)
+			obj.area_id = parseInt(frmObj.area_id);
 
 		if(frmObj.responsable_id != undefined) // 6
-		{
-			if(frmObj.responsable_id == 0)
-				$scope.saveOrder += "0";
-			else
-			{
-				obj.responsable_id = parseInt(frmObj.responsable_id);
-				$scope.saveOrder += "x";
-			}
-		}
-		else
-		{
-			$scope.saveOrder += "x";
-			obj.responsable_id = null;
-		}
+			obj.responsable_id = parseInt(frmObj.responsable_id);
+
+		obj.status = frmObj.status? frmObj.status : false;
+		obj.fecha_baja = null;
 		saver(obj);
 	}
 
 	var saver = function(obj)
 	{
-		switch($scope.next) {
-			case 0: // tipo
-				if ($scope.saveOrder.charAt(0) == '0' && $scope.project.nuevo_tipo != undefined && $scope.project.nuevo_tipo.length > 0)
-				{
-					$scope.project.nuevo_tipo = $scope.project.nuevo_tipo.toUpperCase();
-					let matches = $.grep($scope.tipos, function(tp){
-						return tp.tipo.toUpperCase() == $scope.project.nuevo_tipo;
-					});
-					if(matches.length == 0)
+		let getUrl = window.location;
+		let baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+		let urlval = baseUrl;
+		
+		urlval += "api/inventario?numero_inventario=" + obj.numero_inventario;
+		urlval += "&numero_serie=" + obj.numero_serie;
+
+		API.oneUrl('validador', urlval).get()
+		.then(tn =>{
+			let a = tn.plain();
+			let x = a.response;
+			if(x == 0)
+			{
+				let data = angular.copy(obj);
+				API.all('inventario').post({data}).then(ad => {
+					AlertService.show("Listo!","El Artículo se ha guardado en inventario");
+					
+					$scope.project.numero_serie = null;
+					$scope.project.numero_inventario = null;
+					if(!$scope.project.keefForm)
 					{
-						API.all('tipo').post({data:{"tipo":$scope.project.nuevo_tipo}}).then(ad => {
-							ToastService.show("Se ha guardado un Tipo nuevo");
-							$scope.tipos = ad.plain();
-							$scope.project.tipo_id = $.grep($scope.tipos, function(ob) {
-								return ob.tipo.toUpperCase() == $scope.project.nuevo_tipo;
-							})[0].id;
-							obj.tipo_id = $scope.project.tipo_id;
-							$scope.next++;
-							saver(obj);
-						});
-					}
-					else
-					{
-						AlertService.error('No se puede guardar el Tipo ingresado por que ya existe, seleccione un Tipo');
-						delete($scope.project.tipo_id);
-						delete($scope.project.nuevo_tipo);
-						return
-					}
-				}
-				else
-				{
-					if($scope.project.tipo_id == 0)
-					{
-						$scope.project.tipo_id = null;
-						obj.tipo_id = null;
-					}
-					$scope.next++;
-					saver(obj);
-				}
-			break
-			case 1: // descripcion
-				if ($scope.saveOrder.charAt(1) == '0' && $scope.project.descripcion_nueva != undefined && $scope.project.descripcion_nueva.length > 0)
-				{
-					$scope.project.descripcion_nueva = $scope.project.descripcion_nueva.toUpperCase();
-					let matches = $.grep($scope.descripciones, function(tp){
-						return tp.descripcion.toUpperCase() == $scope.project.descripcion_nueva;
-					});
-					if(matches.length == 0)
-					{
-						API.all('descripcion').post({data:{"descripcion":$scope.project.descripcion_nueva}}).then(ad => {
-							ToastService.show("Se ha guardado una Descripción nueva");
-							$scope.descripciones = ad.plain();
-							$scope.project.descripcion_id = $.grep($scope.descripciones, function(ob) {
-								return ob.descripcion.toUpperCase() == $scope.project.descripcion_nueva;
-							})[0].id;
-							obj.descripcion_id = $scope.project.descripcion_id;
-							$scope.next++;
-							saver(obj);
-						});
-					}
-					else
-					{
-						AlertService.error('No se puede guardar la Descripción ingresada por que ya existe, seleccione una Descripción');
-						delete($scope.project.descripcion_id);
-						delete($scope.project.descripcion_nueva);
-						return
-					}
-				}
-				else
-				{
-					if($scope.project.descripcion_id == 0)
-					{
-						$scope.project.descripcion_id = null;
-						obj.descripcion_id = null;
-					}
-					$scope.next++;
-					saver(obj);
-				}
-			break;
-			case 2: // caracteristica
-				if ($scope.saveOrder.charAt(2) == '0' && $scope.project.caracteristica_nueva!= undefined && $scope.project.caracteristica_nueva.length > 0)
-				{
-					$scope.project.caracteristica_nueva = $scope.project.caracteristica_nueva.toUpperCase();
-					let matches = $.grep($scope.caracteristicas, function(tp){
-						return tp.caracteristica.toUpperCase() == $scope.project.caracteristica_nueva;
-					});
-					if(matches.length == 0)
-					{
-						API.all('caracteristica').post({data:{"caracteristica":$scope.project.caracteristica_nueva}}).then(ad => {
-							ToastService.show("Se ha guardado una Caracteristica nueva");
-							$scope.caracteristicas = ad.plain();
-							$scope.project.caracteristica_id = $.grep($scope.caracteristicas, function(ob) {
-								return ob.caracteristica.toUpperCase() == $scope.project.caracteristica_nueva;
-							})[0].id;
-							obj.caracteristica_id = $scope.project.caracteristica_id;
-							$scope.next++;
-							saver(obj);
-						});
-					}
-					else
-					{
-						AlertService.error('No se puede guardar la Caracteristica ingresada por que ya existe, seleccione una Caracteristica');
-						delete($scope.project.caracteristica_id);
-						delete($scope.project.caracteristica_nueva);
-						return
-					}
-				}
-				else
-				{
-					if($scope.project.caracteristica_id == 0)
-					{
+						//limpiar formulario
+						$scope.project.area_id = null;						
 						$scope.project.caracteristica_id = null;
-						obj.caracteristica_id = null;
-					}
-					$scope.next++;
-					saver(obj);
-				}
-			break;
-			case 3: // marca
-				if ($scope.saveOrder.charAt(3) == '0' && $scope.project.marca != undefined && $scope.project.marca.length > 0)
-				{
-					$scope.project.marca = $scope.project.marca.toUpperCase();
-					let matches = $.grep($scope.marcas, function(tp){
-						return tp.marca.toUpperCase() == $scope.project.marca;
-					});
-					if(matches.length == 0)
-					{
-						API.all('marca').post({data:{"marca":$scope.project.marca}}).then(ad => {
-							ToastService.show("Se ha guardado una Marca nueva");
-							$scope.marcas = ad.plain();
-							$scope.project.marca_id = $.grep($scope.marcas, function(ob) {
-								return ob.marca.toUpperCase() == $scope.project.marca;
-							})[0].id;
-							obj.marca_id = $scope.project.marca_id;
-							$scope.next++;
-							saver(obj);
-						});
-					}
-					else
-					{
-						AlertService.error('No se puede guardar la Marca ingresada por que ya existe, seleccione una Marca');
-						delete($scope.project.marca_id);
-						delete($scope.project.marca);
-						return
-					}
-				}
-				else
-				{
-					if($scope.project.marca_id == 0)
-					{
+						$scope.project.descripcion_id = null;
+						$scope.project.fecha_baja = null;
+						$scope.project.grupo_id = null;
+						$scope.project.subgrupo_id = null;
+						$scope.project.municipio = null;
+						$scope.project.municipio_id = null;
 						$scope.project.marca_id = null;
-						obj.marca_id = null;
-					}
-					$scope.next++;
-					saver(obj);
-				}
-			break;
-			case 4: // modelo
-				if ($scope.saveOrder.charAt(4) == '0' && $scope.project.modelo !=undefined && $scope.project.modelo.length > 0)
-				{
-					$scope.project.modelo = $scope.project.modelo.toUpperCase();
-					let matches = $.grep($scope.modelos, function(tp){
-						return tp.modelo.toUpperCase() == $scope.project.modelo;
-					});
-					if(matches.length == 0)
-					{
-						API.all('modelo').post({data:{"modelo":$scope.project.modelo}}).then(ad => {
-							ToastService.show("Se ha guardado una Modelo nueva");
-							$scope.modelos = ad.plain();
-							$scope.project.modelo_id = $.grep($scope.modelos, function(ob) {
-								return ob.modelo.toUpperCase() == $scope.project.modelo;
-							})[0].id;
-							obj.modelo_id = $scope.project.modelo_id;
-							$scope.next++;
-							saver(obj);
-						});
-					}
-					else
-					{
-						AlertService.error('No se puede guardar el Modelo ingresado por que ya existe, seleccione un Modelo');
-						delete($scope.project.modelo_id);
-						delete($scope.project.modelo);
-						return
-					}
-				}
-				else
-				{
-					if($scope.project.modelo_id == 0)
-					{
 						$scope.project.modelo_id = null;
-						obj.modelo_id = null;
-					}
-					$scope.next++;
-					saver(obj);
-				}
-			break;
-			case 5: // area
-				if ($scope.saveOrder.charAt(5) == '0' && $scope.project.nueva_area != undefined && $scope.project.nueva_area.length > 0)
-				{
-					$scope.project.nueva_area = $scope.project.nueva_area.toUpperCase();
-					let matches = $.grep($scope.areas, function(tp){
-						return tp.area.toUpperCase() == $scope.project.nueva_area;
-					});
-					if(matches.length == 0)
-					{
-						API.all('area').post({data:{"area":$scope.project.nueva_area}}).then(ad => {
-							ToastService.show("Se ha guardado una Área nueva");
-							$scope.areas = ad.plain();
-							$scope.project.area_id = $.grep($scope.areas, function(ob) {
-								return ob.area.toUpperCase() == $scope.project.nueva_area;
-							})[0].id;
-							obj.area_id = $scope.project.area_id;
-							$scope.next++;
-							saver(obj);
-						});
-					}
-					else
-					{						
-						AlertService.error('No se puede guardar el Área ingresada por que ya existe, seleccione una Área');
-						delete($scope.project.area_id);
-						delete($scope.project.nueva_area);
-						return
-					}
-				}
-				else
-				{
-					if($scope.project.area_id == 0)
-					{
-						$scope.project.area_id = null;
-						obj.area_id = null;
-					}
-					$scope.next++;
-					saver(obj);
-				}
-			break;
-			case 6: // responsable
-				if ($scope.saveOrder.charAt(6) == '0' && $scope.project.nuevo_responsable != undefined && $scope.project.nuevo_responsable.length > 0)
-				{
-					$scope.project.nuevo_responsable = $scope.project.nuevo_responsable.toUpperCase();
-					let matches = $.grep($scope.responsables, function(tp){
-						return tp.responsable.toUpperCase() == $scope.project.nuevo_responsable;
-					});
-					if(matches.length == 0)
-					{
-						API.all('responsable').post({data:{"responsable":$scope.project.nuevo_responsable}}).then(ad => {
-							ToastService.show("Se ha guardado un Responsable nuevo");
-							$scope.responsables = ad.plain();
-							$scope.project.responsable_id = $.grep($scope.responsables, function(ob) {
-								return ob.responsable.toUpperCase() == $scope.project.nuevo_responsable;
-							})[0].id;
-							obj.responsable_id = $scope.project.responsable_id;
-							$scope.next++;
-							saver(obj);
-						});
-					}
-					else
-					{
-						AlertService.error('No se puede guardar el Responsable ingresado por que ya existe, seleccione un Responsable');
-						delete($scope.project.responsable_id);
-						delete($scope.project.nuevo_responsable);
-						return
-					}
-				}
-				else
-				{
-					if($scope.project.responsable_id == 0)
-					{
+						$scope.project.modelo = null;
+						$scope.project.municipio_id = null;
+						$scope.project.oficialia_id = null;
 						$scope.project.responsable_id = null;
-						obj.responsable_id = null;
+						delete($scope.subgrupos);
+						delete($scope.modelos);
+						delete($scope.marcas);
+						delete($scope.caracteristicas);
 					}
-					$scope.next++;
-					saver(obj);
-				}
-			break
-			default:
-			// verifica numero de serie y numero de inventario
-
-				let getUrl = window.location;
-				let baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-				let urlval = baseUrl;
-				
-				urlval += "api/inventario?numero_inventario=" + obj.numero_inventario;
-				urlval += "&numero_serie=" + obj.numero_serie;
-
-				API.oneUrl('validador', urlval).get()
-				.then(tn =>{
-					let a = tn.plain();
-					let x = a.response;
-					if(x == 0)
-					{
-						let data = angular.copy(obj);
-						API.all('inventario').post({data}).then(ad => {
-							AlertService.show("Listo!","El Artículo se ha guardado en inventario");
-							
-							$scope.project.numero_serie = null;
-							$scope.project.numero_inventario = null;
-							if(! $scope.project.keefForm)
-							{
-								//limpiar formulario
-								$scope.project.area_id = null;
-								$scope.project.cantidad = null;
-								$scope.project.caracteristica_id = null;
-								$scope.project.descripcion_id = null;
-								$scope.project.fecha_baja = null;
-								$scope.project.grupo_id = null;
-								$scope.project.marca_id = null;
-								$scope.project.modelo_id = null;
-								$scope.project.municipio_fisico_id = null;
-								$scope.project.municipio_id = null;
-								$scope.project.localidad_fisica_id = null;
-								$scope.project.numero_inventario = null;
-								$scope.project.numero_serie = null;
-								$scope.project.oficialia_id = null;
-								$scope.project.responsable_id = null;
-								$scope.project.tipo_id = null;
-							}
-							$scope.projectForm.$setPristine();
-							$scope.projectForm.$setUntouched();
-						});
-					}
-					else if(x == 1)
-						AlertService.error("El Número de inventario ya existe en el sistema, ingrese otro número");
-					else if(x == 2)
-						AlertService.error("El Número de serie ya existe en el sistema, ingrese otro número");
-					else
-						AlertService.error("El Número de inventario y El Número de serie proporcionados ya existen en el sistema, ingrese otros números");
+					$scope.projectForm.$setPristine();
+					$scope.projectForm.$setUntouched();
 				});
-			break;
-		}
-	}
+			}
+			else if(x == 1)
+				AlertService.error("El Número de inventario ya existe en el sistema, ingrese otro número");
+			else if(x == 2)
+				AlertService.error("El Número de serie ya existe en el sistema, ingrese otro número");
+			else
+				AlertService.error("El Número de inventario y El Número de serie proporcionados ya existen en el sistema, ingrese otros números");
+		});
+	};
 });

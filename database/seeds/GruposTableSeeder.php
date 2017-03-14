@@ -12,7 +12,12 @@ class GruposTableSeeder extends Seeder {
 			array(
 				'id' => 1,
 				'grupo' => 'Equipo de Computo',
-				'created_at' => Carbon::now(),
+				'created_at' => $now,
+				),
+			array(
+				'id' => 2,
+				'grupo' => 'Moviliario',
+				'created_at' => $now,
 				)
 		);
 		DB::table('grupos')->insert($grupos);

@@ -13,20 +13,19 @@ class CreateInventariosTable extends Migration
       $table->increments('id');
       $table->integer('numero_inventario')->nullable()->unique();
       $table->string('numero_serie')->nullable()->unique();
-      $table->integer('cantidad');
       $table->date('fecha_baja')->nullable();
       $table->boolean('status')->default(true);
 
-      $table->integer('subgrupo_id')->nullable();
+      //$table->integer('subgrupo_id')->nullable(); // no es requerido, el modelo dice subgrupo
       //$table->integer('marca_id')->nullable(); // no se ocupa guardar la marca, el modelo ya tiene marca
-      $table->integer('modelo_id')->nullable(); 
       //$table->integer('municipio_id')->nullable(); // no se ocupa guardar por que la oficialia ya tiene municipio
-      $table->string('oficialia_id')->nullable();
-
       //$table->integer('grupo_id')->nullable(); // no se ocupa guardar por que el subgrupo ya trae grupo
+      //$table->integer('caracteristica_id')->nullable(); // no se ocupa guardar por que el modelo ya tiene caracteristicas
+
+      $table->integer('modelo_id')->nullable(); 
+      $table->string('oficialia_id')->nullable();
       $table->integer('area_id')->nullable();
       $table->integer('responsable_id')->nullable();
-      //$table->integer('caracteristica_id')->nullable(); // no se ocupa guardar por que el modelo ya tiene caracteristicas
 
       $table->foreign('area_id')
             ->references('id')->on('areas')
@@ -36,16 +35,26 @@ class CreateInventariosTable extends Migration
             ->references('id')->on('responsables')
             ->onDelete('cascade');
 
+      $table->foreign('modelo_id')
+            ->references('id')->on('modelos')
+            ->onDelete('cascade');
+
+      $table->foreign('oficialia_id')
+            ->references('id')->on('oficialias')
+            ->onDelete('cascade');
+
+      $table->timestamps();
+
 /*
       $table->foreign('grupo_id')
             ->references('id')->on('grupos')
             ->onDelete('cascade');
 */
-
+/*
       $table->foreign('subgrupo_id')
             ->references('id')->on('subgrupos')
             ->onDelete('cascade');
-
+*/
       /*
       $table->foreign('caracteristica_id')
             ->references('id')->on('caracteristicas')
@@ -56,19 +65,11 @@ class CreateInventariosTable extends Migration
             ->onDelete('cascade');
       */
 
-      $table->foreign('modelo_id')
-            ->references('id')->on('modelos')
-            ->onDelete('cascade');
       /*
       $table->foreign('municipio_id')
             ->references('id')->on('municipios')
             ->onDelete('cascade');
       */
-      $table->foreign('oficialia_id')
-            ->references('id')->on('oficialias')
-            ->onDelete('cascade');
-
-      $table->timestamps();
     });
   }
   public function down()

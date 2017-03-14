@@ -10,11 +10,11 @@ class Inventario extends Model
     ];
 
     protected $fillable = [
-    	'id','numero_inventario','numero_serie','cantidad', 'status','fecha_baja','subgrupo_id','modelo_id','oficialia_id', 'area_id', 'responsable_id'
+    	'id','numero_inventario','numero_serie', 'status','fecha_baja','modelo_id','oficialia_id', 'area_id', 'responsable_id'
     ]; 
 
     protected $hidden = [
-		'subgrupo_id','modelo_id','oficialia_id', 'area_id', 'responsable_id'
+		'modelo_id','oficialia_id', 'area_id', 'responsable_id'
     ];
 
     public function getNumeroInventarioAttribute($value)
@@ -29,10 +29,11 @@ class Inventario extends Model
     {
         return is_null($value)? '': $value;
     }
+    /*
     public function subgrupo()
     {   
         return $this->hasOne('App\Descripcion', 'id', 'subgrupo_id');
-    }
+    }*/
     public function modelo()
     {        
         return $this->hasOne('App\Modelo', 'id', 'modelo_id');

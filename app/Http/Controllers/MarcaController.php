@@ -13,7 +13,14 @@ class MarcaController extends Controller
 
     public function index()
     {
-        return Marca::with('modelos')->orderBy('marca', 'asc')->get();
+        return Marca::with(
+                    array('modelos' => function($q) {
+                            $q->with(
+                                array('subgrupo' => function($s){
+                                    $s->with('grupo');
+                                }));
+                        })
+                    )->orderBy('marca', 'asc')->get();
     }
 
     public function create()
@@ -48,7 +55,14 @@ class MarcaController extends Controller
 
     public function show($id)
     {
-        return Marca::find($id);
+        return Marca::with(
+                    array('modelos' => function($q) {
+                            $q->with(
+                                array('subgrupo' => function($s){
+                                    $s->with('grupo');
+                                }));
+                        })
+                    )->find($id);
     }
 
     public function edit($id)

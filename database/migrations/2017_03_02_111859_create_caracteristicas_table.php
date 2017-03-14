@@ -11,12 +11,6 @@ class CreateCaracteristicasTable extends Migration
         Schema::create('caracteristicas', function (Blueprint $table) {
             $table->integer('id')->unique();
             $table->string('caracteristica')->unique();
-
-            $table->integer('subgrupo_id')->nullable();
-            $table->foreign('subgrupo_id')
-                  ->references('id')->on('subgrupos')
-                  ->onDelete('cascade');
-
             $table->timestamps();
         });
     }
