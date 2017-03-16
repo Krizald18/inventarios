@@ -127,7 +127,7 @@
           </a>
         </li>
         <li id="liauth" ng-if="autenticado" hidden>
-         <a href="#/resguardos">
+         <a href="#/resguardo">
            <i class="fa fa-lock fa-2x"></i>
             <span class="nav-text">
               Resguardos
@@ -175,7 +175,7 @@
     <script src="js/satellizer.min.js"></script>    
     <script src="js/select.min.js"></script>    
     <script src="js/ui-bootstrap-2.5.0.min.js"></script>
-    <!--<script src="js/svg-assets-cache.js"></script>-->
+    <script src="js/svg-assets-cache.js"></script>
     <!--<script src="js/moment.min.js"></script>-->
     <!--<script src="bower_components/angular-touch/angular-touch.js"></script>--><!-- conflict with material-->
     <!-- required by restangular-->
@@ -192,6 +192,7 @@
     <script src="angular/scripts/controllers/sidebar.js"></script>
     <script src="angular/scripts/controllers/main.js"></script>
     <script src="angular/scripts/controllers/inventario.js"></script>
+    <script src="angular/scripts/controllers/resguardo.js"></script>
     <script src="angular/scripts/controllers/agregar.js"></script>
     <script src="angular/scripts/controllers/login.js"></script>
     <script src="angular/scripts/controllers/register.js"></script>
