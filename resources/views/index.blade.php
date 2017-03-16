@@ -127,10 +127,10 @@
           </a>
         </li>
         <li id="liauth" ng-if="autenticado" hidden>
-         <a href="#/editar">
-           <i class="fa fa-pencil fa-2x"></i>
+         <a href="#/resguardos">
+           <i class="fa fa-lock fa-2x"></i>
             <span class="nav-text">
-              Editar Articulos
+              Resguardos
             </span>
           </a>
         </li>
@@ -175,7 +175,8 @@
     <script src="js/satellizer.min.js"></script>    
     <script src="js/select.min.js"></script>    
     <script src="js/ui-bootstrap-2.5.0.min.js"></script>
-    <script src="js/svg-assets-cache.js"></script>
+    <!--<script src="js/svg-assets-cache.js"></script>-->
+    <!--<script src="js/moment.min.js"></script>-->
     <!--<script src="bower_components/angular-touch/angular-touch.js"></script>--><!-- conflict with material-->
     <!-- required by restangular-->
     <script src="js/lodash.min.js"></script>

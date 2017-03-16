@@ -14,8 +14,7 @@ class CreateSubgruposTable extends Migration
            
             $table->integer('grupo_id')->nullable();
             $table->foreign('grupo_id')
-                  ->references('id')->on('grupos')
-                  ->onDelete('cascade');
+                  ->references('id')->on('grupos');
 
             $table->timestamps();
         });

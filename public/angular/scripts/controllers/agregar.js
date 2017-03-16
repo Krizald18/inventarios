@@ -512,6 +512,10 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
 		$scope.refreshbodyheight();
 	}, 900);
 
+	setTimeout(function(){
+		$scope.refreshbodyheight();
+	}, 1500);
+
 	$scope.cambioMunicipio =  function(){
 		if(!$scope.project.municipio)
 			return;

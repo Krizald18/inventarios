@@ -44,6 +44,8 @@ class InventarioController extends Controller
 
             $desc = false;
             $order = 'numero_inventario';
+            $txt = '';
+            $searchby = 0;
             $limit = 5;
             if($request->has('order'))
             {
@@ -57,9 +59,18 @@ class InventarioController extends Controller
             }
             if($request->has('limit'))
                 $limit = intval($request->limit);
+
+            if($request->has('txt'))
+                $txt = $request->txt;
+
+            if($request->has('searchby'))
+                $searchby = $request->searchby;
+
             if($desc)
             {
-                $x = Inventario::with('area', 'responsable')
+                if($searchby == 1) // solo por numero de serie
+                {
+                    $x = Inventario::with('area', 'responsable')
                         ->with(array('oficialia' => function($q){
                             $q->with('municipio');
                         }))
@@ -68,12 +79,86 @@ class InventarioController extends Controller
                             $q->with('caracteristica');
                             $q->with('subgrupo');
                         }))
-                        ->orderBy($order, 'desc')
-                        ->paginate($limit);
+                            ->where('numero_serie', $txt)
+                            ->orderBy($order, 'desc')
+                            ->paginate($limit);
+                    return Response::json($x, 300);
+                }
+                if($searchby == 2) // serie o inventario
+                {
+                    $x = Inventario::with('area', 'responsable')
+                            ->with(array('oficialia' => function($q){
+                                $q->with('municipio');
+                            }))
+                            ->with(array('modelo' => function($q){
+                                $q->with('marca');
+                                $q->with('caracteristica');
+                                $q->with('subgrupo');
+                            }))
+                                ->where('numero_serie', $txt)
+                                ->orwhere('numero_inventario', $txt)
+                                ->orderBy($order, 'desc')
+                                ->paginate($limit);
+                        return Response::json($x, 300);
+                    }
+                    if($searchby == 3) // oficialia, responsable o serie
+                    {
+                        $a = Inventario::with('area', 'responsable')
+                            ->with(array('oficialia' => function($q){
+                                $q->with('municipio');
+                            }))
+                            ->with(array('modelo' => function($q){
+                                $q->with('marca');
+                                $q->with('caracteristica');
+                                $q->with('subgrupo');
+                            }))
+                            ->where('numero_serie', $txt)
+                            ->orderBy($order, 'desc')
+                            ->paginate($limit);
+
+                        if(count($a) == 1)
+                            return Response::json($a, 300);
+
+                        $x = Inventario::with('area', 'responsable')
+                            ->with(array('modelo' => function($r){
+                                $r->with('marca');
+                                $r->with('caracteristica');
+                                $r->with('subgrupo');
+                            }))
+                            ->with(array('oficialia' => function($o){
+                                $o->with('municipio');
+                            }))
+                            ->whereHas('oficialia', function($q) use ($txt){
+                                $q->where('oficialia', 'LIKE', '%'.$txt.'%');
+                            })
+                            ->orwhereHas('responsable', function($s) use ($txt){
+                                $s->where('responsable', 'LIKE', '%'.$txt.'%');
+                            })
+                            ->orderBy($order, 'desc')
+                            ->paginate($limit);
+
+                        return Response::json($x, 300);
+                    }
+                    else                    
+                        $x = Inventario::with('area', 'responsable')
+                            ->with(array('oficialia' => function($q){
+                                $q->with('municipio');
+                            }))
+                            ->with(array('modelo' => function($q){
+                                $q->with('marca');
+                                $q->with('caracteristica');
+                                $q->with('subgrupo');
+                            }))
+                                ->orderBy($order, 'asc')
+                                ->orderBy($order, 'desc')
+                                ->paginate($limit);
+                        return Response::json($x, 300);
             }
             else
             {
-                $x = Inventario::with('area', 'responsable')
+                if($searchby == 1) // solo por numero de serie
+                {
+                    $x = Inventario::with('area', 'responsable')
                         ->with(array('oficialia' => function($q){
                             $q->with('municipio');
                         }))
@@ -82,8 +167,79 @@ class InventarioController extends Controller
                             $q->with('caracteristica');
                             $q->with('subgrupo');
                         }))
-                            ->orderBy($order, 'asc')
+                            ->where('numero_serie', $txt)
+                            ->orderBy($order)
                             ->paginate($limit);
+                    return Response::json($x, 300);
+                }
+                if($searchby == 2) // serie o inventario
+                {
+                    $x = Inventario::with('area', 'responsable')
+                        ->with(array('oficialia' => function($q){
+                            $q->with('municipio');
+                        }))
+                        ->with(array('modelo' => function($q){
+                            $q->with('marca');
+                            $q->with('caracteristica');
+                            $q->with('subgrupo');
+                        }))
+                            ->where('numero_serie', $txt)
+                            ->orwhere('numero_inventario', $txt)
+                            ->orderBy($order)
+                            ->paginate($limit);
+                    return Response::json($x, 300);
+                }
+                if($searchby == 3) // oficialia, responsable o serie
+                {
+                    $a = Inventario::with('area', 'responsable')
+                        ->with(array('oficialia' => function($q){
+                            $q->with('municipio');
+                        }))
+                        ->with(array('modelo' => function($q){
+                            $q->with('marca');
+                            $q->with('caracteristica');
+                            $q->with('subgrupo');
+                        }))
+                        ->where('numero_serie', $txt)
+                        ->orderBy($order)
+                        ->paginate($limit);
+
+                    if(count($a) == 1)
+                        return Response::json($a, 300);
+
+                    $x = Inventario::with('area', 'responsable')
+                        ->with(array('modelo' => function($r){
+                            $r->with('marca');
+                            $r->with('caracteristica');
+                            $r->with('subgrupo');
+                        }))
+                        ->with(array('oficialia' => function($o){
+                            $o->with('municipio');
+                        }))
+                        ->whereHas('oficialia', function($q) use ($txt){
+                            $q->where('oficialia', 'LIKE', '%'.$txt.'%');
+                        })
+                        ->orwhereHas('responsable', function($s) use ($txt){
+                            $s->where('responsable', 'LIKE', '%'.$txt.'%');
+                        })
+                        ->orderBy($order)
+                        ->paginate($limit);
+
+                    return Response::json($x, 300);
+                }
+                else                    
+                    $x = Inventario::with('area', 'responsable')
+                        ->with(array('oficialia' => function($q){
+                            $q->with('municipio');
+                        }))
+                        ->with(array('modelo' => function($q){
+                            $q->with('marca');
+                            $q->with('caracteristica');
+                            $q->with('subgrupo');
+                        }))
+                            ->orderBy($order)
+                            ->paginate($limit);
+                    return Response::json($x, 300);
             }
 
             return Response::json($x, 300);

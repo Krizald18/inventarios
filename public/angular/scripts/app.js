@@ -11,7 +11,6 @@ angular
     'ngRoute.middleware',
     'ngSanitize',
     'restangular',
-//  'ui.router',
     'satellizer',
     'app.config',
     'ui.bootstrap',
@@ -19,4 +18,10 @@ angular
     'md.data.table',
     'material.svgAssetsCache'
   ]);
-  angular.module('app.config', []);
+  /*.filter('moment', function() {
+    return function(dateString, format) {
+        return moment(dateString).format(format);
+    };
+})*/
+
+angular.module('app.config', []);
