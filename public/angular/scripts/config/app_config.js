@@ -39,6 +39,11 @@ angular.module('app.config')
 				controller: 'InventarioCtrl',
 				middleware: 'AuthenticatedOnly'
 			})
+			.when('/resguardo', {
+				templateUrl: 'angular/views/resguardo.html',
+				controller: 'ResguardoCtrl',
+				middleware: 'AuthenticatedOnly'
+			})
 			.when('/agregar', {
 				templateUrl: 'angular/views/agregar.html',
 				controller: 'AgregarCtrl',

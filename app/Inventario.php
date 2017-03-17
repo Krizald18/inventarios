@@ -10,11 +10,11 @@ class Inventario extends Model
     ];
 
     protected $fillable = [
-    	'id','numero_inventario','numero_serie', 'status','fecha_baja','modelo_id','oficialia_id', 'area_id', 'responsable_id'
+    	'id','numero_inventario','numero_serie', 'status','fecha_baja', 'resguardo_id', 'modelo_id','oficialia_id', 'area_id', 'responsable_id'
     ]; 
 
     protected $hidden = [
-		'modelo_id','oficialia_id', 'area_id', 'responsable_id'
+		'resguardo_id', 'modelo_id','oficialia_id', 'area_id', 'responsable_id'
     ];
 
     public function getNumeroInventarioAttribute($value)

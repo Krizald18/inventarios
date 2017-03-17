@@ -1,0 +1,186 @@
+<md-content style ="background-color:white;">
+    <md-tabs class="" md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}" style="background-color: white;margin-left: 150px; min-height: 600px; width: 900px;" ng-style="{{myStyle}}">
+      <md-tab id="tab1">
+        <md-tab-label>Responsable</md-tab-label>
+        <md-tab-body><br>
+            <form ng-submit="$event.preventDefault()" name="searchForm">
+              <md-autocomplete flex ng-required = "!showing"
+                md-input-name="autocompleteField"
+                md-input-minlength="5"
+                md-input-maxlength="45"
+                md-no-cache="noCache"
+                md-selected-item="selectedItem"
+                md-search-text="searchText"
+                md-items="item in querySearch(searchText)"
+                md-item-text="item.responsable"
+                md-require-match
+                md-floating-label="Responsable">
+              <md-item-template>
+                <span md-highlight-text="searchText">{{item.responsable}}</span>
+              </md-item-template>
+              <div ng-messages="searchForm.autocompleteField.$error" ng-if="searchForm.autocompleteField.$touched">
+                <div ng-message="required">Usted debe seleccionar un responsable</div>
+                <div ng-message="minlength">Ingrese al menos 5 letras</div>
+                <div ng-message="maxlength">El texto ingresado es mas largo de lo permitido</div>
+                <div ng-message="md-require-match"><span ng-if="searchText.length >= 5 && itemsfound.length == 0">No encontrado</span><span ng-if="searchText.length >= 5 && itemsfound.length > 0">Seleccione un responsable</span></div>
+              </div>
+              </md-autocomplete>
+            </form>
+            <div layout="row" ng-show = "showing">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td class="col-md-6">
+                        <h5><strong>Responsable:</strong></h5>
+                      </td>
+                      <td>
+                        <h5>{{showing.responsable}}</h5>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col-md-6">
+                        <h5><strong>Municipio:</strong></h5>
+                      </td>
+                      <td>
+                        <h5>Culiacán</h5>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col-md-6">
+                        <h5><strong>Oficialia:</strong></h5>
+                      </td>
+                      <td>
+                        <h5>{{showing.oficialia && showing.oficialia.oficialia? showing.oficialia.id + " - " + showing.oficialia.oficialia: "No asignada"}}</h5>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col-md-6">
+                        <h5><strong>Artículos asignados:</strong></h5>
+                      </td>
+                      <td>
+                        <h5>{{showing.articulos_asignados.length}}</h5>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col-md-6">
+                        <h5><strong>Artículos con resguardo:</strong></h5>
+                      </td>
+                      <td>
+                        <h5>{{showing.con_resguardo.length}}</h5>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+            <br><hr ng-show = "showing">
+        </md-tab-body>
+      </md-tab>
+      <md-tab id="tab2" ng-if = "showing.articulos_asignados.length > 0" style="width: 900px;" ng-style="{{myStyle}}">
+        <md-tab-label>Artículos Asignados</md-tab-label>
+        <md-tab-body>
+          <md-switch class="md-primary" name="sinResguardo" ng-model="sinResguardo" style="margin-left: 62%;">
+            <!--ng-disabled="showing.sin_resguardo.length == 0 || showing.con_resguardo.length == 0"-->
+            {{sinResguardo? "Con reguardo": "Sin resguardo"}}
+          </md-switch>
+          <div ng-if="!sinResguardo">
+          <md-input-container class="md-block">
+            <label>Asignados sin resguardo</label>
+            <input type="text" name="" disabled="" />
+          </md-input-container>
+          <md-table-container style="margin-top:-35px;width: 700px;">
+            <table md-table md-row-select multiple ng-model="selected2">
+              <thead md-head>
+                <tr md-row>
+                  <th md-column>Numero de Inventario</th>
+                  <th md-column>Numero de Serie</th>
+                  <th md-column>Artículo</th>
+                </tr>
+              </thead>
+              <tbody md-body>
+                <tr md-row md-select="objeto" md-select-id="name" md-auto-select ng-repeat="objeto in showing.sin_resguardo">
+                  <td md-cell>{{objeto.numero_inventario}}</td>
+                  <td md-cell>{{objeto.numero_serie}}</td>
+                  <td md-cell>{{objeto.modelo.subgrupo.subgrupo}} {{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </md-table-container><br>
+          <md-button type="button" aria-label="crearResguardo" class="md-raised md-primary" ng-if="selected2" ng-click="crearResguardo();" ng-show="selected2.length > 0">Crear resguardo <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></md-button>
+        </div>
+        <div ng-if="sinResguardo">
+          <md-input-container class="md-block">
+            <label>Asignados con resguardo</label>
+            <input type="text" name="" disabled="" />
+          </md-input-container>
+          <md-table-container style="margin-top:-35px;width: 700px;">
+            <table md-table>
+              <thead md-head>
+                <tr md-row>
+                  <th md-column>Numero de Inventario</th>
+                  <th md-column>Numero de Serie</th>
+                  <th md-column>Artículo</th>
+                </tr>
+              </thead>
+              <tbody md-body>
+                <tr md-row md-select="objeto" md-select-id="name" md-auto-select ng-repeat="objeto in showing.con_resguardo">
+                  <td md-cell>{{objeto.numero_inventario}}</td>
+                  <td md-cell>{{objeto.numero_serie}}</td>
+                  <td md-cell>{{objeto.modelo.subgrupo.subgrupo}} {{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </md-table-container>
+        </div>
+        </md-tab-body>
+      </md-tab>
+      <md-tab id="tab3" ng-if = "showing.resguardos.length > 0" style="width: 900px">
+        <md-tab-label>Resguardos</md-tab-label>
+        <md-tab-body>
+          <md-input-container class="md-block">
+            <label>Resguardos</label>
+            <input type="text" name="" disabled="" />
+          </md-input-container>
+          <md-table-container style="margin-top:-35px;width: 850px;">
+            <div ng-repeat="resp in showing.resguardos">
+              <table md-table>
+              <thead md-head>
+                <tr md-row>
+                  <th md-column>Creación</th>
+                  <th md-column>Firma</th>
+                  <th md-column>Numero de Inventario</th>
+                  <th md-column>Numero de Serie</th>
+                  <th md-column>Artículo</th>
+                </tr>
+              </thead>
+                <tbody md-body>
+                  <tr md-row ng-repeat="objeto in resp.articulos">
+                    <td md-cell>{{resp.created_at}}</td>
+                    <td md-cell>{{resp.updated_at}}</td>
+                    <td md-cell>{{objeto.numero_inventario}}</td>
+                    <td md-cell>{{objeto.numero_serie}}</td>
+                    <td md-cell>{{objeto.modelo.subgrupo.subgrupo}} {{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div layout="row">
+                <md-container class="md-block" flex="75"></md-container>
+                <md-container class="md-block" flex="25">
+                  <md-button class="md-icon-button" aria-label="More">
+                    <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+                  </md-button>
+                  <md-button class="md-icon-button" aria-label="More">
+                    <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+                  </md-button>
+                  <md-button class="md-icon-button" aria-label="More">
+                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+                  </md-button>
+                </md-container>
+              </div>
+            </div>
+            <md-button type="button" aria-label="imprimetodo" class="md-raised" ng-click="printAll();" ng-show="showing.resguardos.length > 1">Imprimir todos los resguardos <span class="glyphicon glyphicon-print" aria-hidden="true"></span></md-button>
+          </md-table-container><br>
+          <md-button type="button" aria-label="crearResguardo" class="md-raised md-primary" ng-if="selected2" ng-click="crearResguardo();" ng-show="selected2.length > 0">Crear resguardo <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></md-button>
+        </md-tab-body>
+      </md-tab>
+    </md-tabs>
+</div>

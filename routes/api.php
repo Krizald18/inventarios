@@ -37,5 +37,6 @@ Route::resource('oficialia', 'OficialiaController', ['only' => ['index', 'store'
 Route::resource('area', 'AreaController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('responsable', 'ResponsableController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('inventario', 'InventarioController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+Route::resource('resguardo', 'ResguardoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 
 //unprotected API routes, no JWT (must not be logged in)

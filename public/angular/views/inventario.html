@@ -3,7 +3,6 @@
       <md-tab id="tab1">
         <md-tab-label>Inventario</md-tab-label>
         <md-tab-body>
-        <br>
         <md-table-container style="width: 1200px">
             <md-progress-linear md-mode="query" ng-if="loading"></md-progress-linear>
             <md-progress-linear md-mode="query" ng-if="!loading" style="opacity: 0;"></md-progress-linear>
@@ -57,36 +56,36 @@
           <md-table-container style="width: 1200px">
             <md-progress-linear md-mode="query" ng-if="loading"></md-progress-linear>
             <md-progress-linear md-mode="query" ng-if="!loading" style="opacity: 0;"></md-progress-linear>
-              <table md-table md-row-select multiple ng-model="selected2">
-                <thead md-head md-order="query.order" md-on-reorder="getInventario">
-                  <tr md-row>
-                    <th md-column><span>Numero de Inventario</span></th>
-                    <th md-column>Numero de Serie</th>
-                    <th md-column>Status</th>
-                    <th md-column>Subgrupo</th>
-                    <th md-column>Marca y Modelo</th>
-                    <th md-column>Oficialia</th>
-                    <th md-column>Responsable</th>
-                  </tr>
-                </thead>
-                <tbody md-body>
-                  <tr md-row md-select="objeto" md-select-id="name" md-auto-select ng-repeat="objeto in printqueue">
-                    <td md-cell>{{objeto.numero_inventario}}</td>
-                    <td md-cell>{{objeto.numero_serie}}</td>
-                    <td md-cell>{{objeto.status? "Activo": "Inactivo"}}</td>
-                    <td md-cell>{{objeto.modelo.subgrupo.subgrupo}}</td>
-                    <td md-cell>{{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
-                    <td md-cell><a href="#" style="color: rgba(0,0,0,0.87); text-decoration: none;" ng-click="$event.preventDefault(); sortbyOF(objeto.oficialia);">
-                      {{objeto.oficialia.oficialia}}
-                    </a></td>
-                    <td md-cell><a href="#" style="color: rgba(0,0,0,0.87); text-decoration: none;" ng-click="$event.preventDefault(); sortbyOF(objeto.oficialia);">{{objeto.responsable.responsable}}</a></td>
-                  </tr>
-                </tbody>
-              </table>
-            </md-table-container>
-            <br>
-            <md-button type="button" aria-label="print" class="md-raised" ng-if="printqueue && printqueue.length > 0" ng-click="print();"><span class="glyphicon glyphicon-print" aria-hidden="true"></span></md-button>
-            <md-button type="button" aria-label="print" class="md-raised" ng-if="printqueue && printqueue.length > 0" ng-click="remove();"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></md-button>
-      </md-tab-body>
-    </md-tab>
+            <table md-table md-row-select multiple ng-model="selected2">
+              <thead md-head md-order="query.order" md-on-reorder="getInventario">
+                <tr md-row>
+                  <th md-column><span>Numero de Inventario</span></th>
+                  <th md-column>Numero de Serie</th>
+                  <th md-column>Status</th>
+                  <th md-column>Subgrupo</th>
+                  <th md-column>Marca y Modelo</th>
+                  <th md-column>Oficialia</th>
+                  <th md-column>Responsable</th>
+                </tr>
+              </thead>
+              <tbody md-body>
+                <tr md-row md-select="objeto" md-select-id="name" md-auto-select ng-repeat="objeto in printqueue">
+                  <td md-cell>{{objeto.numero_inventario}}</td>
+                  <td md-cell>{{objeto.numero_serie}}</td>
+                  <td md-cell>{{objeto.status? "Activo": "Inactivo"}}</td>
+                  <td md-cell>{{objeto.modelo.subgrupo.subgrupo}}</td>
+                  <td md-cell>{{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
+                  <td md-cell><a href="#" style="color: rgba(0,0,0,0.87); text-decoration: none;" ng-click="$event.preventDefault(); sortbyOF(objeto.oficialia);">
+                    {{objeto.oficialia.oficialia}}
+                  </a></td>
+                  <td md-cell><a href="#" style="color: rgba(0,0,0,0.87); text-decoration: none;" ng-click="$event.preventDefault(); sortbyOF(objeto.oficialia);">{{objeto.responsable.responsable}}</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </md-table-container><br>
+          <md-button type="button" aria-label="print" class="md-raised" ng-if="printqueue && printqueue.length > 0" ng-click="print();"><span class="glyphicon glyphicon-print" aria-hidden="true"></span></md-button>
+          <md-button type="button" aria-label="print" class="md-raised" ng-if="printqueue && printqueue.length > 0" ng-click="remove();"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></md-button>
+        </md-tab-body>
+      </md-tab>
+    </md-tabs>
 </div>

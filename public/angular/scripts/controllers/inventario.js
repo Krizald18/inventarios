@@ -101,6 +101,8 @@ angular.module('App').controller('InventarioCtrl', function (API, $scope, $inter
 						$scope.printqueue.push(angular.copy(o));
 				}
 			});
+			$scope.selected = [];
+			$scope.selected2 = [];
 			$scope.refreshbodyheight();
 		}
 	}
