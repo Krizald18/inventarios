@@ -8,12 +8,33 @@ class ResponsableController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['cors', 'auth:api']);
+        //$this->middleware(['cors', 'auth:api']);
     }
 
     public function index()
     {
-        return Responsable::orderBy('responsable', 'asc')->with('usuario')->get();
+        return Responsable::with('usuario', 'articulos_asignados')
+                            ->with(array('resguardos' => function($q){
+                                    $q->with(array('articulos' => function($a){
+                                        $a->with(array('modelo' => function($q){
+                                            $q->with('marca');
+                                            $q->with('caracteristica');
+                                            $q->with('subgrupo');
+                                        }));
+                                    }));
+                                }))
+                            ->with(array('articulos_asignados' => function($a){
+                                $a->with(array('modelo' => function($q){
+                                    $q->with('marca');
+                                    $q->with('caracteristica');
+                                    $q->with('subgrupo');
+                                }));
+                            }))
+                            ->with(array('oficialia' => function($q){
+                                $q->with('municipio');
+                            }))
+                            ->orderBy('responsable', 'asc')
+                            ->get();
     }
 
     public function create()
@@ -40,7 +61,21 @@ class ResponsableController extends Controller
 
             $j->save();
 
-            return Responsable::orderBy('responsable', 'asc')->get();
+            return Responsable::with('usuario', 'articulos_asignados')
+                            ->with(array('resguardos' => function($q){
+                                    $q->with(array('articulos' => function($a){
+                                        $a->with(array('modelo' => function($q){
+                                            $q->with('marca');
+                                            $q->with('caracteristica');
+                                            $q->with('subgrupo');
+                                        }));
+                                    }));
+                                }))
+                            ->with(array('oficialia' => function($q){
+                                $q->with('municipio');
+                            }))
+                            ->orderBy('responsable', 'asc')
+                            ->get();
         }
         else
             return $request;
@@ -48,7 +83,15 @@ class ResponsableController extends Controller
 
     public function show($id)
     {
-        return Responsable::with('usuario')->find($id);
+        return Responsable::with('usuario', 'articulos_asignados')
+                          ->with(array('resguardos' => function($q){
+                                    $q->with('articulos');
+                                }))
+                          ->with(array('oficialia' => function($q){
+                                $q->with('municipio');
+                            }))
+                          ->orderBy('responsable', 'asc')
+                          ->find($id);
     }
 
     public function edit($id)
@@ -66,6 +109,11 @@ class ResponsableController extends Controller
         $obj = Responsable::find($id);
         $obj->delete();
 
-        return Responsable::orderBy('responsable', 'asc')->get();
+        return Responsable::with('usuario', 'articulos_asignados', 'resguardos')
+                          ->with(array('oficialia' => function($q){
+                                $q->with('municipio');
+                            }))
+                          ->orderBy('responsable', 'asc')
+                          ->get();
     }
 }
