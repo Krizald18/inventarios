@@ -169,6 +169,7 @@ return [
 
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         Irazasyed\JwtAuthGuard\JwtAuthGuardServiceProvider::class,
+        niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
         //Barryvdh\Cors\ServiceProvider::class,
         /*
          * Application Service Providers...
@@ -215,6 +216,7 @@ return [
         'Mail' => Illuminate\Support\Facades\Mail::class,
         'Notification' => Illuminate\Support\Facades\Notification::class,
         'Password' => Illuminate\Support\Facades\Password::class,
+        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
         'Queue' => Illuminate\Support\Facades\Queue::class,
         'Redirect' => Illuminate\Support\Facades\Redirect::class,
         'Redis' => Illuminate\Support\Facades\Redis::class,
