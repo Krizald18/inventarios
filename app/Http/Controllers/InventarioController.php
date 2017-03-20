@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Inventario;
+use App\Resguardo;
 use Response;
 
 class InventarioController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['cors', 'auth:api']);
+        //$this->middleware(['cors', 'auth:api']);
     }
-
     public function index(Request $request)
     {
         if($request->has('numero_inventario') && $request->has('numero_serie')) 
@@ -68,7 +68,7 @@ class InventarioController extends Controller
 
             if($desc)
             {
-                if($searchby == 1) // solo por numero de serie
+                if($searchby == 1) // solo por numero de serie, a Z - 0 9
                 {
                     $x = Inventario::with('area', 'responsable')
                         ->with(array('oficialia' => function($q){
@@ -84,7 +84,7 @@ class InventarioController extends Controller
                             ->paginate($limit);
                     return Response::json($x, 300);
                 }
-                if($searchby == 2) // serie o inventario
+                if($searchby == 2) // serie o inventario, 0 9
                 {
                     $x = Inventario::with('area', 'responsable')
                             ->with(array('oficialia' => function($q){
@@ -101,7 +101,7 @@ class InventarioController extends Controller
                                 ->paginate($limit);
                         return Response::json($x, 300);
                     }
-                    if($searchby == 3) // oficialia, responsable o serie
+                    if($searchby == 3) // oficialia, responsable o serie, a Z
                     {
                         $a = Inventario::with('area', 'responsable')
                             ->with(array('oficialia' => function($q){
@@ -139,7 +139,7 @@ class InventarioController extends Controller
 
                         return Response::json($x, 300);
                     }
-                    else                    
+                    else
                         $x = Inventario::with('area', 'responsable')
                             ->with(array('oficialia' => function($q){
                                 $q->with('municipio');
@@ -241,7 +241,6 @@ class InventarioController extends Controller
                             ->paginate($limit);
                     return Response::json($x, 300);
             }
-
             return Response::json($x, 300);
         }
     }
@@ -280,9 +279,24 @@ class InventarioController extends Controller
                 $j->area_id = $o->area_id;
 
             if(isset($o->responsable_id) && !is_null($o->responsable_id))
+            {
                 $j->responsable_id = $o->responsable_id;
-            
+                /*$res = Resguardo::where('responsable_id', $j->responsable_id)
+                                ->where('status', 0)
+                                ->orderBy('created_at', 'desc')
+                                ->first();
+                if(isset($res) && !is_null($res))
+                {
+
+                }
+                else
+                {
+                    $res = new Resguardo;
+                    $res->responsable_id = $j->responsable_id;
+                }*/
+            }        
             $j->save();
+            //$res->articulos()->save($j);
             return self::show($j->id);
         }
         else

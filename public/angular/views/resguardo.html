@@ -165,19 +165,20 @@
               <div layout="row">
                 <md-container class="md-block" flex="75"></md-container>
                 <md-container class="md-block" flex="25">
-                  <md-button class="md-icon-button" aria-label="More">
+                  <md-button class="md-icon-button" aria-label="generate" ng-click="generatePDF(resp);">
                     <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
                   </md-button>
-                  <md-button class="md-icon-button" aria-label="More">
+                  <md-button class="md-icon-button" aria-label="download">
                     <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
                   </md-button>
-                  <md-button class="md-icon-button" aria-label="More">
+                  <md-button class="md-icon-button" aria-label="upload">
                     <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
                   </md-button>
                 </md-container>
               </div>
             </div>
-            <md-button type="button" aria-label="imprimetodo" class="md-raised" ng-click="printAll();" ng-show="showing.resguardos.length > 1">Imprimir todos los resguardos <span class="glyphicon glyphicon-print" aria-hidden="true"></span></md-button>
+            <!--
+            <md-button type="button" aria-label="imprimetodo" class="md-raised" ng-click="printAll();" ng-show="showing.resguardos.length > 1">Imprimir todos los resguardos <span class="glyphicon glyphicon-print" aria-hidden="true"></span></md-button>-->
           </md-table-container><br>
           <md-button type="button" aria-label="crearResguardo" class="md-raised md-primary" ng-if="selected2" ng-click="crearResguardo();" ng-show="selected2.length > 0">Crear resguardo <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></md-button>
         </md-tab-body>

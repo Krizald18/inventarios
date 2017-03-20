@@ -12,7 +12,7 @@ class CaracteristicaController extends Controller
         //$this->middleware(['cors', 'auth:api']);
     }
     public function index()
-    {        
+    {
         return Caracteristica::with('subgrupo')->orderBy('caracteristica', 'asc')->get();
     }
 

@@ -5,7 +5,8 @@ use Illuminate\Http\Request;
 use App\Resguardo;
 use App\Inventario;
 use App\Responsable;
-
+use PDF;
+use Response;
 class ResguardoController extends Controller
 {
     public function __construct()
@@ -15,6 +16,7 @@ class ResguardoController extends Controller
 
     public function index()
     {
+        return self::generate_pdf();
         return Resguardo::with('articulos')->get();
     }
 
@@ -71,6 +73,8 @@ class ResguardoController extends Controller
                             ->orderBy('responsable', 'asc')
                             ->find($j->responsable_id);
         }
+        else if($request->has('pdf_data'))
+            return self::generate_pdf($request);
         else
             return $request;
     }
@@ -96,5 +100,77 @@ class ResguardoController extends Controller
         $obj->delete();
 
         return Resguardo::all();
+    }
+
+    function generate_pdf(Request $request) {
+        $now = new \DateTime('now');
+        $day = $now->format('d');
+        $mn = $now->format('m');
+        $year = $now->format('Y');
+        switch (intval($mn)) {
+            case 1:
+                $month = "Enero";
+                break;
+            case 2:
+                $month = "Febrero";
+                break;
+            case 3:
+                $month = "Marzo";
+                break;
+            case 4:
+                $month = "Abril";
+                break;
+            case 5:
+                $month = "Mayo";
+                break;
+            case 6:
+                $month = "Junio";
+                break;
+            case 7:
+                $month = "Julio";
+                break;
+            case 8:
+                $month = "Agosto";
+                break;
+            case 9:
+                $month = "Septiembre";
+                break;
+            case 10:
+                $month = "Octubre";
+                break;
+            case 11:
+                $month = "Nobiembre";
+                break;
+            case 12:
+                $month = "Diciembre";
+                break;
+        }
+        $o = (object) $request->input('pdf_data');
+        $articulos = $o->articulos;
+        //dd($articulos);
+        $data = [
+            'id' => strval($year).( intval($o->id) < 100? ( intval($o->id) < 10? '00'.$o->id: '0'.$o->id ) : $o->id ),
+            'articulos' => $articulos,
+            'oficial' => $o->oficial,
+            'oficialia' => $o->oficialia,
+            'municipio' => $o->municipio,
+            'estado' => 'SINALOA',
+            'day' => $day,
+            'month' => $month,
+            'year' => $year
+        ];
+
+        $id = $o->id;
+
+        if (!file_exists('pdfs/generados/pdf'.$id.'.pdf')) {
+            $pdf = PDF::loadView('resguardo', $data);
+            $pdf->save('pdfs/generados/pdf'.$id.'.pdf');
+        }
+        
+        $file= public_path(). '/pdfs/generados/pdf'.$id.'.pdf';
+        $pdfdata = file_get_contents($file);
+        $base64 = base64_encode($pdfdata);
+        
+        return $base64;
     }
 }

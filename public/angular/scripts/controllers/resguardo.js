@@ -1,6 +1,6 @@
 'use strict';
 angular.module('App')
-	.controller('ResguardoCtrl', function ($scope, $timeout, $q, API, AlertService) {
+	.controller('ResguardoCtrl', function ($scope, $timeout, $q, API, AlertService, $http) {
 	    // list of `state` value/display objects
 	    $scope.selected2 = [];
 	    $scope.sinResguardo = false;
@@ -123,4 +123,38 @@ angular.module('App')
 	        return (resp.responsable.indexOf(lowercaseQuery) === 0);
 	      };
 	    }
+	    $scope.generatePDF = function(respaldo){
+	    	var dt = new Date();
+    		var gd = dt.getDate();
+    		var gm = dt.getMonth() + 1;
+			let dy = gd < 10? '0' + gd : gd;
+			let mn = gm < 10? '0' + gm : gm;
+			var name = 'resguardo-' + (respaldo.id < 100? (respaldo.id < 10? '00' + respaldo.id: '0' + respaldo.id) : respaldo.id);
+			name += dy + mn + dt.getFullYear() + '.pdf';
+	    	let articulos = respaldo.articulos.map(function(o) {
+	    		let obj = {};
+	    		obj.numero_inventario = o.numero_inventario;
+	    		obj.numero_serie = o.numero_serie;
+	    		obj.articulo = o.modelo.subgrupo.subgrupo + ' ' + o.modelo.marca.marca + ' ' + o.modelo.modelo;
+	    		return obj;
+	    	});
+    		let pdf_data = {};
+    		pdf_data.id = respaldo.id;
+    		pdf_data.oficial = $scope.showing.responsable;
+    		pdf_data.oficialia = $scope.showing.oficialia && $scope.showing.oficialia.oficialia? $scope.showing.oficialia.oficialia: null;
+    		pdf_data.municipio = $scope.showing.oficialia && $scope.showing.oficialia.municipio? $scope.showing.oficialia.municipio.municipio: null;
+    		pdf_data.articulos = articulos;
+    		API.all('resguardo').post({pdf_data}).then(pdfEncoded =>{
+				downloadURI("data:application/pdf;base64," + pdfEncoded, name);
+    		});
+
+	    }
+	    function downloadURI(uri, name) {
+		  var link = document.createElement("a");
+		  link.download = name;
+		  link.href = uri;
+		  document.body.appendChild(link);
+		  link.click();
+		  document.body.removeChild(link);
+		}
 	});
