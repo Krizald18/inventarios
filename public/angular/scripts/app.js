@@ -16,7 +16,9 @@ angular
     'ui.bootstrap',
     'ui.select',
     'md.data.table',
-    'material.svgAssetsCache'
+    'material.svgAssetsCache',
+    'lfNgMdFileInput',
+    'angularFileUpload'
   ]);
   /*.filter('moment', function() {
     return function(dateString, format) {

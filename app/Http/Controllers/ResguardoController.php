@@ -15,8 +15,7 @@ class ResguardoController extends Controller
     }
 
     public function index()
-    {
-        return self::generate_pdf();
+    {        
         return Resguardo::with('articulos')->get();
     }
 
@@ -81,7 +80,7 @@ class ResguardoController extends Controller
 
     public function show($id)
     {
-        return Resguardo::find($id);
+        return Resguardo::with('articulos')->find($id);
     }
 
     public function edit($id)
@@ -162,12 +161,19 @@ class ResguardoController extends Controller
 
         $id = $o->id;
 
-        if (!file_exists('pdfs/generados/pdf'.$id.'.pdf')) {
+        if (!file_exists('pdfs/generados/resguardo'.$id.'.pdf')) {
             $pdf = PDF::loadView('resguardo', $data);
-            $pdf->save('pdfs/generados/pdf'.$id.'.pdf');
+            $pdf->save('pdfs/generados/resguardo'.$id.'.pdf');
+        }
+
+        $resguardo = Resguardo::find($id);
+        if(!$resguardo->pdf_generado)
+        {
+            $resguardo->pdf_generado = true;
+            $resguardo->save();
         }
         
-        $file= public_path(). '/pdfs/generados/pdf'.$id.'.pdf';
+        $file = public_path(). '/pdfs/generados/resguardo'.$id.'.pdf';
         $pdfdata = file_get_contents($file);
         $base64 = base64_encode($pdfdata);
         

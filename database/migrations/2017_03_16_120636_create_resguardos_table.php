@@ -12,6 +12,8 @@ class CreateResguardosTable extends Migration
             $table->integer('id')->unique();
             $table->string('observaciones')->nullable();
             $table->boolean('status')->default(false); // open
+            $table->boolean('pdf_generado')->default(false);
+            $table->boolean('pdf_firmado')->default(false);
 
             $table->integer('responsable_id')->nullable();
             $table->foreign('responsable_id')->references('id')->on('responsables');

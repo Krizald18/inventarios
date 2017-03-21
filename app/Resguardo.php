@@ -7,6 +7,8 @@ class Resguardo extends Model
 {
     protected $casts = [
        'status' => 'boolean',
+       'pdf_generado' => 'boolean',
+       'pdf_firmado' => 'boolean'
     ];
 
     protected $fillable = [

@@ -20,7 +20,7 @@ angular.module('App')
 				.then((response) => {
 					//remove this if you require email verification
 					$auth.setToken(response.data);
-					ToastService.show('Successfully registered.');
+					ToastService.show('Registro Exitoso.');
 					window.location = '/';
 				})
 				.catch($scope.failedRegistration.bind(this));

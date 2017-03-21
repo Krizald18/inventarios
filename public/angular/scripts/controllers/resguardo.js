@@ -1,6 +1,6 @@
 'use strict';
 angular.module('App')
-	.controller('ResguardoCtrl', function ($scope, $timeout, $q, API, AlertService, $http) {
+	.controller('ResguardoCtrl', function ($scope, $timeout, $q, API, AlertService, $mdDialog, FileUploader, $window) {
 	    // list of `state` value/display objects
 	    $scope.selected2 = [];
 	    $scope.sinResguardo = false;
@@ -123,15 +123,15 @@ angular.module('App')
 	        return (resp.responsable.indexOf(lowercaseQuery) === 0);
 	      };
 	    }
-	    $scope.generatePDF = function(respaldo){
+	    $scope.generatePDF = function(resguardo){
 	    	var dt = new Date();
     		var gd = dt.getDate();
     		var gm = dt.getMonth() + 1;
 			let dy = gd < 10? '0' + gd : gd;
 			let mn = gm < 10? '0' + gm : gm;
-			var name = 'resguardo-' + (respaldo.id < 100? (respaldo.id < 10? '00' + respaldo.id: '0' + respaldo.id) : respaldo.id);
+			var name = 'resguardo-' + (resguardo.id < 100? (resguardo.id < 10? '00' + resguardo.id: '0' + resguardo.id) : resguardo.id);
 			name += dy + mn + dt.getFullYear() + '.pdf';
-	    	let articulos = respaldo.articulos.map(function(o) {
+	    	let articulos = resguardo.articulos.map(function(o) {
 	    		let obj = {};
 	    		obj.numero_inventario = o.numero_inventario;
 	    		obj.numero_serie = o.numero_serie;
@@ -139,15 +139,157 @@ angular.module('App')
 	    		return obj;
 	    	});
     		let pdf_data = {};
-    		pdf_data.id = respaldo.id;
+    		pdf_data.id = resguardo.id;
     		pdf_data.oficial = $scope.showing.responsable;
     		pdf_data.oficialia = $scope.showing.oficialia && $scope.showing.oficialia.oficialia? $scope.showing.oficialia.oficialia: null;
     		pdf_data.municipio = $scope.showing.oficialia && $scope.showing.oficialia.municipio? $scope.showing.oficialia.municipio.municipio: null;
     		pdf_data.articulos = articulos;
     		API.all('resguardo').post({pdf_data}).then(pdfEncoded =>{
 				downloadURI("data:application/pdf;base64," + pdfEncoded, name);
+				API.one('resguardo', resguardo.id).get()
+				.then( res => {
+					let resguardo = $.grep($scope.showing.resguardos, function(r){
+						return r.id == res.id;
+					})[0];
+					resguardo.pdf_generado = res.pdf_generado;
+					resguardo.pdf_firmado = res.pdf_firmado;
+				});
     		});
 
+	    }
+	    $scope.uploadPDF = function(ev, id){
+	    	if(!id)
+	    		return;
+		    $mdDialog.show({
+		      controller: DialogController,
+		      templateUrl: 'subir_resguardo.html',
+		      parent: angular.element(document.body),
+		      targetEvent: ev,
+		      clickOutsideToClose:true,
+		      fullscreen: true // Only for -xs, -sm breakpoints.
+		    })
+		    .then(function(files) {
+		    	var token = $window.localStorage.satellizer_token;
+		    	$scope.uploader = new FileUploader({
+		            headers: {
+		                'Authorization': "Bearer " + token
+		            },
+		            url: 'api/uploader/' + id,
+		            alias: 'file'
+		        });
+		        $scope.uploader.filters.push({
+		            name: 'imageFilter',
+		            fn: function(item, options) {
+		                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+		                return '|pdf|'.indexOf(type) !== -1;
+		            }
+		        });
+		       	if(files && files.length > 0)
+		       	{
+		       		var pdf = new FileUploader.FileItem($scope.uploader, files[0].lfFile);
+					pdf.progress = 100;
+					pdf.isUploaded = true;
+					pdf.isSuccess = true;
+					$scope.uploader.queue.push(pdf);
+		       		$scope.uploader.queue.forEach(function(item, i) {
+		                item.formData.push({
+		                    'folder': 'resguardos_firmados'
+		                });
+		                item.upload();
+		                setTimeout(function(){
+							if(item.isUploading)
+							{
+								setTimeout(function(){
+									if(item.isUploading)
+									{
+										setTimeout(function(){
+											if(item.isUploading)
+											{
+												setTimeout(function(){
+													if(item.isUploading)
+													{
+														setTimeout(function(){
+															if(item.isUploading)
+															{
+																setTimeout(function(){
+																	if(item.isUploading)
+																	{
+																		setTimeout(function(){
+																			if(item.isUploading)
+																			{
+																				setTimeout(function(){
+																					if(item.isUploading)
+																					{
+																						setTimeout(function(){
+																							if(item.isUploading)
+																							{
+																								if(item.isUploading)
+																									AlertService.error('Error al cargar archivo, se ha exedido el tiempo de espera, 5 seg.');
+																								else
+																									done(id);
+																							}
+																							else
+																								done(id);
+																						}, 4500);
+																					}
+																					else
+																						done(id);
+																				}, 3500);
+																			}
+																			else
+																				done(id);
+																		}, 2500);
+																	}
+																	else
+																		done(id);
+																}, 1500);
+															}
+															else
+																done(id);
+														}, 1000);
+													}
+													else
+														done(id);
+												}, 800);
+											}
+											else
+												done(id);
+										}, 600);
+									}
+									else
+										done(id);
+								}, 400);
+							}
+							else
+								done(id);
+						}, 200);
+		            });
+		       	}
+		       	else
+		       		console.log('no subir');
+		    }, function() {
+		      	console.log('no subir');
+		    });
+	    }
+	    $scope.downloadSigned = function(resguardo){
+	    	let data = {
+	    		'folder': 'resguardos_firmados'
+	    	};
+	    	API.one('downloader', resguardo.id).get(data).then(pdfEncoded =>{
+	    		var dt = new Date();
+				downloadURI("data:application/pdf;base64," + pdfEncoded, 'resguardo-firmado-' + dt.getFullYear() + resguardo.id + '.pdf');
+    		});
+	    }
+	    var done = function(id){
+	    	API.one('resguardo', id).get()
+	    	.then(res =>{
+	    		let resguardo = $.grep($scope.showing.resguardos, function(r){
+					return r.id == res.id;
+				})[0];
+				resguardo.pdf_firmado = res.pdf_firmado;
+				resguardo.updated_at = res.updated_at;
+				AlertService.show("Listo!", "Se ha cargado el documento");
+	    	});
 	    }
 	    function downloadURI(uri, name) {
 		  var link = document.createElement("a");
@@ -156,5 +298,19 @@ angular.module('App')
 		  document.body.appendChild(link);
 		  link.click();
 		  document.body.removeChild(link);
+		}
+
+		function DialogController($scope, $mdDialog) {
+		    $scope.hide = function() {
+		      	$mdDialog.hide();
+		    };
+
+		    $scope.cancel = function() {
+		      	$mdDialog.cancel();
+		    };
+
+		    $scope.answer = function() {
+		      	$mdDialog.hide($scope.files01);
+		    };
 		}
 	});

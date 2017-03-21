@@ -27,6 +27,16 @@ Route::group(['prefix' => 'user'], function()
 	Route::get('', ['uses' => 'UserController@allUsers']);
 	Route::get('{id}', ['uses' => 'UserController@getUser']);
 });
+Route::group(['prefix' => 'uploader'], function()
+{
+	//Route::get('', ['uses' => 'UploaderController@uploadFile']);
+	Route::post('{id}', ['uses' => 'UploaderController@uploadFile']);
+});
+Route::group(['prefix' => 'downloader'], function()
+{
+	//Route::get('', ['uses' => 'UploaderController@uploadFile']);
+	Route::get('{id}', ['uses' => 'DownloaderController@donwloadFile']);
+});
 Route::resource('grupo', 'GrupoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('subgrupo', 'SubgrupoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('caracteristica', 'CaracteristicaController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);

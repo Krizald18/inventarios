@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="css/angular-material.min.css" />
     <link rel="stylesheet" href="css/md-data-table.min.css" />
     <link rel="stylesheet" href="css/select.min.css" />
+    <link rel="stylesheet" href="css/lf-ng-md-file-input.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -176,6 +177,8 @@
     <script src="js/select.min.js"></script>    
     <script src="js/ui-bootstrap-2.5.0.min.js"></script>
     <script src="js/svg-assets-cache.js"></script>
+    <script src="js/lf-ng-md-file-input.min.js"></script>
+    <script src="js/angular-file-upload.min.js"></script>
     <!--<script src="js/moment.min.js"></script>-->
     <!--<script src="bower_components/angular-touch/angular-touch.js"></script>--><!-- conflict with material-->
     <!-- required by restangular-->

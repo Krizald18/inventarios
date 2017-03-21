@@ -155,7 +155,7 @@
                 <tbody md-body>
                   <tr md-row ng-repeat="objeto in resp.articulos">
                     <td md-cell>{{resp.created_at}}</td>
-                    <td md-cell>{{resp.updated_at}}</td>
+                    <td md-cell>{{resp.pdf_firmado? resp.updated_at : '-----' }}</td>
                     <td md-cell>{{objeto.numero_inventario}}</td>
                     <td md-cell>{{objeto.numero_serie}}</td>
                     <td md-cell>{{objeto.modelo.subgrupo.subgrupo}} {{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
@@ -168,10 +168,10 @@
                   <md-button class="md-icon-button" aria-label="generate" ng-click="generatePDF(resp);">
                     <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
                   </md-button>
-                  <md-button class="md-icon-button" aria-label="download">
+                  <md-button class="md-icon-button" aria-label="download" ng-click="downloadSigned(resp);" ng-disabled="!resp.pdf_firmado">
                     <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
                   </md-button>
-                  <md-button class="md-icon-button" aria-label="upload">
+                  <md-button class="md-icon-button" aria-label="upload" ng-click="uploadPDF($event, resp.id);" ng-disabled="!resp.pdf_generado">
                     <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
                   </md-button>
                 </md-container>
