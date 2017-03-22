@@ -6,7 +6,16 @@
         <p>
         	►	Seleccione uno o mas archivos en formato PDF con el resguardo firmado.<br>
         </p>
-        <lf-ng-md-file-input lf-files="files01" multiple drag progress></lf-ng-md-file-input>
+        <form name="testForm" layout="column">
+          <lf-ng-md-file-input name="files" lf-files="files01" lf-maxcount="5" lf-filesize="10MB" lf-totalsize="20MB" lf-mimetype="application/pdf" multiple drag ng-mouseover="changed();">
+          </lf-ng-md-file-input>
+          <div ng-if="testForm.files.$error" style="color:red;">
+              <div ng-show="maxcount">Demaciados archivos</div>
+              <div ng-show="filesize">El tamaño del archivo es muy grande</div>
+              <div ng-show="totalsize">El tamaño total de los archivos es muy grande</div>
+              <div ng-show="mimetype">Solo se permiten archivos en formato PDF</div>
+          </div>
+      </form>
       </div>
     </md-dialog-content>
 

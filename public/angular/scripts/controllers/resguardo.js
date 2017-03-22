@@ -176,13 +176,6 @@ angular.module('App')
 		            url: 'api/uploader/' + id,
 		            alias: 'file'
 		        });
-		        $scope.uploader.filters.push({
-		            name: 'imageFilter',
-		            fn: function(item, options) {
-		                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-		                return '|pdf|'.indexOf(type) !== -1;
-		            }
-		        });
 		       	if(files && files.length > 0)
 		       	{
 		       		$.each(files, function(i, o){
@@ -192,9 +185,10 @@ angular.module('App')
 						pdf.isSuccess = true;
 						$scope.uploader.queue.push(pdf);
 		       		});
-		       		$scope.uploader.queue.forEach(function(item, i) {
+					$scope.uploader.queue.forEach(function(item, i) {
 		                item.formData.push({
-		                    'folder': 'resguardos_firmados'
+		                    'folder': 'resguardos_firmados',
+		                    'name': item.file.name
 		                });
 		                item.upload();
 		                setTimeout(function(){
@@ -302,8 +296,12 @@ angular.module('App')
 		  link.click();
 		  document.body.removeChild(link);
 		}
-
 		function DialogController($scope, $mdDialog) {
+			$scope.changed = function() {
+				$scope.files01 = $scope.files01.filter((file) => {
+					return file.lfFile.type == "application/pdf";
+				});
+			}
 		    $scope.hide = function() {
 		      	$mdDialog.hide();
 		    };
