@@ -644,10 +644,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
 		$scope.next = 0;
 
 		if(!$scope.projectForm.$valid)
-		{
-			console.log($scope.projectForm);
 			return;
-		}
 
 		if(frmObj.numero_inventario && frmObj.numero_inventario.length > 0)
 			obj.numero_inventario = parseInt(frmObj.numero_inventario);
