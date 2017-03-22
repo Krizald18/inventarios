@@ -21,22 +21,22 @@ Route::post('auth/password/email', 'Auth\PasswordResetController@sendResetLinkEm
 Route::get('auth/password/verify', 'Auth\PasswordResetController@verify');
 Route::post('auth/password/reset', 'Auth\PasswordResetController@reset');
 
-//protected API routes with JWT (must be logged in)
+//protected API routes with JWT (logged in required)
 Route::group(['prefix' => 'user'], function()
 {
 	Route::get('', ['uses' => 'UserController@allUsers']);
 	Route::get('{id}', ['uses' => 'UserController@getUser']);
 });
+
 Route::group(['prefix' => 'uploader'], function()
 {
-	//Route::get('', ['uses' => 'UploaderController@uploadFile']);
 	Route::post('{id}', ['uses' => 'UploaderController@uploadFile']);
 });
 Route::group(['prefix' => 'downloader'], function()
 {
-	//Route::get('', ['uses' => 'UploaderController@uploadFile']);
 	Route::get('{id}', ['uses' => 'DownloaderController@donwloadFile']);
 });
+//protected API resource routes with JWT (logged in required)
 Route::resource('grupo', 'GrupoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('subgrupo', 'SubgrupoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('caracteristica', 'CaracteristicaController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
@@ -49,4 +49,9 @@ Route::resource('responsable', 'ResponsableController', ['only' => ['index', 'st
 Route::resource('inventario', 'InventarioController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('resguardo', 'ResguardoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 
-//unprotected API routes, no JWT (must not be logged in)
+// hiden -- remove these routes in production
+// Route::resource('evidencia', 'ResguardoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+// --
+
+//unprotected API routes, no JWT (logged in not required)
+// --

@@ -189,7 +189,7 @@ class ResguardoController extends Controller
             $resguardo->save();
         }
         
-        $file = public_path(). '/pdfs/generados/'.$folio.'.pdf';
+        $file = public_path().'/pdfs/generados/'.$folio.'.pdf';
         $pdfdata = file_get_contents($file);
         $base64 = base64_encode($pdfdata);
         

@@ -123,10 +123,10 @@ angular.module('App')
 	    }
 	    $scope.generatePDF = function(resguardo){
 	    	var dt = new Date();
-    		var gd = dt.getDate();
-    		var gm = dt.getMonth() + 1;
-			let dy = gd < 10? '0' + gd : gd;
-			let mn = gm < 10? '0' + gm : gm;
+    		// var gd = dt.getDate();
+    		// var gm = dt.getMonth() + 1;
+			// let dy = gd < 10? '0' + gd : gd;
+			// let mn = gm < 10? '0' + gm : gm;
 			var name = 'RE-' + dt.getFullYear() + (resguardo.id < 100? (resguardo.id < 10? '00' + resguardo.id: '0' + resguardo.id) : resguardo.id) + '.pdf';
 	    	let articulos = resguardo.articulos.map(function(o) {
 	    		let obj = {};
@@ -168,6 +168,8 @@ angular.module('App')
 		      fullscreen: true // Only for -xs, -sm breakpoints.
 		    })
 		    .then(function(files) {
+	    		var dt = new Date();
+				var folder = 'resguardos_firmados/RE-' + dt.getFullYear() + (id < 100? (id < 10? '00' + id: '0' + id) : id);
 		    	var token = $window.localStorage.satellizer_token;
 		    	$scope.uploader = new FileUploader({
 		            headers: {
@@ -179,16 +181,20 @@ angular.module('App')
 		       	if(files && files.length > 0)
 		       	{
 		       		$.each(files, function(i, o){
-		       			var pdf = new FileUploader.FileItem($scope.uploader, o.lfFile);
-						pdf.progress = 100;
-						pdf.isUploaded = true;
-						pdf.isSuccess = true;
-						$scope.uploader.queue.push(pdf);
+		       			if(o.lfFile.type == "application/pdf")
+		       			{
+			       			var pdf = new FileUploader.FileItem($scope.uploader, o.lfFile);
+							pdf.progress = 100;
+							pdf.isUploaded = true;
+							pdf.isSuccess = true;
+							$scope.uploader.queue.push(pdf);
+						}
 		       		});
 					$scope.uploader.queue.forEach(function(item, i) {
 		                item.formData.push({
-		                    'folder': 'resguardos_firmados',
-		                    'name': item.file.name
+		                    'folder': folder,
+		                    'name': item.file.name,
+		                    'tipo_archivo':'resguardo_firmado'
 		                });
 		                item.upload();
 		                setTimeout(function(){

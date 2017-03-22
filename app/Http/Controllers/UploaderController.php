@@ -14,9 +14,11 @@ class UploaderController extends Controller
     		return 'sin folder';
         if(!$request->has('name'))
             return 'sin nombre de archivo';
+        if(!$request->has('tipo_archivo'))
+            return 'sin tipo de archivo';
     	if(!$request->hasFile('file'))
     		return 'sin archivo';
-    	if(strval($request->folder) == 'resguardos_firmados')
+    	if(strval($request->tipo_archivo) == 'resguardo_firmado')
 	    {
             $now = new \DateTime('now');
             $year = $now->format('Y');
@@ -34,7 +36,7 @@ class UploaderController extends Controller
                 file_get_contents($request->file('file')->getRealPath())
             );
 
-    	    if(strval($request->folder) == 'resguardos_firmados')
+    	    if(strval($request->tipo_archivo) == 'resguardo_firmado')
             	return $resguardo;
             else
             	return 'done!';
