@@ -27,14 +27,12 @@ angular.module('App')
 			var obj = angular.copy($scope.selected2);
 			if(!obj || (obj && obj.length == 0))
 				return;
-			console.log($scope.selected2);
 			let articulos = $scope.selected2.map(function(obj){
 				return obj.id;
 			});
 			let data = {};
 			data.articulos = articulos;
 			data.responsable_id = $scope.showing.id;
-			console.log(data);
 			API.all('resguardo').post({data}).then(ad => {
 				$scope.showing.articulos_asignados = $scope.showing.articulos_asignados.filter(function(o){
 					return $.grep($scope.selected2, function(p){
@@ -268,10 +266,11 @@ angular.module('App')
 						}, 200);
 		            });
 		       	}
-		       	else
-		       		console.log('no subir');
+		       	else{
+		       		// console.log('no subir');
+		       	}
 		    }, function() {
-		      	console.log('no subir');
+		      	// console.log('no subir');
 		    });
 	    }
 	    $scope.downloadSigned = function(resguardo){

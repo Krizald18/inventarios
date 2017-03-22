@@ -173,10 +173,14 @@ class ResguardoController extends Controller
 
         $id = $o->id;
 
-        if (file_exists('pdfs/generados/resguardo'.$id.'.pdf')) 
-            unlink('pdfs/generados/resguardo'.$id.'.pdf');
+        if (!file_exists('pdfs/generados/'))
+            mkdir('pdfs/generados/', 0777, true);
+
+        if (file_exists('pdfs/generados/'.$folio.'.pdf')) 
+            unlink('pdfs/generados/'.$folio.'.pdf');
+
         $pdf = PDF::loadView('resguardo', $data);
-        $pdf->save('pdfs/generados/resguardo'.$id.'.pdf');
+        $pdf->save('pdfs/generados/'.$folio.'.pdf');
 
         $resguardo = Resguardo::find($id);
         if(!$resguardo->pdf_generado)
@@ -185,7 +189,7 @@ class ResguardoController extends Controller
             $resguardo->save();
         }
         
-        $file = public_path(). '/pdfs/generados/resguardo'.$id.'.pdf';
+        $file = public_path(). '/pdfs/generados/'.$folio.'.pdf';
         $pdfdata = file_get_contents($file);
         $base64 = base64_encode($pdfdata);
         
