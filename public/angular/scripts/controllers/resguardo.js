@@ -1,6 +1,6 @@
 'use strict';
 angular.module('App')
-	.controller('ResguardoCtrl', function ($scope, $timeout, $q, API, AlertService, $mdDialog, FileUploader, $window) {
+	.controller('ResguardoCtrl', function ($scope, $mdDialog, $timeout, $window, $q, API, FileUploader, AlertService) {
 	    // list of `state` value/display objects
 	    $scope.selected2 = [];
 	    $scope.sinResguardo = false;
@@ -169,7 +169,7 @@ angular.module('App')
 		    })
 		    .then(function(files) {
 	    		var dt = new Date();
-				var folder = 'resguardos_firmados/RE-' + dt.getFullYear() + (id < 100? (id < 10? '00' + id: '0' + id) : id);
+				var uri = 'resguardos_firmados/RE-' + dt.getFullYear() + (id < 100? (id < 10? '00' + id: '0' + id) : id);
 		    	var token = $window.localStorage.satellizer_token;
 		    	$scope.uploader = new FileUploader({
 		            headers: {
@@ -192,7 +192,7 @@ angular.module('App')
 		       		});
 					$scope.uploader.queue.forEach(function(item, i) {
 		                item.formData.push({
-		                    'folder': folder,
+		                    'uri': uri,
 		                    'name': item.file.name,
 		                    'tipo_archivo':'resguardo_firmado'
 		                });

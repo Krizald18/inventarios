@@ -28,4 +28,9 @@ class Resguardo extends Model
     {
         return $this->belongsTo('App\Responsable', 'responsable_id', 'id');
     }
+
+    public function evidencias()
+    {
+        return $this->hasMany('App\Evidencia', 'resguardo_id');
+    }
 }
