@@ -12,25 +12,32 @@ class UploaderController extends Controller
     {
     	if(!$request->has('folder'))
     		return 'sin folder';
+        if(!$request->has('name'))
+            return 'sin nombre de archivo';
     	if(!$request->hasFile('file'))
     		return 'sin archivo';
-
     	if(strval($request->folder) == 'resguardos_firmados')
 	    {
+            $now = new \DateTime('now');
+            $year = $now->format('Y');
+            $folio = 'RE-'.strval($year).($id < 100? ( $id < 10? '00'.$id: '0'.$id ) : $id );            
 		    $resguardo = Resguardo::findOrFail($id);
 	        $resguardo->pdf_firmado = true;
 	        $resguardo->save();
 	    }
+        if(isset($folio))
+        {
+            if(Storage::exists($request->folder.'/'.strval($request->name)))
+                Storage::delete($request->folder.'/'.strval($request->name));
+            Storage::put(
+                $request->folder.'/'.strval($request->name),
+                file_get_contents($request->file('file')->getRealPath())
+            );
 
-        if(!Storage::exists($request->folder.'/'.$id.'.pdf'))
-	        Storage::put(
-	            $request->folder.'/'.$resguardo->id.'.pdf',
-	            file_get_contents($request->file('file')->getRealPath())
-	        );
-
-	    if(strval($request->folder) == 'resguardos_firmados')
-        	return $resguardo;
-        else
-        	return 'done!';
+    	    if(strval($request->folder) == 'resguardos_firmados')
+            	return $resguardo;
+            else
+            	return 'done!';
+        }
     }
 }

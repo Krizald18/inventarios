@@ -56,6 +56,9 @@
         margin-right: -2px;
         margin-top: -5px;
       }
+      div.lf-ng-md-file-input-drag-text-container layout-align-center-center.layout-row{
+        height:120px;
+      }
     </style>
   </head>
   <body ng-app="App">    

@@ -34,9 +34,13 @@ class ResguardoController extends Controller
                 $nextid = $nextid + 1;
             else
                 $nextid = 1;
-
+    
+        $now = new \DateTime('now');
+        $year = $now->format('Y');
+            $folio = 'RE-'.strval($year).( $nextid < 100? ( $nextid < 10? '00'.$nextid: '0'.$nextid ) : $nextid );
             $j = new Resguardo;
             $j->id = $nextid;
+            $j->folio = $folio;
             $j->responsable_id = $o->responsable_id;
             $j->push();
 
@@ -145,12 +149,20 @@ class ResguardoController extends Controller
                 break;
         }
         $o = (object) $request->input('pdf_data');
+        $folio = 'RE-'.strval($year).( intval($o->id) < 100? ( intval($o->id) < 10? '00'.$o->id: '0'.$o->id ) : $o->id );
         $articulos = $o->articulos;
+        foreach ($articulos as $articulo) {
+            $a = (object) $articulo;
+            $inv = Inventario::find($a->id);
+            $inv->folio_resguardo = $folio;
+            $inv->save;
+        }
         //dd($articulos);
         $data = [
-            'id' => strval($year).( intval($o->id) < 100? ( intval($o->id) < 10? '00'.$o->id: '0'.$o->id ) : $o->id ),
+            'id' => $folio,
             'articulos' => $articulos,
             'oficial' => $o->oficial,
+            'num_oficialia' => strlen(strval($o->num_oficialia)) < 5? '0'.strval($o->num_oficialia) : strval($o->num_oficialia),
             'oficialia' => $o->oficialia,
             'municipio' => $o->municipio,
             'estado' => 'SINALOA',
@@ -161,10 +173,10 @@ class ResguardoController extends Controller
 
         $id = $o->id;
 
-        if (!file_exists('pdfs/generados/resguardo'.$id.'.pdf')) {
-            $pdf = PDF::loadView('resguardo', $data);
-            $pdf->save('pdfs/generados/resguardo'.$id.'.pdf');
-        }
+        if (file_exists('pdfs/generados/resguardo'.$id.'.pdf')) 
+            unlink('pdfs/generados/resguardo'.$id.'.pdf');
+        $pdf = PDF::loadView('resguardo', $data);
+        $pdf->save('pdfs/generados/resguardo'.$id.'.pdf');
 
         $resguardo = Resguardo::find($id);
         if(!$resguardo->pdf_generado)

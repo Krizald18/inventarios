@@ -1,5 +1,5 @@
 <md-content style ="background-color:white;">
-    <md-tabs class="" md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}" style="background-color: white;margin-left: 150px; min-height: 600px; width: 900px;" ng-style="{{myStyle}}">
+    <md-tabs class="" md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}" style="background-color: white;margin-left: 150px; min-height: 600px; width: 920px;" ng-style="{{myStyle}}">
       <md-tab id="tab1">
         <md-tab-label>Responsable</md-tab-label>
         <md-tab-body><br>
@@ -75,7 +75,7 @@
             <br><hr ng-show = "showing">
         </md-tab-body>
       </md-tab>
-      <md-tab id="tab2" ng-if = "showing.articulos_asignados.length > 0" style="width: 900px;" ng-style="{{myStyle}}">
+      <md-tab id="tab2" ng-if = "showing.articulos_asignados.length > 0" style="width: 920px;" ng-style="{{myStyle}}">
         <md-tab-label>Artículos Asignados</md-tab-label>
         <md-tab-body>
           <md-switch class="md-primary" name="sinResguardo" ng-model="sinResguardo" style="margin-left: 62%;">
@@ -133,27 +133,29 @@
         </div>
         </md-tab-body>
       </md-tab>
-      <md-tab id="tab3" ng-if = "showing.resguardos.length > 0" style="width: 900px">
+      <md-tab id="tab3" ng-if = "showing.resguardos.length > 0" style="width: 920px">
         <md-tab-label>Resguardos</md-tab-label>
         <md-tab-body>
           <md-input-container class="md-block">
             <label>Resguardos</label>
             <input type="text" name="" disabled="" />
           </md-input-container>
-          <md-table-container style="margin-top:-35px;width: 850px;">
+          <md-table-container style="margin-top:-35px;width: 920px;">
             <div ng-repeat="resp in showing.resguardos">
               <table md-table>
               <thead md-head>
                 <tr md-row>
-                  <th md-column>Creación</th>
-                  <th md-column>Firma</th>
+                  <th md-column class="col-md-2">Folio</th>
+                  <th md-column class="col-md-2">Creación</th>
+                  <th md-column class="col-md-2">Firma</th>
                   <th md-column>Numero de Inventario</th>
                   <th md-column>Numero de Serie</th>
-                  <th md-column>Artículo</th>
+                  <th md-column class="col-md-4">Artículo</th>
                 </tr>
               </thead>
                 <tbody md-body>
                   <tr md-row ng-repeat="objeto in resp.articulos">
+                    <td md-cell>{{resp.folio}}</td>                  
                     <td md-cell>{{resp.created_at}}</td>
                     <td md-cell>{{resp.pdf_firmado? resp.updated_at : '-----' }}</td>
                     <td md-cell>{{objeto.numero_inventario}}</td>

@@ -11,6 +11,7 @@ class CreateResguardosTable extends Migration
         Schema::create('resguardos', function (Blueprint $table) {
             $table->integer('id')->unique();
             $table->string('observaciones')->nullable();
+            $table->string('folio')->nullable()->unique();
             $table->boolean('status')->default(false); // open
             $table->boolean('pdf_generado')->default(false);
             $table->boolean('pdf_firmado')->default(false);

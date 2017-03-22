@@ -10,7 +10,7 @@ class Inventario extends Model
     ];
 
     protected $fillable = [
-    	'id','numero_inventario','numero_serie', 'status','fecha_baja', 'resguardo_id', 'modelo_id','oficialia_id', 'area_id', 'responsable_id'
+    	'id','numero_inventario','numero_serie', 'status','fecha_baja', 'folio_resguardo', 'resguardo_id', 'modelo_id','oficialia_id', 'area_id', 'responsable_id'
     ]; 
 
     protected $hidden = [
@@ -28,6 +28,10 @@ class Inventario extends Model
     public function getCantidadAttribute($value)
     {
         return is_null($value)? '': $value;
+    }
+    public function getFolioResguardoAttribute($value)
+    {
+        return (string) $value;
     }
     /*
     public function subgrupo()

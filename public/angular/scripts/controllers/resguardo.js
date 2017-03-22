@@ -129,10 +129,10 @@ angular.module('App')
     		var gm = dt.getMonth() + 1;
 			let dy = gd < 10? '0' + gd : gd;
 			let mn = gm < 10? '0' + gm : gm;
-			var name = 'resguardo-' + (resguardo.id < 100? (resguardo.id < 10? '00' + resguardo.id: '0' + resguardo.id) : resguardo.id);
-			name += dy + mn + dt.getFullYear() + '.pdf';
+			var name = 'RE-' + dt.getFullYear() + (resguardo.id < 100? (resguardo.id < 10? '00' + resguardo.id: '0' + resguardo.id) : resguardo.id) + '.pdf';
 	    	let articulos = resguardo.articulos.map(function(o) {
 	    		let obj = {};
+	    		obj.id = o.id;
 	    		obj.numero_inventario = o.numero_inventario;
 	    		obj.numero_serie = o.numero_serie;
 	    		obj.articulo = o.modelo.subgrupo.subgrupo + ' ' + o.modelo.marca.marca + ' ' + o.modelo.modelo;
@@ -141,6 +141,7 @@ angular.module('App')
     		let pdf_data = {};
     		pdf_data.id = resguardo.id;
     		pdf_data.oficial = $scope.showing.responsable;
+    		pdf_data.num_oficialia = $scope.showing.oficialia && $scope.showing.oficialia.id? $scope.showing.oficialia.id: null;
     		pdf_data.oficialia = $scope.showing.oficialia && $scope.showing.oficialia.oficialia? $scope.showing.oficialia.oficialia: null;
     		pdf_data.municipio = $scope.showing.oficialia && $scope.showing.oficialia.municipio? $scope.showing.oficialia.municipio.municipio: null;
     		pdf_data.articulos = articulos;
@@ -186,11 +187,13 @@ angular.module('App')
 		        });
 		       	if(files && files.length > 0)
 		       	{
-		       		var pdf = new FileUploader.FileItem($scope.uploader, files[0].lfFile);
-					pdf.progress = 100;
-					pdf.isUploaded = true;
-					pdf.isSuccess = true;
-					$scope.uploader.queue.push(pdf);
+		       		$.each(files, function(i, o){
+		       			var pdf = new FileUploader.FileItem($scope.uploader, o.lfFile);
+						pdf.progress = 100;
+						pdf.isUploaded = true;
+						pdf.isSuccess = true;
+						$scope.uploader.queue.push(pdf);
+		       		});
 		       		$scope.uploader.queue.forEach(function(item, i) {
 		                item.formData.push({
 		                    'folder': 'resguardos_firmados'
@@ -225,42 +228,42 @@ angular.module('App')
 																							{
 																								if(item.isUploading)
 																									AlertService.error('Error al cargar archivo, se ha exedido el tiempo de espera, 5 seg.');
-																								else
+																								else if (i == $scope.uploader.queue.length - 1)
 																									done(id);
 																							}
-																							else
+																							else if (i == $scope.uploader.queue.length - 1)
 																								done(id);
 																						}, 4500);
 																					}
-																					else
+																					else if (i == $scope.uploader.queue.length - 1)
 																						done(id);
 																				}, 3500);
 																			}
-																			else
+																			else if (i == $scope.uploader.queue.length - 1)
 																				done(id);
 																		}, 2500);
 																	}
-																	else
+																	else if (i == $scope.uploader.queue.length - 1)
 																		done(id);
 																}, 1500);
 															}
-															else
+															else if (i == $scope.uploader.queue.length - 1)
 																done(id);
 														}, 1000);
 													}
-													else
+													else if (i == $scope.uploader.queue.length - 1)
 														done(id);
 												}, 800);
 											}
-											else
+											else if (i == $scope.uploader.queue.length - 1)
 												done(id);
 										}, 600);
 									}
-									else
+									else if (i == $scope.uploader.queue.length - 1)
 										done(id);
 								}, 400);
 							}
-							else
+							else if (i == $scope.uploader.queue.length - 1)
 								done(id);
 						}, 200);
 		            });
@@ -276,8 +279,9 @@ angular.module('App')
 	    		'folder': 'resguardos_firmados'
 	    	};
 	    	API.one('downloader', resguardo.id).get(data).then(pdfEncoded =>{
-	    		var dt = new Date();
-				downloadURI("data:application/pdf;base64," + pdfEncoded, 'resguardo-firmado-' + dt.getFullYear() + resguardo.id + '.pdf');
+	    		let dt = new Date();
+	    		let rid = resguardo.id < 100? (resguardo.id < 10? '00' + resguardo.id: '0' + resguardo.id) : resguardo.id;
+				downloadURI("data:application/pdf;base64," + pdfEncoded, 'RE-' + dt.getFullYear() + rid + '.pdf');
     		});
 	    }
 	    var done = function(id){

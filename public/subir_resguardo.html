@@ -1,13 +1,12 @@
 <md-dialog aria-label="Resguardo">
   <form ng-cloak>
     <md-dialog-content>
-      <div class="md-dialog-content">
-        <h4>Seleccione un archivo PDF</h4>
+      <div class="md-dialog-content" style="width: 700px;">
+        <h4>Subir resguardo</h4>
         <p>
-        	►	Seleccione un archivo en formato PDF con el resguardo firmado, solo se permite seleccionar un archivo por resguardo.<br>
-          ►	Si el resguardo tiene más de una hoja, unalas en un archivo PDF antes de subir.
+        	►	Seleccione uno o mas archivos en formato PDF con el resguardo firmado.<br>
         </p>
-        <lf-ng-md-file-input lf-files="files01" drag progress></lf-ng-md-file-input>
+        <lf-ng-md-file-input lf-files="files01" multiple drag progress></lf-ng-md-file-input>
       </div>
     </md-dialog-content>
 

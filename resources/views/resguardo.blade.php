@@ -13,8 +13,11 @@
 		    font-size: 80%;
 		}
 		#date {
-			margin-top: -50px;
+			margin-top: -120px;
 			text-align: right;
+		}
+		#logo{
+			margin-left: 20px;
 		}
 		img{
 			margin-left: 30px;
@@ -45,13 +48,13 @@
 <body>
 	<htmlpageheader name="page-header">
 		<br><br><br>
-	    <img src="images/gob-logo.jpg" alt="logo" height="80px" width="160px">
-	    <div id="date">Culiacán, Sinaloa {{$day}} de {{$month}} de {{$year}}<br>Núm. {{$id}}</div>
-	    <br><br><br><br><p>DIRECCIÓN DEL REGISTRO CIVIL<br>PROYECTO DE MODERNIZACIÓN DEL REGISTRO CIVIL</p>
+	    <div id="logo"><img src="images/gob-logo.jpg" alt="logo" height="112px" width="90px"></div>
+	    <div id="date"><img src="images/reg-logo.jpg" alt="logo" height="87px" width="110px"><br>Culiacán, Sinaloa {{$day}} de {{$month}} de {{$year}}<br>Núm. {{$id}}</div>
+	    <p>DIRECCIÓN DEL REGISTRO CIVIL<br>PROYECTO DE MODERNIZACIÓN DEL REGISTRO CIVIL</p>
 	</htmlpageheader>
 	<div id="content">
-	<p><br><br><br><br><br><br><br><br><br><br><br><br><br></p>
-		Recibí por parte de la Dirección del Registro Civil: <br><br><br>
+	<p><br><br><br><br><br><br><br><br><br><br><br><br></p>
+		Recibí por parte de la Dirección del Registro Civil: <br><br>
 		<table>
 		  <tr>
 		  	<th>Núm.</th>
@@ -72,8 +75,8 @@
 		</table>
 	</div>
 	<htmlpagefooter name="page-footer">
-		<p>_________________________________________________<br>{{$oficial}}<br>OFICIAL DE {{$oficialia}}, {{$municipio}}, {{$estado}}.<br><br><br><br></p>
-		<p style="color: #555;">Unidad de Servicios Estatales. Blvd. Ducto Pemex y Pedro Infante, S/N, Sección IV del desarrollo urbano tres ríos.<br>Tel. 758-7000 Culiacán, Sinaloa. C.P. 8000</p>
+		<p>_________________________________________________<br>{{$oficial}}<br>{{$oficialia? 'OFICIAL ':''}}{{$num_oficialia}}{{$oficialia? 'DE ':''}}{{$oficialia}}{{$oficialia? ',':''}} {{$municipio}}, {{$estado}}.<br><br><br><br></p>
+		<!--<p style="color: #555;">Unidad de Servicios Estatales. Blvd. Ducto Pemex y Pedro Infante, S/N, Sección IV del desarrollo urbano tres ríos.<br>Tel. 758-7000 Culiacán, Sinaloa. C.P. 8000</p>-->
 	    <br><br>
 	</htmlpagefooter>
 </body>

@@ -12,7 +12,7 @@ class Resguardo extends Model
     ];
 
     protected $fillable = [
-    	'id', 'comentarios', 'responsable_id', 'status'
+    	'id', 'comentarios', 'responsable_id', 'status', 'folio'
     ]; 
 
     protected $hidden = [
