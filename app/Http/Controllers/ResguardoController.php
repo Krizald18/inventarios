@@ -16,7 +16,7 @@ class ResguardoController extends Controller
 
     public function index()
     {        
-        return Resguardo::with('articulos')->get();
+        return Resguardo::with('articulos', 'evidencias')->get();
     }
 
     public function create()
@@ -84,7 +84,7 @@ class ResguardoController extends Controller
 
     public function show($id)
     {
-        return Resguardo::with('articulos')->find($id);
+        return Resguardo::with('articulos', 'evidencias')->find($id);
     }
 
     public function edit($id)
