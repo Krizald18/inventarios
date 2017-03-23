@@ -27,8 +27,7 @@ class CreateInventariosTable extends Migration
       $table->string('oficialia_id')->nullable();
       $table->integer('area_id')->nullable();
       $table->integer('responsable_id')->nullable();
-      $table->integer('resguardo_id')->nullable();
-
+      $table->integer('resguardo_id')->unsigned()->nullable();
       $table->foreign('area_id')
             ->references('id')->on('areas');
 
@@ -43,7 +42,7 @@ class CreateInventariosTable extends Migration
             ->references('id')->on('responsables');
 
       $table->foreign('resguardo_id')
-            ->references('id')->on('responsables');
+            ->references('id')->on('resguardos');
 
       $table->timestamps();
 

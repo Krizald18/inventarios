@@ -13,7 +13,7 @@ class CreateEvidenciasTable extends Migration
             $table->string('uri'); // folder
             $table->string('file');
 
-            $table->integer('resguardo_id')->nullable();
+            $table->integer('resguardo_id')->unsigned()->nullable();
             $table->foreign('resguardo_id')->references('id')->on('resguardos');
             $table->timestamps();
         });

@@ -29,26 +29,28 @@ class ResguardoController extends Controller
         if($request->has('data'))
         {
             $o = (object) $request->input('data');
-            $nextid = \DB::table('resguardos')->max('id');
+            /*$nextid = \DB::table('resguardos')->max('id');
             if(isset($nextid))
                 $nextid = $nextid + 1;
             else
                 $nextid = 1;
-    
+    */
         $now = new \DateTime('now');
         $year = $now->format('Y');
-            $folio = 'RE-'.strval($year).( $nextid < 100? ( $nextid < 10? '00'.$nextid: '0'.$nextid ) : $nextid );
             $j = new Resguardo;
-            $j->id = $nextid;
-            $j->folio = $folio;
+            //$j->id = $nextid;
             $j->responsable_id = $o->responsable_id;
             $j->push();
+
+            $folio = 'RE-'.strval($year).( $j->id < 100? ( $j->id < 10? '00'.$j->id: '0'.$j->id ) : $j->id );
+            $j->folio = $folio;
+            $j->save();
 
             if(isset($o->articulos))
             {
                 foreach ($o->articulos as $articulo) {
                     $i = Inventario::find($articulo);
-                    $i->resguardo_id = $nextid;
+                    $i->resguardo_id = $j->id;
                     $i->save();
                 }
             }

@@ -9,7 +9,7 @@ class CreateResguardosTable extends Migration
     public function up()
     {
         Schema::create('resguardos', function (Blueprint $table) {
-            $table->integer('id')->unique();
+            $table->increments('id');
             $table->string('observaciones')->nullable();
             $table->string('folio')->nullable()->unique();
             $table->boolean('status')->default(false); // open

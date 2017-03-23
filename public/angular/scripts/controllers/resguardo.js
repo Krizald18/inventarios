@@ -360,6 +360,7 @@ angular.module('App')
 		    $scope.delete = (evidencia) => {
 		    	if(!evidencia)
 		    		return;
+		    	$scope.seleccionados = [];
 		    	API.one('uploader', evidencia.id).remove().then(res =>{
 		    		var resguardo = res.plain();
 		    		$scope.evidencias = resguardo.evidencias;
