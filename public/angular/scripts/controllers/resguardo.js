@@ -156,9 +156,10 @@ angular.module('App')
     		});
 
 	    }
-	    $scope.uploadPDF = function(ev, id){
-	    	if(!id)
+	    $scope.uploadPDF = function(ev, resguardo){
+	    	if(!resguardo)
 	    		return;
+	    	var id  = resguardo.id;
 		    $mdDialog.show({
 		      controller: DialogController,
 		      templateUrl: 'subir_resguardo.html',
@@ -273,15 +274,21 @@ angular.module('App')
 		      	// console.log('no subir');
 		    });
 	    }
-	    $scope.downloadSigned = function(resguardo){
-	    	let data = {
-	    		'folder': 'resguardos_firmados'
-	    	};
-	    	API.one('downloader', resguardo.id).get(data).then(pdfEncoded =>{
-	    		let dt = new Date();
-	    		let rid = resguardo.id < 100? (resguardo.id < 10? '00' + resguardo.id: '0' + resguardo.id) : resguardo.id;
-				downloadURI("data:application/pdf;base64," + pdfEncoded, 'RE-' + dt.getFullYear() + rid + '.pdf');
-    		});
+	    $scope.downloadSigned = function(resg){
+	    	if(!resg)
+	    		return;
+	    	localStorage.resguardo_id = resg.id;
+			$mdDialog.show({
+				controller: BajarEvidenciasController,
+				templateUrl: 'bajar_resguardo.html',
+				parent: angular.element(document.body),
+				clickOutsideToClose: true,
+				fullscreen: true // Only for -xs, -sm breakpoints.
+		    }).then(rs => {}, res => {
+		    	// handle cancel from mdDialog
+		    	if(res)
+		    		resg.pdf_firmado = res.pdf_firmado;
+		    });
 	    }
 	    var done = function(id){
 	    	API.one('resguardo', id).get()
@@ -291,6 +298,7 @@ angular.module('App')
 				})[0];
 				resguardo.pdf_firmado = res.pdf_firmado;
 				resguardo.updated_at = res.updated_at;
+				resguardo.evidencias = res.evidencias;
 				AlertService.show("Listo!", "Se ha cargado el documento");
 	    	});
 	    }
@@ -319,5 +327,68 @@ angular.module('App')
 		    $scope.answer = function() {
 		      	$mdDialog.hide($scope.files01);
 		    };
+		}
+		function BajarEvidenciasController($scope, $mdDialog, API) {
+			let id = localStorage.resguardo_id;
+			if(localStorage.resguardo_id)
+				localStorage.removeItem('resguardo_id');
+			API.one('resguardo', id).get()
+	    	.then(res =>{
+	    		$scope.evidencias = res.evidencias;
+		    }, function() {
+		      	console.log('error');
+		    });
+
+			$scope.evidencias = [];
+			$scope.seleccionados = [];
+		    $scope.hide = function() {
+		      	$mdDialog.hide();
+		    };
+
+		    $scope.cancel = function() {
+		      	$mdDialog.cancel();
+		    };
+
+		    $scope.download = (evidencia) =>{
+		    	let data = {
+		    		'type': 'resguardo'
+		    	};
+		    	API.one('downloader', evidencia.id).get(data).then(pdfEncoded =>{
+					downloadURI("data:application/pdf;base64," + pdfEncoded, evidencia.file);
+	    		});
+		    };
+		    $scope.delete = (evidencia) => {
+		    	if(!evidencia)
+		    		return;
+		    	API.one('uploader', evidencia.id).remove().then(res =>{
+		    		var resguardo = res.plain();
+		    		$scope.evidencias = resguardo.evidencias;
+		    		if(resguardo.evidencias.length == 0)
+		    		{
+		    			AlertService.show("Sin archivos", "Se han eliminado todos los archivos");
+		    			$mdDialog.cancel(resguardo);
+		    		}
+	    		});
+		    };
+		    $scope.descargar = () =>{
+		    	// descargar todos los seleccionados
+		    	$.each($scope.seleccionados, function(i, e){
+		    		$scope.download(e);
+		    	});
+		    };
+		    $scope.eliminar = () =>{
+		    	// eliminar todos los seleccionados
+		    	$.each($scope.seleccionados, function(i, e){
+		    		$scope.delete(e);
+		    	});
+		    }
+		    function downloadURI(uri, name) {
+				var link = document.createElement("a");
+				link.download = name;
+				link.href = uri;
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+			}
 		}
 	});

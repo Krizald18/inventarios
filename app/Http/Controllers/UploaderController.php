@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Storage;
 use App\Resguardo;
+use App\Evidencia;
 use Illuminate\Http\Request;
 
 class UploaderController extends Controller
@@ -26,6 +27,12 @@ class UploaderController extends Controller
 		    $resguardo = Resguardo::findOrFail($id);
 	        $resguardo->pdf_firmado = true;
 	        $resguardo->save();
+            
+            $e = new Evidencia;
+            $e->resguardo_id = $id;
+            $e->uri = $request->uri;
+            $e->file = $request->name;
+            $e->save();
 	    }
         if(isset($folio))
         {
@@ -41,5 +48,22 @@ class UploaderController extends Controller
             else
             	return 'done!';
         }
+    }
+    public function deleteFile($id)
+    {
+        // recive un id de una evidencia
+        $e = Evidencia::findOrFail($id);
+        $rid = $e->resguardo_id;
+
+        if(Storage::exists($e->uri.'/'.$e->file))
+            Storage::delete($e->uri.'/'.$e->file);
+        $e->delete();
+        $r = Resguardo::with('evidencias')->findOrFail($rid);
+        if(count($r->evidencias) == 0)
+        {
+            $r->pdf_firmado = false;
+            $r->save();
+        }
+        return $r;
     }
 }
