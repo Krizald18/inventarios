@@ -103,9 +103,26 @@ angular.module('App').controller('InventarioCtrl', function(API, $scope, $interv
 			$scope.selected2 = [];
 			$scope.refreshbodyheight();
 		}
-	}
+	};
 	$scope.remove = () => {
 		if($scope.printqueue.length > 0 && $scope.selected2.length > 0)
 			$scope.printqueue = $scope.printqueue.filter(o => $.grep($scope.selected2, x => x.id == o.id).length == 0);
-	}
+	};
+	$scope.baja = (articulo) => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
+	/*{
+		$mdDialog.show({
+				controller: BajarEvidenciasController,
+				templateUrl: 'angular/modals/baja_articulo.html',
+				parent: angular.element(document.body),
+				clickOutsideToClose: true,
+				fullscreen: true // Only for -xs, -sm breakpoints.
+		    }).then(rs => {}, res => {
+		    	// handle cancel from mdDialog (salir)
+		    	if(res)
+	    		{
+	    			//
+	    		}
+		    });
+	};*/
+	$scope.editar = (articulo) => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
 });

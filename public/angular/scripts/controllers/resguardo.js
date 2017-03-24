@@ -137,7 +137,7 @@ angular.module('App')
 	    	var id  = resguardo.id;
 		    $mdDialog.show({
 		      controller: DialogController,
-		      templateUrl: 'subir_resguardo.html',
+		      templateUrl: 'angular/modals/subir_resguardo.html',
 		      parent: angular.element(document.body),
 		      targetEvent: ev,
 		      clickOutsideToClose:true,
@@ -252,7 +252,7 @@ angular.module('App')
 	    	localStorage.resguardo_id = resg.id;
 			$mdDialog.show({
 				controller: BajarEvidenciasController,
-				templateUrl: 'bajar_resguardo.html',
+				templateUrl: 'angular/modals/bajar_resguardo.html',
 				parent: angular.element(document.body),
 				clickOutsideToClose: true,
 				fullscreen: true // Only for -xs, -sm breakpoints.
