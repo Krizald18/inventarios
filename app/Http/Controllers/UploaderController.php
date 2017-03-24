@@ -28,11 +28,15 @@ class UploaderController extends Controller
 	        $resguardo->pdf_firmado = true;
 	        $resguardo->save();
             
-            $e = new Evidencia;
-            $e->resguardo_id = $id;
-            $e->uri = $request->uri;
-            $e->file = $request->name;
-            $e->save();
+            $ev = Evidencia::where('resguardo_id', $id)->where('uri', $request->uri)->where('file', $request->name)->get();
+            if(count($ev) == 0)
+            {
+                $e = new Evidencia;
+                $e->resguardo_id = $id;
+                $e->uri = $request->uri;
+                $e->file = $request->name;
+                $e->save();
+            }
 	    }
         if(isset($folio))
         {

@@ -191,6 +191,8 @@ angular.module('App')
 							$scope.uploader.queue.push(pdf);
 						}
 		       		});
+		       		if($scope.uploader.queue.length > 1)
+		       			localStorage.multiple_upload = true;
 					$scope.uploader.queue.forEach(function(item, i) {
 		                item.formData.push({
 		                    'uri': uri,
@@ -285,7 +287,7 @@ angular.module('App')
 				clickOutsideToClose: true,
 				fullscreen: true // Only for -xs, -sm breakpoints.
 		    }).then(rs => {}, res => {
-		    	// handle cancel from mdDialog
+		    	// handle cancel from mdDialog (salir)
 		    	if(res)
 		    		resg.pdf_firmado = res.pdf_firmado;
 		    });
@@ -299,7 +301,13 @@ angular.module('App')
 				resguardo.pdf_firmado = res.pdf_firmado;
 				resguardo.updated_at = res.updated_at;
 				resguardo.evidencias = res.evidencias;
-				AlertService.show("Listo!", "Se ha cargado el documento");
+				let m = localStorage.multiple_upload;
+				if(m)
+					AlertService.show("Listo!", "Se han cargado los documentos");
+				else
+					AlertService.show("Listo!", "Se ha cargado el documento");
+				if(localStorage.multiple_upload != undefined)
+					localStorage.removeItem('multiple_upload');
 	    	});
 	    }
 	    function downloadURI(uri, name) {
