@@ -12,33 +12,28 @@ angular.module('App')
 	    	'height': '650px',
 	    	'min-height': '650px'
 	    }
-	    $scope.refreshbodyheight = function(){
+	    $scope.millisec = (date_str) => new Date(date_str).getTime();
+	    $scope.refreshbodyheight = () => {
 			var body = document.body,
 			    html = document.documentElement;
 			body.style.height = 100 + "%";
-			setTimeout(function(){
+			setTimeout(() => {
 				var height = Math.max( body.scrollHeight, body.offsetHeight, 
 			        html.clientHeight, html.scrollHeight, html.offsetHeight );
 				body.style.height = height + "px";
 			}, 500);
 			$scope.loading = false;
 		}
-		$scope.crearResguardo =  function() {
+		$scope.crearResguardo =  () => {
 			var obj = angular.copy($scope.selected2);
 			if(!obj || (obj && obj.length == 0))
 				return;
-			let articulos = $scope.selected2.map(function(obj){
-				return obj.id;
-			});
+			let articulos = $scope.selected2.map(obj => obj.id);
 			let data = {};
 			data.articulos = articulos;
 			data.responsable_id = $scope.showing.id;
 			API.all('resguardo').post({data}).then(ad => {
-				$scope.showing.articulos_asignados = $scope.showing.articulos_asignados.filter(function(o){
-					return $.grep($scope.selected2, function(p){
-						return o.id == p.id;
-					}).length == 0;
-				});
+				$scope.showing.articulos_asignados = $scope.showing.articulos_asignados.filter(o => $.grep($scope.selected2, p => o.id == p.id).length == 0);
 				$scope.selected2 = [];
 				$scope.showing = ad.plain();
 				if($scope.showing.resguardos.length == 0)
@@ -48,25 +43,19 @@ angular.module('App')
 				}
 				else	
 				{
-					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(function(a){
-						return !articuloConResguardo(a, $scope.showing.resguardos);
-					});
-					$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(function(a){
-						return articuloConResguardo(a, $scope.showing.resguardos);
-					});
+					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a, $scope.showing.resguardos));
+					$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a, $scope.showing.resguardos));
 				}
 				
 				$scope.sinResguardo = ($scope.showing.sin_resguardo.length == 0);
 				AlertService.show("Guardado","Resguardo creado");
-				API.all("responsable").getList().then(res => {
-			     	$scope.responsables = res.plain();
-			    });
+				API.all("responsable").getList().then(res => $scope.responsables = res.plain());
 			});
 		}
-		var articuloConResguardo = function(a, x){
+		var articuloConResguardo = (a, x) => {
 			var b = false;			
-			$.each(x, function(j, r){
-				$.each(r.articulos, function(i,articulo){
+			$.each(x, (j, r) => {
+				$.each(r.articulos, (i,articulo) => {
 					if(a.id == articulo.id)
 					{
 						b = true;
@@ -76,7 +65,7 @@ angular.module('App')
 			});			
 			return b;
 		}
-	    $scope.$watch('selectedItem', function(s){
+	    $scope.$watch('selectedItem', s => {
 	    	if(s)
 	    	{
 	    		$scope.showing = angular.copy(s);
@@ -87,12 +76,8 @@ angular.module('App')
 				}
 				else	
 				{
-					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(function(a){
-						return !articuloConResguardo(a, $scope.showing.resguardos);
-					});
-					$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(function(a){
-						return articuloConResguardo(a, $scope.showing.resguardos);
-					});
+					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a, $scope.showing.resguardos));
+					$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a, $scope.showing.resguardos));
 				}
 				$scope.sinResguardo = ($scope.showing.sin_resguardo.length == 0);
 	    		var heightCl = s.articulos_asignados.length > s.resguardos.length? s.articulos_asignados.length * 105: s.resguardos.length * 105;
@@ -104,31 +89,22 @@ angular.module('App')
 	    		$scope.refreshbodyheight();
 	    	}
 	    })
-	    API.all("responsable").getList().then(res => {
-	     	$scope.responsables = res.plain();
-	    });
-	    function querySearch (query) {
+	    API.all("responsable").getList().then(res => $scope.responsables = res.plain());
+	    function querySearch(query) {
 	      var results = query ? $scope.responsables.filter( createFilterFor(query) ) : $scope.responsables;
 	      var deferred = $q.defer();
-	      $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+	      $timeout(() => { deferred.resolve( results ); }, Math.random() * 1000, false);
 	      $scope.itemsfound = results;
 	      return deferred.promise;
 	    }
-	    function createFilterFor(query) {
+	    var createFilterFor = query =>{
 	      var lowercaseQuery = angular.uppercase(query);
-
-	      return function filterFn(resp) {
-	        return (resp.responsable.indexOf(lowercaseQuery) === 0);
-	      };
+	      return resp => resp.responsable.indexOf(lowercaseQuery) === 0;
 	    }
-	    $scope.generatePDF = function(resguardo){
-	    	var dt = new Date();
-    		// var gd = dt.getDate();
-    		// var gm = dt.getMonth() + 1;
-			// let dy = gd < 10? '0' + gd : gd;
-			// let mn = gm < 10? '0' + gm : gm;
+	    $scope.generatePDF = resguardo => {
+	    	let dt = new Date();
 			var name = 'RE-' + dt.getFullYear() + (resguardo.id < 100? (resguardo.id < 10? '00' + resguardo.id: '0' + resguardo.id) : resguardo.id) + '.pdf';
-	    	let articulos = resguardo.articulos.map(function(o) {
+	    	let articulos = resguardo.articulos.map(o => {
 	    		let obj = {};
 	    		obj.id = o.id;
 	    		obj.numero_inventario = o.numero_inventario;
@@ -147,16 +123,14 @@ angular.module('App')
 				downloadURI("data:application/pdf;base64," + pdfEncoded, name);
 				API.one('resguardo', resguardo.id).get()
 				.then( res => {
-					let resguardo = $.grep($scope.showing.resguardos, function(r){
-						return r.id == res.id;
-					})[0];
+					let resguardo = $.grep($scope.showing.resguardos, r => r.id == res.id)[0];
 					resguardo.pdf_generado = res.pdf_generado;
 					resguardo.pdf_firmado = res.pdf_firmado;
 				});
     		});
 
 	    }
-	    $scope.uploadPDF = function(ev, resguardo){
+	    $scope.uploadPDF = (ev, resguardo) => {
 	    	if(!resguardo)
 	    		return;
 	    	var id  = resguardo.id;
@@ -168,7 +142,7 @@ angular.module('App')
 		      clickOutsideToClose:true,
 		      fullscreen: true // Only for -xs, -sm breakpoints.
 		    })
-		    .then(function(files) {
+		    .then(files => {
 	    		var dt = new Date();
 				var uri = 'resguardos_firmados/RE-' + dt.getFullYear() + (id < 100? (id < 10? '00' + id: '0' + id) : id);
 		    	var token = $window.localStorage.satellizer_token;
@@ -181,7 +155,7 @@ angular.module('App')
 		        });
 		       	if(files && files.length > 0)
 		       	{
-		       		$.each(files, function(i, o){
+		       		$.each(files, (i, o) => {
 		       			if(o.lfFile.type == "application/pdf")
 		       			{
 			       			var pdf = new FileUploader.FileItem($scope.uploader, o.lfFile);
@@ -193,38 +167,38 @@ angular.module('App')
 		       		});
 		       		if($scope.uploader.queue.length > 1)
 		       			localStorage.multiple_upload = true;
-					$scope.uploader.queue.forEach(function(item, i) {
+					$scope.uploader.queue.forEach((item, i) => {
 		                item.formData.push({
 		                    'uri': uri,
 		                    'name': item.file.name,
 		                    'tipo_archivo':'resguardo_firmado'
 		                });
 		                item.upload();
-		                setTimeout(function(){
+		                setTimeout(() => {
 							if(item.isUploading)
 							{
-								setTimeout(function(){
+								setTimeout(() => {
 									if(item.isUploading)
 									{
-										setTimeout(function(){
+										setTimeout(() => {
 											if(item.isUploading)
 											{
-												setTimeout(function(){
+												setTimeout(() => {
 													if(item.isUploading)
 													{
-														setTimeout(function(){
+														setTimeout(() => {
 															if(item.isUploading)
 															{
-																setTimeout(function(){
+																setTimeout(() => {
 																	if(item.isUploading)
 																	{
-																		setTimeout(function(){
+																		setTimeout(() => {
 																			if(item.isUploading)
 																			{
-																				setTimeout(function(){
+																				setTimeout(() => {
 																					if(item.isUploading)
 																					{
-																						setTimeout(function(){
+																						setTimeout(() => {
 																							if(item.isUploading)
 																							{
 																								if(item.isUploading)
@@ -269,14 +243,9 @@ angular.module('App')
 						}, 200);
 		            });
 		       	}
-		       	else{
-		       		// console.log('no subir');
-		       	}
-		    }, function() {
-		      	// console.log('no subir');
 		    });
 	    }
-	    $scope.downloadSigned = function(resg){
+	    $scope.downloadSigned = resg => {
 	    	if(!resg)
 	    		return;
 	    	localStorage.resguardo_id = resg.id;
@@ -292,12 +261,10 @@ angular.module('App')
 		    		resg.pdf_firmado = res.pdf_firmado;
 		    });
 	    }
-	    var done = function(id){
+	    var done = id => {
 	    	API.one('resguardo', id).get()
-	    	.then(res =>{
-	    		let resguardo = $.grep($scope.showing.resguardos, function(r){
-					return r.id == res.id;
-				})[0];
+	    	.then(res => {
+	    		let resguardo = $.grep($scope.showing.resguardos, r => r.id == res.id)[0];
 				resguardo.pdf_firmado = res.pdf_firmado;
 				resguardo.updated_at = res.updated_at;
 				resguardo.evidencias = res.evidencias;
@@ -310,7 +277,7 @@ angular.module('App')
 					localStorage.removeItem('multiple_upload');
 	    	});
 	    }
-	    function downloadURI(uri, name) {
+	    var downloadURI = (uri, name) => {
 		  var link = document.createElement("a");
 		  link.download = name;
 		  link.href = uri;
@@ -318,58 +285,33 @@ angular.module('App')
 		  link.click();
 		  document.body.removeChild(link);
 		}
-		function DialogController($scope, $mdDialog) {
-			$scope.changed = function() {
-				$scope.files01 = $scope.files01.filter((file) => {
-					return file.lfFile.type == "application/pdf";
-				});
-			}
-		    $scope.hide = function() {
-		      	$mdDialog.hide();
-		    };
-
-		    $scope.cancel = function() {
-		      	$mdDialog.cancel();
-		    };
-
-		    $scope.answer = function() {
-		      	$mdDialog.hide($scope.files01);
-		    };
+		var DialogController = ($scope, $mdDialog) => {
+			$scope.changed = () => $scope.files01 = $scope.files01.filter(file => file.lfFile.type == "application/pdf");
+		    $scope.hide = () => $mdDialog.hide();
+		    $scope.cancel = () => $mdDialog.cancel();
+		    $scope.answer = () => $mdDialog.hide($scope.files01);
 		}
-		function BajarEvidenciasController($scope, $mdDialog, API) {
+		var BajarEvidenciasController = ($scope, $mdDialog, API) => {
 			let id = localStorage.resguardo_id;
 			if(localStorage.resguardo_id)
 				localStorage.removeItem('resguardo_id');
 			API.one('resguardo', id).get()
-	    	.then(res =>{
-	    		$scope.evidencias = res.evidencias;
-		    }, function() {
-		      	console.log('error');
-		    });
+	    	.then(res => $scope.evidencias = res.evidencias, () => { /* catch error */ });
 
 			$scope.evidencias = [];
 			$scope.seleccionados = [];
-		    $scope.hide = function() {
-		      	$mdDialog.hide();
-		    };
 
-		    $scope.cancel = function() {
-		      	$mdDialog.cancel();
-		    };
-
-		    $scope.download = (evidencia) =>{
+		    $scope.download = evidencia => {
 		    	let data = {
 		    		'type': 'resguardo'
 		    	};
-		    	API.one('downloader', evidencia.id).get(data).then(pdfEncoded =>{
-					downloadURI("data:application/pdf;base64," + pdfEncoded, evidencia.file);
-	    		});
+		    	API.one('downloader', evidencia.id).get(data).then(pdfEncoded => downloadURI("data:application/pdf;base64," + pdfEncoded, evidencia.file));
 		    };
-		    $scope.delete = (evidencia) => {
+		    $scope.delete = evidencia => {
 		    	if(!evidencia)
 		    		return;
 		    	$scope.seleccionados = [];
-		    	API.one('uploader', evidencia.id).remove().then(res =>{
+		    	API.one('uploader', evidencia.id).remove().then(res => {
 		    		var resguardo = res.plain();
 		    		$scope.evidencias = resguardo.evidencias;
 		    		if(resguardo.evidencias.length == 0)
@@ -379,19 +321,11 @@ angular.module('App')
 		    		}
 	    		});
 		    };
-		    $scope.descargar = () =>{
-		    	// descargar todos los seleccionados
-		    	$.each($scope.seleccionados, function(i, e){
-		    		$scope.download(e);
-		    	});
-		    };
-		    $scope.eliminar = () =>{
-		    	// eliminar todos los seleccionados
-		    	$.each($scope.seleccionados, function(i, e){
-		    		$scope.delete(e);
-		    	});
-		    }
-		    function downloadURI(uri, name) {
+		    $scope.hide = () => $mdDialog.hide();
+		    $scope.cancel = () => $mdDialog.cancel();
+		    $scope.descargar = () => $.each($scope.seleccionados, (i, e) => $scope.download(e)); // descargar todos los seleccionados
+		    $scope.eliminar = () => $.each(angular.copy($scope.seleccionados), (i, e) => $scope.delete(e)); // eliminar todos los seleccionados
+		    $scope.downloadURI = (uri, name) => {
 				var link = document.createElement("a");
 				link.download = name;
 				link.href = uri;

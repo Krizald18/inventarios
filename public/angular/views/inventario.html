@@ -83,8 +83,8 @@
               </tbody>
             </table>
           </md-table-container><br>
-          <md-button type="button" aria-label="print" class="md-raised" ng-if="printqueue && printqueue.length > 0" ng-click="print();"><span class="glyphicon glyphicon-print" aria-hidden="true"></span></md-button>
-          <md-button type="button" aria-label="print" class="md-raised" ng-if="printqueue && printqueue.length > 0" ng-click="remove();"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></md-button>
+          <md-button type="button" aria-label="print" class="md-raised" ng-if="printqueue && printqueue.length > 0" ng-click="printqueueprint();"><span class="glyphicon glyphicon-print" aria-hidden="true"></span></md-button>
+          <md-button type="button" aria-label="remove" class="md-raised" ng-disabled="selected2.length == 0" ng-click="remove();"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></md-button>
         </md-tab-body>
       </md-tab>
     </md-tabs>

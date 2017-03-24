@@ -8,7 +8,7 @@ angular.module('App')
 		$scope.email = '';
 		$scope.password = '';
 	
-		$scope.register = function() {
+		$scope.register = () => {
 			let user = {
 				nombre: $scope.nombre,
 				username: $scope.username,
@@ -17,7 +17,7 @@ angular.module('App')
 			};
 
 			$auth.signup(user)
-				.then((response) => {
+				.then(response => {
 					//remove this if you require email verification
 					$auth.setToken(response.data);
 					ToastService.show('Registro Exitoso.');
@@ -28,7 +28,7 @@ angular.module('App')
 
 
 
-		$scope.failedRegistration = function(response) {
+		$scope.failedRegistration = response => {
 			if (response.status === 422) {
 				for (let error in response.data.errors) {
 					return ToastService.error(response.data.errors[error][0]);

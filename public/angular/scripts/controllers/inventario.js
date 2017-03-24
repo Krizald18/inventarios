@@ -1,5 +1,5 @@
 'use strict';
-angular.module('App').controller('InventarioCtrl', function (API, $scope, $interval) {	
+angular.module('App').controller('InventarioCtrl', function(API, $scope, $interval, AlertService) {	
 	$scope.selected = [];
 	$scope.selected2 = [];
 	$scope.printqueue = [];
@@ -11,16 +11,16 @@ angular.module('App').controller('InventarioCtrl', function (API, $scope, $inter
 		page: 1
 	};
 
-	$scope.$watch('strSearch', function(val){
+	$scope.$watch('strSearch', val => {
 		if(val && val.length > 0)
   			$scope.strSearch = val.toUpperCase();
   	});
 
-	$scope.refreshbodyheight = function(){
+	$scope.refreshbodyheight = () => {
 		var body = document.body,
 		    html = document.documentElement;
 		body.style.height = 100 + "%";
-		setTimeout(function(){
+		setTimeout(() => {
 			var height = Math.max( body.scrollHeight, body.offsetHeight, 
 		        html.clientHeight, html.scrollHeight, html.offsetHeight );
 			body.style.height = height + "px";
@@ -28,7 +28,7 @@ angular.module('App').controller('InventarioCtrl', function (API, $scope, $inter
 		$scope.loading = false;
 	}
 
-	var dt = function(response){
+	var dt = response => {
 		$scope.inventario = response.data;
 		$scope.total = response.data.total;
 		$scope.refreshbodyheight()
@@ -36,11 +36,11 @@ angular.module('App').controller('InventarioCtrl', function (API, $scope, $inter
 
 	API.all("inventario").getList().catch(dt);
 
-	$scope.getInventario = function () {
+	$scope.getInventario = () => {
 		$scope.loading = true;
 		API.all("inventario?").customGET("", $scope.query).catch(dt);
 	};
-	$scope.buscaArticulo = function(){
+	$scope.buscaArticulo = () => {
 		if($scope.strSearch.length == 0)
 		{
 			$scope.selected = [];
@@ -83,20 +83,18 @@ angular.module('App').controller('InventarioCtrl', function (API, $scope, $inter
 			console.log('BUSCAR POR OFICIALIA O RESPONSABLE O SERIE')
 		}
 	};
-	$scope.sortbyOF = function(o){
-		console.log(o);
-	}
-	$scope.printqueueAdd = function(){
+	$scope.print = () => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
+	$scope.printqueueprint = () => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
+
+	$scope.printqueueAdd = () => {
 		if($scope.selected.length > 0)
 		{
-			$.each($scope.selected, function(i,o){
+			$.each($scope.selected, (i,o) => {
 				if($scope.printqueue.length == 0)
 					$scope.printqueue.push(o);
 				else
 				{
-					let x = $.grep($scope.printqueue, function(pr){
-						return pr.id == o.id;
-					});
+					let x = $.grep($scope.printqueue, pr => pr.id == o.id);
 					if(x.length == 0)
 						$scope.printqueue.push(angular.copy(o));
 				}
@@ -106,14 +104,8 @@ angular.module('App').controller('InventarioCtrl', function (API, $scope, $inter
 			$scope.refreshbodyheight();
 		}
 	}
-	$scope.remove = function(){
+	$scope.remove = () => {
 		if($scope.printqueue.length > 0 && $scope.selected2.length > 0)
-		{
-			$scope.printqueue = $scope.printqueue.filter(function(o) {
-				return $.grep($scope.selected2, function(x){
-					return x.id == o.id;
-				}).length == 0;
-			});
-		}
+			$scope.printqueue = $scope.printqueue.filter(o => $.grep($scope.selected2, x => x.id == o.id).length == 0);
 	}
 });

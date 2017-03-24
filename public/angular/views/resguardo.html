@@ -156,8 +156,8 @@
                 <tbody md-body>
                   <tr md-row ng-repeat="objeto in resp.articulos">
                     <td md-cell>{{resp.folio}}</td>                  
-                    <td md-cell>{{resp.created_at}}</td>
-                    <td md-cell>{{resp.pdf_firmado? resp.updated_at : '-----' }}</td>
+                    <td md-cell>{{millisec(resp.created_at) | date:'dd/MM/yyyy hh:mm:ss a'}}</td>
+                    <td md-cell>{{resp.pdf_firmado? (millisec(resp.updated_at) | date:'dd/MM/yyyy hh:mm:ss a'): '-----' }}</td>
                     <td md-cell>{{objeto.numero_inventario}}</td>
                     <td md-cell>{{objeto.numero_serie}}</td>
                     <td md-cell>{{objeto.modelo.subgrupo.subgrupo}} {{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
@@ -179,8 +179,6 @@
                 </md-container>
               </div>
             </div>
-            <!--
-            <md-button type="button" aria-label="imprimetodo" class="md-raised" ng-click="printAll();" ng-show="showing.resguardos.length > 1">Imprimir todos los resguardos <span class="glyphicon glyphicon-print" aria-hidden="true"></span></md-button>-->
           </md-table-container><br>
           <md-button type="button" aria-label="crearResguardo" class="md-raised md-primary" ng-if="selected2" ng-click="crearResguardo();" ng-show="selected2.length > 0">Crear resguardo <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></md-button>
         </md-tab-body>

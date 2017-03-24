@@ -1,16 +1,12 @@
 angular.module('App')
 	.controller('SidebarCtrl', function ($scope, $auth) {
-		$scope.$watch(
-			function () { 
-				return localStorage.satellizer_token; 
-			}, 
-			function(newVal,oldVal) {
+		$scope.$watch(() => localStorage.satellizer_token, (newVal,oldVal) => {
 				if ($auth.isAuthenticated()) 
 	            	$scope.autenticado = true;
 				else
 					$scope.autenticado = false;
 			});
-		$scope.logout = function(){
+		$scope.logout = () => {
 			localStorage.removeItem('satellizer_token');
 			location.reload();
 		}

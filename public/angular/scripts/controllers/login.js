@@ -5,14 +5,14 @@ angular.module('App').controller('LoginCtrl', function ($scope, $auth, ToastServ
     $scope.username = '';
     $scope.password = '';
 
-	$scope.login = function() {
+	$scope.login = () => {
 		let user = {
 			username: $scope.username,
 			password: $scope.password
 		};
 
 		$auth.login(user)
-			.then((response) => {
+			.then(response => {
 				$auth.setToken(response.data);
 				if(sessionStorage.getItem('prev')) 
 				{
@@ -27,7 +27,7 @@ angular.module('App').controller('LoginCtrl', function ($scope, $auth, ToastServ
 			.catch($scope.failedLogin.bind());
 	}
 
-	$scope.failedLogin = function(response) {
+	$scope.failedLogin = response => {
 		if (response.status === 422) {
 			for (let error in response.data.errors) {
 				return ToastService.error(response.data.errors[error][0]);

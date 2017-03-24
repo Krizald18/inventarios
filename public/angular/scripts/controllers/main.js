@@ -1,10 +1,10 @@
 'use strict';
-angular.module('App').controller('MainCtrl', function ($scope, $auth) {
-	$scope.refreshbodyheight = function(){
+angular.module('App').controller('MainCtrl',  function($scope, $auth) {
+	$scope.refreshbodyheight = () => {
 		var body = document.body,
 		    html = document.documentElement;
 		body.style.height = 100 + "%";
-		setTimeout(function(){
+		setTimeout(() => {
 			var height = Math.max( body.scrollHeight, body.offsetHeight, 
 		        html.clientHeight, html.scrollHeight, html.offsetHeight );
 			body.style.height = height + "px";
@@ -14,15 +14,15 @@ angular.module('App').controller('MainCtrl', function ($scope, $auth) {
 
 	$scope.refreshbodyheight();
 
-	setTimeout(function(){
+	setTimeout(() => {
 		$scope.refreshbodyheight();
 	}, 600);
 	
-	setTimeout(function(){
+	setTimeout(() => {
 		$scope.refreshbodyheight();
 	}, 700);
 
-	setTimeout(function(){
+	setTimeout(() => {
 		$scope.refreshbodyheight();
 	}, 1500);
 });
