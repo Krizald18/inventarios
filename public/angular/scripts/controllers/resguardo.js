@@ -43,8 +43,8 @@ angular.module('App')
 				}
 				else	
 				{
-					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a, $scope.showing.resguardos));
-					$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a, $scope.showing.resguardos));
+					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a));
+					$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a));
 				}
 				
 				$scope.sinResguardo = ($scope.showing.sin_resguardo.length == 0);
@@ -52,8 +52,9 @@ angular.module('App')
 				API.all("responsable").getList().then(res => $scope.responsables = res.plain());
 			});
 		}
-		var articuloConResguardo = (a, x) => {
-			var b = false;			
+		var articuloConResguardo = a => {
+			var b = false;
+			let x = $scope.showing.resguardos;
 			$.each(x, (j, r) => {
 				$.each(r.articulos, (i,articulo) => {
 					if(a.id == articulo.id)
@@ -76,8 +77,8 @@ angular.module('App')
 				}
 				else	
 				{
-					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a, $scope.showing.resguardos));
-					$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a, $scope.showing.resguardos));
+					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a));
+					$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a));
 				}
 				$scope.sinResguardo = ($scope.showing.sin_resguardo.length == 0);
 	    		var heightCl = s.articulos_asignados.length > s.resguardos.length? s.articulos_asignados.length * 105: s.resguardos.length * 105;
