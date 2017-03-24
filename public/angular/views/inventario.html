@@ -25,10 +25,8 @@
                     <td md-cell>{{objeto.status? "Activo": "Inactivo"}}</td>
                     <td md-cell>{{objeto.modelo.subgrupo.subgrupo}}</td>
                     <td md-cell>{{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
-                    <td md-cell><a href="#" style="color: rgba(0,0,0,0.87); text-decoration: none;" ng-click="$event.preventDefault(); sortbyOF(objeto.oficialia);">
-                      {{objeto.oficialia.oficialia}}
-                    </a></td>
-                    <td md-cell><a href="#" style="color: rgba(0,0,0,0.87); text-decoration: none;" ng-click="$event.preventDefault(); sortbyOF(objeto.oficialia);">{{objeto.responsable.responsable}}</a></td>
+                    <td md-cell>{{objeto.oficialia.oficialia}}</td>
+                    <td md-cell>{{objeto.responsable.responsable}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -75,10 +73,8 @@
                   <td md-cell>{{objeto.status? "Activo": "Inactivo"}}</td>
                   <td md-cell>{{objeto.modelo.subgrupo.subgrupo}}</td>
                   <td md-cell>{{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
-                  <td md-cell><a href="#" style="color: rgba(0,0,0,0.87); text-decoration: none;" ng-click="$event.preventDefault(); sortbyOF(objeto.oficialia);">
-                    {{objeto.oficialia.oficialia}}
-                  </a></td>
-                  <td md-cell><a href="#" style="color: rgba(0,0,0,0.87); text-decoration: none;" ng-click="$event.preventDefault(); sortbyOF(objeto.oficialia);">{{objeto.responsable.responsable}}</a></td>
+                  <td md-cell>{{objeto.oficialia.oficialia}}</td>
+                  <td md-cell>{{objeto.responsable.responsable}}</td>
                 </tr>
               </tbody>
             </table>
