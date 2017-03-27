@@ -42,7 +42,7 @@
                         <h5><strong>Municipio:</strong></h5>
                       </td>
                       <td>
-                        <h5>Culiacán</h5>
+                        <h5>{{showing.oficialia && showing.oficialia.municipio? showing.oficialia.municipio.municipio: "No asignado"}}</h5>
                       </td>
                     </tr>
                     <tr>
@@ -78,13 +78,13 @@
       <md-tab id="tab2" ng-if = "showing.articulos_asignados.length > 0" style="width: 920px;" ng-style="{{myStyle}}">
         <md-tab-label>Artículos Asignados</md-tab-label>
         <md-tab-body>
-          <md-switch class="md-primary" name="sinResguardo" ng-model="sinResguardo" style="margin-left: 62%;">
+          <md-switch class="md-primary" name="sinResguardo" ng-model="sinResguardo" style="margin-left: 62%;"  ng-show="showing.id != 244">
             <!--ng-disabled="showing.sin_resguardo.length == 0 || showing.con_resguardo.length == 0"-->
             {{sinResguardo? "Con reguardo": "Sin resguardo"}}
           </md-switch>
           <div ng-if="!sinResguardo">
           <md-input-container class="md-block">
-            <label>Asignados sin resguardo</label>
+            <label>{{showing.id != 244? "Asignados sin resguardo": "Artículos"}}</span></label>
             <input type="text" name="" disabled="" />
           </md-input-container>
           <md-table-container style="margin-top:-35px;width: 700px;">
@@ -94,6 +94,7 @@
                   <th md-column>Numero de Inventario</th>
                   <th md-column>Numero de Serie</th>
                   <th md-column>Artículo</th>
+                  <th md-column ng-if="showing.id == 244">Status</th>
                 </tr>
               </thead>
               <tbody md-body>
@@ -101,15 +102,17 @@
                   <td md-cell>{{objeto.numero_inventario}}</td>
                   <td md-cell>{{objeto.numero_serie}}</td>
                   <td md-cell>{{objeto.modelo.subgrupo.subgrupo}} {{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
+                  <td md-cell ng-if="showing.id == 244">{{objeto.status? "Activo": "Baja"}}</td>
                 </tr>
               </tbody>
             </table>
           </md-table-container><br>
-          <md-button type="button" aria-label="crearResguardo" class="md-raised md-primary" ng-if="selected2" ng-click="crearResguardo();" ng-show="selected2.length > 0">Crear resguardo <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></md-button>
+          <md-button type="button" aria-label="crearResguardo" class="md-raised md-primary" ng-if="selected2.length > 0 && showing.id != 244" ng-click="crearResguardo();">Crear resguardo <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></md-button>
+          <md-button type="button" aria-label="crearResguardo" class="md-raised md-primary" ng-if="selected2.length > 0 && showing.id == 244" ng-click="transferirArticulos();">Transferir Artículo<span ng-show="selected2.length > 1">s</span> <span class="glyphicon glyphicon-random" aria-hidden="true"></span></md-button>
         </div>
         <div ng-if="sinResguardo">
           <md-input-container class="md-block">
-            <label>Asignados con resguardo</label>
+            <label>{{showing.id != 244? "Asignados con resguardo": "Artículos"}}</label>
             <input type="text" name="" disabled="" />
           </md-input-container>
           <md-table-container style="margin-top:-35px;width: 700px;">
@@ -180,7 +183,7 @@
               </div>
             </div>
           </md-table-container><br>
-          <md-button type="button" aria-label="crearResguardo" class="md-raised md-primary" ng-if="selected2" ng-click="crearResguardo();" ng-show="selected2.length > 0">Crear resguardo <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></md-button>
+          <md-button type="button" aria-label="crearResguardo" class="md-raised md-primary" ng-if="selected2 && showing.id != 244" ng-click="crearResguardo();" ng-show="selected2.length > 0">Crear resguardo <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></md-button>
         </md-tab-body>
       </md-tab>
     </md-tabs>

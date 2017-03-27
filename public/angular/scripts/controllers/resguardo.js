@@ -12,6 +12,17 @@ angular.module('App')
 	    	'height': '650px',
 	    	'min-height': '650px'
 	    }
+	    $scope.$watch('showing', val => {
+	    	if(val && val.id == 244)
+	    		$scope.sinResguardo = false;
+	    	else
+	    	{
+	    		$scope.selected2 = [];
+	    		setTimeout(() => {
+					$scope.sinResguardo = (!($scope.showing && $scope.showing.sin_resguardo && $scope.showing.sin_resguardo.length > 0));
+	    		}, 600);
+	    	}
+	    })
 	    $scope.millisec = (date_str) => new Date(date_str).getTime();
 	    $scope.refreshbodyheight = () => {
 			var body = document.body,
@@ -286,6 +297,7 @@ angular.module('App')
 		  link.click();
 		  document.body.removeChild(link);
 		}
+		$scope.transferirArticulos = () => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
 		var DialogController = ($scope, $mdDialog) => {
 			$scope.changed = () => $scope.files01 = $scope.files01.filter(file => file.lfFile.type == "application/pdf");
 		    $scope.hide = () => $mdDialog.hide();
