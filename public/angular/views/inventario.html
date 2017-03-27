@@ -66,7 +66,6 @@
                 <tr md-row>
                   <th md-column><span>Numero de Inventario</span></th>
                   <th md-column>Numero de Serie</th>
-                  <th md-column>Status</th>
                   <th md-column>Subgrupo</th>
                   <th md-column>Marca y Modelo</th>
                   <th md-column>Oficialia</th>
@@ -77,7 +76,6 @@
                 <tr md-row md-select="objeto" md-select-id="name" md-auto-select ng-repeat="objeto in printqueue">
                   <td md-cell>{{objeto.numero_inventario}}</td>
                   <td md-cell>{{objeto.numero_serie}}</td>
-                  <td md-cell>{{objeto.status? "Activo": "Inactivo"}}</td>
                   <td md-cell>{{objeto.modelo.subgrupo.subgrupo}}</td>
                   <td md-cell>{{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
                   <td md-cell>{{objeto.oficialia.oficialia}}</td>

@@ -139,6 +139,8 @@ angular.module('App').controller('InventarioCtrl', function(API, $scope, $interv
 	    			data.fecha_baja = rs.fecha_baja.toLocaleDateString();
 	    			data.command = 'baja';
 	    			API.all('inventario').post(data).then(ad => {
+	    				$scope.selected = [];
+	    				$scope.selected2 = [];
 	    				$scope.getInventario();
 	    			});
 	    		}
