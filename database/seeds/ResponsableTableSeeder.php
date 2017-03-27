@@ -251,5 +251,6 @@ class ResponsableTableSeeder extends Seeder {
 		DB::insert('insert into responsables (id, responsable, oficialia_id, created_at) values (?,?,?,?)', [241,'ZAIDA LORENA GASPAR CALDERON',null,$now]);
 		DB::insert('insert into responsables (id, responsable, oficialia_id, created_at) values (?,?,?,?)', [242,'ZULET YULEMI SANCHEZ RODRIGUEZ','14003',$now]);
 		DB::insert('insert into responsables (id, responsable, oficialia_id, created_at) values (?,?,?,?)', [243,'ZULEYDA JANETH LOPEZ ALVARADO','17002',$now]);
+		DB::insert('insert into responsables (id, responsable, oficialia_id, created_at) values (?,?,?,?)', [244,'GOBIERNO DEL ESTADO',null,$now]);
 	}
 }
