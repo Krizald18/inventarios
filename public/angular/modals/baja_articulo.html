@@ -1,0 +1,93 @@
+<md-dialog aria-label="Baja">
+  <form ng-cloak name="projectForm">
+    <md-dialog-content style="min-height: 300px; width: 700px;">
+      <div class="md-dialog-content">
+        <h4>Baja de articulo</h4>
+        <br>
+        <div layout="row">
+          <table style="margin-left: 20px;">
+            <tbody>
+              <tr>
+                <td class="col-md-6">
+                  <h5><strong>Número de Inventario:</strong></h5>
+                </td>
+                <td>
+                  <h5>{{articulo.numero_inventario}}</h5>
+                </td>
+              </tr>
+              <tr>
+                <td class="col-md-6">
+                  <h5><strong>Número de Serie:</strong></h5>
+                </td>
+                <td>
+                  <h5>{{articulo.numero_serie}}</h5>
+                </td>
+              </tr>
+              <tr>
+                <td class="col-md-6">
+                  <h5><strong>Artículo:</strong></h5>
+                </td>
+                <td>
+                  <h5>{{articulo.modelo.subgrupo.subgrupo}} {{articulo.modelo.marca.marca}} {{articulo.modelo.modelo}}</h5>
+                </td>
+              </tr>
+              <tr ng-if="articulo.responsable">
+                <td class="col-md-6">
+                  <h5><strong>Responsable:</strong></h5>
+                </td>
+                <td>
+                  <h5>{{articulo.responsable.responsable}}</h5>
+                </td>
+              </tr>
+              <tr ng-if="articulo.oficialia">
+                <td class="col-md-6">
+                  <h5><strong>Oficialia:</strong></h5>
+                </td>
+                <td>
+                  <h5>{{articulo.oficialia.id}} {{articulo.oficialia.oficialia}}</h5>
+                </td>
+              </tr>
+              <tr ng-if="articulo.area">
+                <td class="col-md-6">
+                  <h5><strong>Área:</strong></h5>
+                </td>
+                <td>
+                  <h5>{{articulo.area.area}}</h5>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="md-dialog-content">
+        <div layout="row">
+          <md-input-container flex = "70" class="md-block">
+            <label>Comentario</label>
+            <textarea name="comment" ng-model="articulo.comentario" md-maxlength="150" md-select-on-focus ng-required = "!articulo.comentario"></textarea>
+             <div ng-messages="projectForm.comment.$error">
+              <div ng-message="md-maxlength">El campo Comentario debe ser máximo 150 caracteres</div>
+              <div ng-message="required">El campo Comentario es requerido</div>
+            </div>
+          </md-input-container>
+          <md-input-container flex = "30" class="md-block">
+            <label>Fecha de baja</label>
+            <md-datepicker ng-model="articulo.fecha_baja" md-placeholder="Seleccione Fecha" md-open-on-focus></md-datepicker>
+          </md-input-container>
+        </div>
+      </div>
+      <div style="color: red; margin-left: 28px;" ng-if="articulo.resguardo_id">
+        Alerta, este artículo ya cuenta con un resguardo asignado, si continua con la baja el nuevo responsable del artículo será "Gobierno del Estado", se pondrá una nota en el resguardo existente.
+      </div>
+      <br>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="cancel()">
+       	Cancelar
+      </md-button>
+      <md-button ng-click="confirm()">
+        Confirmar
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

@@ -1,5 +1,5 @@
 'use strict';
-angular.module('App').controller('InventarioCtrl', function(API, $scope, $interval, AlertService) {	
+angular.module('App').controller('InventarioCtrl', function(API, $scope, $interval, $mdDialog, AlertService) {	
 	$scope.selected = [];
 	$scope.selected2 = [];
 	$scope.printqueue = [];
@@ -8,12 +8,21 @@ angular.module('App').controller('InventarioCtrl', function(API, $scope, $interv
 	$scope.query = {
 		searchby: 0,
 		limit: 5,
-		page: 1
+		page: 1,
+		status: true
 	};
+	$scope.status_activo = true;
 
 	$scope.$watch('strSearch', val => {
 		if(val && val.length > 0)
   			$scope.strSearch = val.toUpperCase();
+  	});
+  	$scope.$watch('status_activo', val => {
+  		if(val == undefined)
+  			return;
+  		$scope.query.status = val;
+  		$scope.selected = [];
+		$scope.getInventario();
   	});
 
 	$scope.refreshbodyheight = () => {
@@ -47,7 +56,8 @@ angular.module('App').controller('InventarioCtrl', function(API, $scope, $interv
 			$scope.query = {
 					searchby: 0,
 					limit: 5,
-					page: 1
+					page: 1,
+					status: $scope.status_activo
 				};
 			$scope.getInventario();
 			return;
@@ -65,14 +75,14 @@ angular.module('App').controller('InventarioCtrl', function(API, $scope, $interv
 				// tiene numeros y letras
 				$scope.query.searchby = 1;
 				$scope.getInventario();
-				console.log('BUSCAR POR NUMERO DE SERIE');
+				// console.log('BUSCAR POR NUMERO DE SERIE');
 			}
 			else
 			{
 				// son solo numeros
 				$scope.query.searchby = 2;
 				$scope.getInventario();
-				console.log('BUSCAR POR NUMERO DE INVETARIO O SERIE');
+				// console.log('BUSCAR POR NUMERO DE INVETARIO O SERIE');
 			}
 		}
 		else
@@ -80,7 +90,7 @@ angular.module('App').controller('InventarioCtrl', function(API, $scope, $interv
 			// no tiene numeros
 			$scope.query.searchby = 3;
 			$scope.getInventario();
-			console.log('BUSCAR POR OFICIALIA O RESPONSABLE O SERIE')
+			// console.log('BUSCAR POR OFICIALIA O RESPONSABLE O SERIE')
 		}
 	};
 	$scope.print = () => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
@@ -108,21 +118,48 @@ angular.module('App').controller('InventarioCtrl', function(API, $scope, $interv
 		if($scope.printqueue.length > 0 && $scope.selected2.length > 0)
 			$scope.printqueue = $scope.printqueue.filter(o => $.grep($scope.selected2, x => x.id == o.id).length == 0);
 	};
-	$scope.baja = (articulo) => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
-	/*{
+	$scope.baja = () => {
+		// mandar objeto articulo, adjuntar fecha_baja al articulo y comentarios
+		if($scope.selected.length != 1)
+			return;
+		localStorage.articulo = JSON.stringify($scope.selected[0]);
 		$mdDialog.show({
-				controller: BajarEvidenciasController,
+				controller: BajaInventarioController,
 				templateUrl: 'angular/modals/baja_articulo.html',
 				parent: angular.element(document.body),
 				clickOutsideToClose: true,
 				fullscreen: true // Only for -xs, -sm breakpoints.
-		    }).then(rs => {}, res => {
-		    	// handle cancel from mdDialog (salir)
-		    	if(res)
+		    }).then(rs => {
+		    	// handle confirm from mdDialog (confirmar)
+		    	if(rs)
 	    		{
-	    			//
+	    			let data = {};
+	    			data.id = rs.id;
+	    			data.comentario = rs.comentario;
+	    			data.fecha_baja = rs.fecha_baja.toLocaleDateString();
+	    			data.command = 'baja';
+	    			API.all('inventario').post(data).then(ad => {
+	    				$scope.getInventario();
+	    			});
 	    		}
+		    }, res => {
+		    	// handle cancel from mdDialog (cancelar)
+		    	
 		    });
-	};*/
-	$scope.editar = (articulo) => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
+	};
+	$scope.millisec = (date_str) => new Date(date_str).getTime();
+	$scope.editar = articulo => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
+	var BajaInventarioController = ($scope, $mdDialog) => {
+		$scope.articulo = JSON.parse(localStorage.articulo);
+		$scope.articulo.fecha_baja = new Date();
+		if(localStorage.articulo)
+			localStorage.removeItem('articulo');
+	    $scope.hide = () => $mdDialog.hide();
+	    $scope.cancel = () => $mdDialog.cancel();
+	    $scope.confirm = () => {
+	    	$scope.projectForm.$setSubmitted();
+	    	if($scope.articulo.comentario)
+	    		$mdDialog.hide($scope.articulo);
+	    }
+	}
 });
