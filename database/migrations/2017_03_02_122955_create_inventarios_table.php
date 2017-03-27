@@ -14,6 +14,7 @@ class CreateInventariosTable extends Migration
       $table->string('folio_resguardo')->nullable();
       $table->integer('numero_inventario')->nullable()->unique();
       $table->string('numero_serie')->nullable()->unique();
+      $table->string('comentario_baja')->nullable();
       $table->date('fecha_baja')->nullable();
       $table->boolean('status')->default(true);
 

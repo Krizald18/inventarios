@@ -41,12 +41,13 @@ class InventarioController extends Controller
         }
         else
         {
-
             $desc = false;
             $order = 'numero_inventario';
             $txt = '';
             $searchby = 0;
             $limit = 5;
+            $status = strval($request->input('status')) == 'true'? true: false;
+           
             if($request->has('order'))
             {
                 if($request->order{0} == "-")
@@ -80,6 +81,7 @@ class InventarioController extends Controller
                             $q->with('subgrupo');
                         }))
                             ->where('numero_serie', $txt)
+                            ->where('status', $status)
                             ->orderBy($order, 'desc')
                             ->paginate($limit);
                     return Response::json($x, 300);
@@ -97,6 +99,7 @@ class InventarioController extends Controller
                             }))
                                 ->where('numero_serie', $txt)
                                 ->orwhere('numero_inventario', $txt)
+                                ->where('status', $status)
                                 ->orderBy($order, 'desc')
                                 ->paginate($limit);
                         return Response::json($x, 300);
@@ -113,6 +116,7 @@ class InventarioController extends Controller
                                 $q->with('subgrupo');
                             }))
                             ->where('numero_serie', $txt)
+                            ->where('status', $status)
                             ->orderBy($order, 'desc')
                             ->paginate($limit);
 
@@ -134,6 +138,7 @@ class InventarioController extends Controller
                             ->orwhereHas('responsable', function($s) use ($txt){
                                 $s->where('responsable', 'LIKE', '%'.$txt.'%');
                             })
+                            ->where('status', $status)
                             ->orderBy($order, 'desc')
                             ->paginate($limit);
 
@@ -149,6 +154,7 @@ class InventarioController extends Controller
                                 $q->with('caracteristica');
                                 $q->with('subgrupo');
                             }))
+                                ->where('status', $status)
                                 ->orderBy($order, 'asc')
                                 ->orderBy($order, 'desc')
                                 ->paginate($limit);
@@ -168,6 +174,7 @@ class InventarioController extends Controller
                             $q->with('subgrupo');
                         }))
                             ->where('numero_serie', $txt)
+                            ->where('status', $status)
                             ->orderBy($order)
                             ->paginate($limit);
                     return Response::json($x, 300);
@@ -185,6 +192,7 @@ class InventarioController extends Controller
                         }))
                             ->where('numero_serie', $txt)
                             ->orwhere('numero_inventario', $txt)
+                            ->where('status', $status)
                             ->orderBy($order)
                             ->paginate($limit);
                     return Response::json($x, 300);
@@ -201,6 +209,7 @@ class InventarioController extends Controller
                             $q->with('subgrupo');
                         }))
                         ->where('numero_serie', $txt)
+                        ->where('status', $status)
                         ->orderBy($order)
                         ->paginate($limit);
 
@@ -222,6 +231,7 @@ class InventarioController extends Controller
                         ->orwhereHas('responsable', function($s) use ($txt){
                             $s->where('responsable', 'LIKE', '%'.$txt.'%');
                         })
+                        ->where('status', $status)
                         ->orderBy($order)
                         ->paginate($limit);
 
@@ -237,6 +247,7 @@ class InventarioController extends Controller
                             $q->with('caracteristica');
                             $q->with('subgrupo');
                         }))
+                            ->where('status', $status)
                             ->orderBy($order)
                             ->paginate($limit);
                     return Response::json($x, 300);
@@ -298,6 +309,19 @@ class InventarioController extends Controller
             $j->save();
             //$res->articulos()->save($j);
             return self::show($j->id);
+        }
+        else if($request->has('command') && $request->input('command') == 'baja')
+        {
+            $ar = Inventario::find($request->input('id'));
+            $ar->fecha_baja = date('Y-m-d',strtotime($request->input('fecha_baja')));
+            $ar->comentario_baja = $request->input('comentario');
+            $ar->status = false;
+            $ar->resguardo_id = null; // sacar articulo de resguardos
+            $ar->area_id = 5; // cambiar area a BODEGA
+            $ar->responsable_id = 244; // cambiar responsable a Gobierno del Estado
+            $ar->oficialia_id = null; // se quita de la oficialia
+            $ar->save();
+            return $ar;
         }
         else
             return $request;
