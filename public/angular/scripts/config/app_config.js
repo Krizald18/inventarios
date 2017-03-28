@@ -15,7 +15,7 @@ angular.module('app.config')
 		$locationProvider.hashPrefix('');
 		$routeProvider
 			.when('/', {
-				templateUrl: 'angular/views/main.html',
+				templateUrl: 'angular/views/home.html',
 				controller: 'MainCtrl',
 				middleware: 'resize'
 			})
@@ -47,6 +47,11 @@ angular.module('app.config')
 			.when('/agregar', {
 				templateUrl: 'angular/views/agregar.html',
 				controller: 'AgregarCtrl',
+				middleware: 'AuthenticatedOnly'
+			})
+			.when('/baja', {
+				templateUrl: 'angular/views/main.html',
+				controller: 'MainCtrl',
 				middleware: 'AuthenticatedOnly'
 			})
 			.otherwise({

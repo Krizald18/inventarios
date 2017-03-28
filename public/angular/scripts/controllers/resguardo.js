@@ -23,7 +23,7 @@ angular.module('App')
 	    		}, 600);
 	    	}
 	    })
-	    $scope.millisec = (date_str) => new Date(date_str).getTime();
+	    $scope.millisec = date_str => new Date(date_str).getTime();
 	    $scope.refreshbodyheight = () => {
 			var body = document.body,
 			    html = document.documentElement;

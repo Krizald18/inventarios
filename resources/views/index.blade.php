@@ -114,6 +114,7 @@
             </span>
           </a>
         </li>
+        <!--
         <li id="liauth" ng-if="autenticado" hidden>
          <a href="#/eliminar">
            <i class="fa fa-remove fa-2x"></i>
@@ -121,7 +122,7 @@
               Eliminar Articulos
             </span>
           </a>
-        </li>
+        </li>-->
         <li id="liauth" ng-if="autenticado" hidden>
          <a href="#/baja">
            <i class="fa fa-minus fa-2x"></i>
