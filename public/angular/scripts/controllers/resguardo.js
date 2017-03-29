@@ -99,7 +99,15 @@ angular.module('App')
 			    	'height': heightCl + 'px',
 			    	'min-height': heightCl + 'px'
 				};
-	    		//$scope.selectedItem = null;
+				if($scope.selectedItem)
+	    			$scope.selectedItem = null;
+	    		
+	    		var activeElement = document.getElementById('fl-input-1');
+
+				if (activeElement) {
+				   activeElement.blur();
+				}
+
 	    		$scope.refreshbodyheight();
 	    	}
 	    })
