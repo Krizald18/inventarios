@@ -51,7 +51,7 @@ Route::resource('inventario', 'InventarioController', ['only' => ['index', 'stor
 Route::resource('resguardo', 'ResguardoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 
 // hiden -- remove these routes in production
-// Route::resource('evidencia', 'EvidenciaController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+Route::resource('evidencia', 'EvidenciaController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 // --
 
 //unprotected API routes, no JWT (logged in not required)

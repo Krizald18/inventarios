@@ -99,7 +99,7 @@ angular.module('App')
 			    	'height': heightCl + 'px',
 			    	'min-height': heightCl + 'px'
 				};
-	    		$scope.selectedItem = null;
+	    		//$scope.selectedItem = null;
 	    		$scope.refreshbodyheight();
 	    	}
 	    })
@@ -299,12 +299,82 @@ angular.module('App')
 		  link.click();
 		  document.body.removeChild(link);
 		}
-		$scope.transferirArticulos = () => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
+		$scope.transferirArticulos = () => {
+			localStorage.articulos = JSON.stringify($scope.showing.articulos_asignados);
+			$mdDialog.show({
+		      controller: TransferirController,
+		      templateUrl: 'angular/modals/transferis_articulos.html',
+		      parent: angular.element(document.body),
+		      clickOutsideToClose:true,
+		      fullscreen: true // Only for -xs, -sm breakpoints.
+		    })
+		    .then(files_length => {
+				API.all("responsable").getList().then(res => {
+					$scope.responsables = res.plain();
+					$scope.showing = $.grep($scope.responsables, rsp => rsp.id == $scope.showing.id)[0];
+		    		if($scope.showing.resguardos.length == 0)
+					{
+						$scope.showing.con_resguardo = [];
+						$scope.showing.sin_resguardo = $scope.showing.articulos_asignados;
+					}
+					else	
+					{
+						$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a));
+						$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a));
+					}
+					$scope.sinResguardo = ($scope.showing.sin_resguardo.length == 0);
+					let s = angular.copy($scope.showing);
+		    		var heightCl = s.articulos_asignados.length > s.resguardos.length? s.articulos_asignados.length * 105: s.resguardos.length * 105;
+					$scope.myStyle = {
+				    	'height': heightCl + 'px',
+				    	'min-height': heightCl + 'px'
+					};
+		    		// $scope.selectedItem = null;
+		    		$scope.refreshbodyheight();
+		    		if(files_length)
+		    		{
+		    			if (files_length > 1)
+		    				AlertService.show("Transferencia completa", "Se completo la transferencia de " + files_length + " artículos.");
+		    			else if(files_length == 1)
+		    				AlertService.show("Transferencia completa", "Se completo la transferencia del artículo.");
+		    		}
+				});
+		    });
+		}
 		var DialogController = ($scope, $mdDialog) => {
 			$scope.changed = () => $scope.files01 = $scope.files01.filter(file => file.lfFile.type == "application/pdf");
 		    $scope.hide = () => $mdDialog.hide();
 		    $scope.cancel = () => $mdDialog.cancel();
 		    $scope.answer = () => $mdDialog.hide($scope.files01);
+		}
+		var TransferirController = ($scope, $mdDialog, API) => {
+			API.all("responsable").getList().then(res => $scope.responsables = res.plain());
+			$scope.confirmado = false;
+			$scope.seleccionados = [];
+			$scope.articulos = JSON.parse(localStorage.articulos);
+			if(localStorage.articulos)
+				localStorage.removeItem('articulos');
+			$scope.back = () => $scope.confirmado = false;
+		    $scope.cancel = () => $mdDialog.cancel();
+		    $scope.confirmar = () => {
+		    	if(!$scope.confirmado)
+		    		$scope.confirmado = true;
+		    	else
+		    	{
+		    		$scope.frmTrans.$setSubmitted();
+		    		if($scope.nuevo_responsable)
+		    		{
+		    			let data = {
+		    				'articulos': $scope.seleccionados.map(s => s.id),
+		    				'nuevo_responsable': $scope.nuevo_responsable,
+		    				'command': 'transfer'
+		    			};
+		    			API.all('responsable').post(data).then(ad => {
+	    					$mdDialog.hide($scope.seleccionados.length);
+		    			});
+		    		}
+		    	}
+		    }
 		}
 		var BajarEvidenciasController = ($scope, $mdDialog, API) => {
 			let id = localStorage.resguardo_id;

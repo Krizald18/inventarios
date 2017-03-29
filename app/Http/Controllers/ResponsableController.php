@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Responsable;
+use App\Inventario;
+use App\Resguardo;
+use App\Evidencia;
 
 class ResponsableController extends Controller
 {
@@ -78,7 +81,42 @@ class ResponsableController extends Controller
                             ->get();
         }
         else
+        {
+            if($request->has('command'))
+            {
+                if($request->input('command') == 'transfer')
+                {
+                    foreach ($request->input('articulos') as $articulo) {
+                        $i = Inventario::find($articulo);
+                        $i->responsable_id = $request->input('nuevo_responsable');
+                        if(isset($i->resguardo_id) && !is_null($i->resguardo_id))
+                        {
+                            $rid = $i->resguardo_id;
+                            $i->resguardo_id = null;
+                            $i->save();
+                            if(isset($rid))
+                            {
+                                $r = Resguardo::with('articulos')->find($rid);
+                                if(count($r->articulos) == 0)
+                                {
+                                    $e = Evidencia::where('resguardo_id', $r->id)->get();
+                                    foreach ($e as $evidencia) {
+                                        $evidencia->delete(); // borrar el registro de evidencias (no se borrarán los archivos)
+                                    }
+                                    $r->delete();
+                                }
+                                $r = Resguardo::with('articulos')->find($rid);
+                            }
+                        }
+                        else
+                            $i->save();
+                    }
+                    return 'done!';
+                }
+
+            }
             return $request;
+        }
     }
 
     public function show($id)

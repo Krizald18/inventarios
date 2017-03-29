@@ -1,0 +1,50 @@
+<md-dialog aria-label="Transferir">
+  <form ng-cloak name="frmTrans">
+    <md-dialog-content>
+      <div class="md-dialog-content" style="min-width: 500px;">
+        <h4>Transferir Artículos</h4>
+        {{!confirmado? "Seleccione los artículos que serán transferidos a otro responsable": "Seleccione el nuevo responsable"}} </span><br><br><br>
+        <md-table-container style="margin-top:-35px;width: 700px;" ng-show="!confirmado">
+          <table md-table md-row-select multiple ng-model="seleccionados">
+            <thead md-head>
+              <tr md-row>
+                <th md-column>Numero de Inventario</th>
+                <th md-column>Numero de Serie</th>
+                <th md-column>Artículo</th>
+              </tr>
+            </thead>
+            <tbody md-body>
+              <tr md-row md-select="objeto" md-select-id="name" md-auto-select ng-repeat="objeto in articulos">
+                <td md-cell>{{objeto.numero_inventario}}</td>
+                <td md-cell>{{objeto.numero_serie}}</td>
+                <td md-cell>{{objeto.modelo.subgrupo.subgrupo}} {{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </md-table-container>
+        <md-input-container flex="" class="md-block" ng-show="confirmado">
+          <label>Responsabele</label>
+          <md-select name="responsable" ng-model="nuevo_responsable" ng-required="!nuevo_responsable">
+            <md-option ng-repeat="x in responsables track by x.id" value="{{x.id}}">{{x.responsable}}</md-option>
+          </md-select>
+          <div ng-messages="frmTrans.responsable.$error">
+            <div ng-message="required">El campo Responsable es requerido</div>
+          </div>
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="cancel()">
+       	Cancelar
+      </md-button>
+      <md-button ng-click="back()" ng-show="confirmado">
+        Atras
+      </md-button>
+      <md-button ng-click="confirmar()" ng-disabled = "seleccionados.length == 0">
+        {{!confirmado? "Continuar" :"Confirmar"}}
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

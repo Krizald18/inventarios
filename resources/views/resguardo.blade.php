@@ -75,7 +75,9 @@
 		</table>
 	</div>
 	<htmlpagefooter name="page-footer">
-		<p>_________________________________________________<br>{{$oficial}}<br>{{$oficialia? 'OFICIAL ':''}}{{$num_oficialia}}{{$oficialia? 'DE ':''}}{{$oficialia}}{{$oficialia? ',':''}} {{$municipio}}, {{$estado}}.<br><br><br><br></p>
+		<p>_________________________________________________<br>{{$oficial}}<br>{{$oficialia && $num_oficialia != 0? 'OFICIAL '.$num_oficialia.' DE '.$oficialia.',':''}} 
+
+		{{$municipio? $municipio.', '.$estado.'.': ''}}<br><br><br><br></p>
 		<!--<p style="color: #555;">Unidad de Servicios Estatales. Blvd. Ducto Pemex y Pedro Infante, S/N, Sección IV del desarrollo urbano tres ríos.<br>Tel. 758-7000 Culiacán, Sinaloa. C.P. 8000</p>-->
 	    <br><br>
 	</htmlpagefooter>

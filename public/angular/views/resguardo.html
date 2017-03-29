@@ -73,6 +73,7 @@
                 </table>
             </div>
             <br><hr ng-show = "showing">
+            <md-button type="button" aria-label="crearResguardo" class="md-raised" ng-if="showing.articulos_asignados.length > 0 && showing.id != 244" ng-click="transferirArticulos();">Transferir Artículo<span ng-show="showing.articulos_asignados.length > 1">s</span> <span class="glyphicon glyphicon-random" aria-hidden="true"></span></md-button>
         </md-tab-body>
       </md-tab>
       <md-tab id="tab2" ng-if = "showing.articulos_asignados.length > 0" style="width: 920px;" ng-style="{{myStyle}}">
