@@ -10,93 +10,153 @@ class MarcasSubgruposTableSeeder extends Seeder {
 
 		$marca_subgrupo = array(
 			array(
-				'marca_id' => 1, // 3COM
-				'subgrupo_id' => 9,
+				'marca_id' => 1,
+				'subgrupo_id' => 6,
 				'created_at' => $now,
 				),
 			array(
-				'marca_id' => 1, // 3COM
-				'subgrupo_id' => 15,
-				'created_at' => $now,
-				),
-			array(
-				'marca_id' => 1, // 3COM
+				'marca_id' => 1,
 				'subgrupo_id' => 20,
 				'created_at' => $now,
 				),
 			array(
-				'marca_id' => 8, // CISCO
-				'subgrupo_id' => 9,
+				'marca_id' => 5,
+				'subgrupo_id' => 13,
 				'created_at' => $now,
 				),
 			array(
-				'marca_id' => 8, // CISCO
+				'marca_id' => 6,
+				'subgrupo_id' => 13,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 7,
 				'subgrupo_id' => 15,
 				'created_at' => $now,
 				),
 			array(
-				'marca_id' => 8, // CISCO
+				'marca_id' => 7,
+				'subgrupo_id' => 23,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 8,
+				'subgrupo_id' => 11,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 8,
+				'subgrupo_id' => 21,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 11,
+				'subgrupo_id' => 21,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 13,
 				'subgrupo_id' => 20,
 				'created_at' => $now,
 				),
 			array(
-				'marca_id' => 2, // ACER
+				'marca_id' => 15,
+				'subgrupo_id' => 22,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 16,
 				'subgrupo_id' => 1,
 				'created_at' => $now,
 				),
 			array(
-				'marca_id' => 2, // ACER
-				'subgrupo_id' => 2,
-				'created_at' => $now,
-				),
-			array(
-				'marca_id' => 9, // COMPAQ
-				'subgrupo_id' => 1,
-				'created_at' => $now,
-				),
-			array(
-				'marca_id' => 9, // COMPAQ
-				'subgrupo_id' => 2,
-				'created_at' => $now,
-				),
-			array(
-				'marca_id' => 11, // DELL
-				'subgrupo_id' => 1,
-				'created_at' => $now,
-				),
-			array(
-				'marca_id' => 11, // DELL
-				'subgrupo_id' => 2,
-				'created_at' => $now,
-				),
-			array(
-				'marca_id' => 15, // EPSON
+				'marca_id' => 16,
 				'subgrupo_id' => 7,
 				'created_at' => $now,
 				),
 			array(
-				'marca_id' => 17, // HP
-				'subgrupo_id' => 1,
-				'created_at' => $now,
-				),
-			array(
-				'marca_id' => 17, // HP
-				'subgrupo_id' => 2,
-				'created_at' => $now,
-				),
-			array(
-				'marca_id' => 17, // HP
-				'subgrupo_id' => 7,
-				'created_at' => $now,
-				),
-			array(
-				'marca_id' => 17, // HP
+				'marca_id' => 16,
 				'subgrupo_id' => 10,
 				'created_at' => $now,
 				),
 			array(
-				'marca_id' => 17, // HP
+				'marca_id' => 16,
 				'subgrupo_id' => 11,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 16,
+				'subgrupo_id' => 12,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 16,
+				'subgrupo_id' => 17,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 16,
+				'subgrupo_id' => 18,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 16,
+				'subgrupo_id' => 21,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 18,
+				'subgrupo_id' => 7,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 20,
+				'subgrupo_id' => 21,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 25,
+				'subgrupo_id' => 13,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 25,
+				'subgrupo_id' => 14,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 14,
+				'subgrupo_id' => 17,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 21,
+				'subgrupo_id' => 17,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 23,
+				'subgrupo_id' => 1,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 24,
+				'subgrupo_id' => 7,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 26,
+				'subgrupo_id' => 11,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 27,
+				'subgrupo_id' => 12,
+				'created_at' => $now,
+				),
+			array(
+				'marca_id' => 28,
+				'subgrupo_id' => 13,
 				'created_at' => $now,
 				)
 		);
