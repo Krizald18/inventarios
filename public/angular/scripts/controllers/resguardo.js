@@ -348,17 +348,21 @@ angular.module('App')
 		    $scope.answer = () => $mdDialog.hide($scope.files01);
 		}
 		var TransferirController = ($scope, $mdDialog, API) => {
-			API.all("responsable").getList().then(res => $scope.responsables = res.plain());
+			API.all("responsable").getList().then(res => $scope.allresp = res.plain());
 			$scope.confirmado = false;
 			$scope.seleccionados = [];
 			$scope.articulos = JSON.parse(localStorage.articulos);
+			console.log($scope.articulos);
 			if(localStorage.articulos)
 				localStorage.removeItem('articulos');
 			$scope.back = () => $scope.confirmado = false;
 		    $scope.cancel = () => $mdDialog.cancel();
 		    $scope.confirmar = () => {
 		    	if(!$scope.confirmado)
+		    	{
+		    		$scope.responsables = $scope.allresp.filter(r => r.id != $scope.seleccionados[0].responsable_id);
 		    		$scope.confirmado = true;
+		    	}
 		    	else
 		    	{
 		    		$scope.frmTrans.$setSubmitted();

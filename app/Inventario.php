@@ -14,7 +14,7 @@ class Inventario extends Model
     ]; 
 
     protected $hidden = [
-	   'modelo_id','oficialia_id', 'area_id', 'responsable_id'
+	   'modelo_id','oficialia_id', 'area_id'
     ];
 
     public function getNumeroInventarioAttribute($value)

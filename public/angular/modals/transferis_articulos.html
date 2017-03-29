@@ -11,6 +11,7 @@
                 <th md-column>Numero de Inventario</th>
                 <th md-column>Numero de Serie</th>
                 <th md-column>Artículo</th>
+                <th md-column ng-if="articulos[0].responsable_id == 244">Status</th>
               </tr>
             </thead>
             <tbody md-body>
@@ -18,6 +19,7 @@
                 <td md-cell>{{objeto.numero_inventario}}</td>
                 <td md-cell>{{objeto.numero_serie}}</td>
                 <td md-cell>{{objeto.modelo.subgrupo.subgrupo}} {{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
+                <td md-cell ng-if="articulos[0].responsable_id == 244">{{objeto.status? "Activo": "Baja"}}</td>
               </tr>
             </tbody>
           </table>
