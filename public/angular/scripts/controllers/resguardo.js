@@ -342,9 +342,9 @@ angular.module('App')
 		    		if(files_length)
 		    		{
 		    			if (files_length > 1)
-		    				AlertService.show("Transferencia completa", "Se completo la transferencia de " + files_length + " artículos.");
+		    				AlertService.show("Transferencia completa", "Se completó la transferencia de " + files_length + " artículos.");
 		    			else if(files_length == 1)
-		    				AlertService.show("Transferencia completa", "Se completo la transferencia del artículo.");
+		    				AlertService.show("Transferencia completa", "Se completó la transferencia del artículo.");
 		    		}
 				});
 		    });
