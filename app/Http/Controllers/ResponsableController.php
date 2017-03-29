@@ -6,7 +6,7 @@ use App\Responsable;
 use App\Inventario;
 use App\Resguardo;
 use App\Evidencia;
-use App\Oficialia;
+// use App\Oficialia;
 
 class ResponsableController extends Controller
 {
