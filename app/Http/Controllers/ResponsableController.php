@@ -6,6 +6,7 @@ use App\Responsable;
 use App\Inventario;
 use App\Resguardo;
 use App\Evidencia;
+use App\Oficialia;
 
 class ResponsableController extends Controller
 {
@@ -89,6 +90,18 @@ class ResponsableController extends Controller
                     foreach ($request->input('articulos') as $articulo) {
                         $i = Inventario::find($articulo);
                         $i->responsable_id = $request->input('nuevo_responsable');
+                        $i->area_id = null;
+                        
+                        $re = Responsable::find($i->responsable_id);
+                        if(isset($re->oficialia_id))
+                        {
+                            //$o = Oficialia::find($re->oficialia_id);
+                            $i->oficialia_id = $re->oficialia_id;
+                            //$i->municipio_id = $o->municipio_id;
+                        }
+                        else
+                            $i->oficialia_id = null;
+
                         if(isset($i->resguardo_id) && !is_null($i->resguardo_id))
                         {
                             $rid = $i->resguardo_id;
