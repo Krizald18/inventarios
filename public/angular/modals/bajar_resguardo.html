@@ -7,6 +7,7 @@
             <thead md-head>
               <tr md-row>
                 <th md-column>Archivo</th>
+                <th md-column>Fecha de subida</th>
                 <th md-column style="padding-right: 10px;height: 15px;width: 100px;">Opciones</th>
               </tr>
             </thead>
@@ -15,11 +16,12 @@
                 <td md-cell>
                   <img src="images/pdf-icon.png" alt="logo" height="23px" width="23px"> {{evidencia.file}}
                 </td>
+                <td md-cell>{{millisec(evidencia.created_at) | date:'dd/MM/yyyy hh:mm:ss a'}}</td>
                 <td md-cell>
                   <md-button class="md-icon-button" aria-label="download" ng-click="$event.preventDefault(); download(evidencia);" style="margin-left: -10px;margin-right: 0px;">
                     <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
                   </md-button>
-                  <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(evidencia);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="true">
+                  <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(evidencia);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                   </md-button>
                 </td>
@@ -31,7 +33,7 @@
   </md-dialog-content>
   <md-dialog-actions layout="row">
       <md-button flex = "38" type="button" aria-label="descargar" class="md-raised" ng-click="descargar();" ng-disabled="!seleccionados || seleccionados.length < 1">Descargar Seleccionado{{seleccionados.length > 1? "s&nbsp;" : "&nbsp;&nbsp;"}}<span class="glyphicon glyphicon-download" aria-hidden="true"></span></md-button>
-      <md-button flex = "38" type="button" aria-label="eliminar" class="md-raised md-warn" ng-click="eliminar();" ng-disabled="(!seleccionados || seleccionados.length < 1)" ng-show="false">Eliminar Seleccionado{{seleccionados.length > 1? "s&nbsp;" : "&nbsp;&nbsp;"}}<span class="glyphicon glyphicon-remove" aria-hidden="true"><br></span></md-button>
+      <md-button flex = "38" type="button" aria-label="eliminar" class="md-raised md-warn" ng-click="eliminar();" ng-disabled="(!seleccionados || seleccionados.length < 1)" ng-show="admin">Eliminar Seleccionado{{seleccionados.length > 1? "s&nbsp;" : "&nbsp;&nbsp;"}}<span class="glyphicon glyphicon-remove" aria-hidden="true"><br></span></md-button>
       <span flex></span>
       <md-button ng-click="cancel()">
         Salir

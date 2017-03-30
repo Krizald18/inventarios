@@ -1,17 +1,16 @@
 <?php
 
 namespace App;
-
 use Illuminate\Database\Eloquent\Model;
 
-class Tipo extends Model
+class Perfil extends Model
 {
+	protected $table = 'perfiles';
     protected $fillable = [
-    	'id', 'tipo'
+    	'id', 'perfil'
     ]; 
 
     protected $hidden = [
         
     ];
-
 }

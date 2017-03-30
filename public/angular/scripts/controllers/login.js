@@ -1,5 +1,5 @@
 'use strict';
-angular.module('App').controller('LoginCtrl', function ($scope, $auth, ToastService) {
+angular.module('App').controller('LoginCtrl', function ($scope, $auth, ToastService, API) {
 	if($auth.isAuthenticated())
 		window.location = '/';
     $scope.username = '';
@@ -14,6 +14,10 @@ angular.module('App').controller('LoginCtrl', function ($scope, $auth, ToastServ
 		$auth.login(user)
 			.then(response => {
 				$auth.setToken(response.data);
+				if(response.data.data.user.perfil_id == 1)
+					localStorage.setItem('admin_token', response.data.data.user.admin.token);
+				localStorage.setItem('user', response.data.data.user.id);
+
 				if(sessionStorage.getItem('prev')) 
 				{
 					var red = sessionStorage.getItem('prev');

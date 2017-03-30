@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Storage;
 use App\Resguardo;
 use App\Evidencia;
+use App\User;
+use Response;
 use Illuminate\Http\Request;
 
 class UploaderController extends Controller
@@ -53,9 +55,17 @@ class UploaderController extends Controller
             	return 'done!';
         }
     }
-    public function deleteFile($id)
+    public function deleteFile(Request $request, $id)
     {
-        // recive un id de una evidencia
+        // validar admin_token y user
+        // recive un id de una evidencia, user (id) y  admin_token
+        if(!$request->has('user') || !$request->has('admin_token'))
+            return Response::json($request, 500);
+        $u = User::with('admin')->find($request->user);
+
+        if($u->admin->token <> $request->admin_token)
+            return Response::json($request, 500);
+
         $e = Evidencia::findOrFail($id);
         $rid = $e->resguardo_id;
 

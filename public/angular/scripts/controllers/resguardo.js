@@ -12,6 +12,8 @@ angular.module('App')
 	    	'height': '650px',
 	    	'min-height': '650px'
 	    }
+	    if(localStorage.admin_token)
+	    	$scope.admin = true;
 	    $scope.$watch('showing', val => {
 	    	if(val && val.id == 244)
 	    		$scope.sinResguardo = false;
@@ -356,6 +358,8 @@ angular.module('App')
 		    $scope.answer = () => $mdDialog.hide($scope.files01);
 		}
 		var TransferirController = ($scope, $mdDialog, API) => {
+			if(localStorage.admin_token)
+	    		$scope.admin = true;
 			$scope.disableConfirm = false;
 			API.all("responsable").getList().then(res => $scope.allresp = res.plain());
 			$scope.confirmado = false;
@@ -445,6 +449,9 @@ angular.module('App')
 		    });
 		}
 		var BajarEvidenciasController = ($scope, $mdDialog, API) => {
+			$scope.millisec = date_str => new Date(date_str).getTime();
+			if(localStorage.admin_token)
+	    		$scope.admin = true;
 			let id = localStorage.resguardo_id;
 			if(localStorage.resguardo_id)
 				localStorage.removeItem('resguardo_id');
@@ -464,7 +471,12 @@ angular.module('App')
 		    	if(!evidencia)
 		    		return;
 		    	$scope.seleccionados = [];
-		    	API.one('uploader', evidencia.id).remove().then(res => {
+		    	let prot = {
+		    		'user': localStorage.user,
+		    		'admin_token' : localStorage.admin_token
+		    	}
+		    	API.one('uploader', evidencia.id).remove(prot)
+		    	.then(res => {
 		    		var resguardo = res.plain();
 		    		$scope.evidencias = resguardo.evidencias;
 		    		if(resguardo.evidencias.length == 0)
@@ -472,6 +484,14 @@ angular.module('App')
 		    			AlertService.show("Sin archivos", "Se han eliminado todos los archivos");
 		    			$mdDialog.cancel(resguardo);
 		    		}
+	    		}).catch(err =>{
+	    			AlertService.show("Error interno", "Se ha producido un error de autenticación, es necesario volver a iniciar sesión");
+	    			setTimeout(()=>{
+	    				localStorage.removeItem('satellizer_token');
+						localStorage.removeItem('admin_token');
+						localStorage.removeItem('user');
+						window.location = '#/login';
+	    			}, 2000)
 	    		});
 		    };
 		    $scope.hide = () => $mdDialog.hide();

@@ -21,11 +21,8 @@ class AreaTableSeeder extends Seeder {
 		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [11,'MATRIMONIOS',$now]);
 		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [12,'NACIMIENTOS',$now]);
 		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [13,'OFICINA',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [14,'OFICIAL MATRIMONIOS',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [15,'OFICIAL REGISTRO DE NACIMIENTOS',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [16,'REGISTRO DE NACIMIENTOS',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [17,'REGISTRO NACIMIENTOS',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [18,'SISTEMAS',$now]);
-		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [19,'UNIDAD ADMINISTRATIVA',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [14,'REGISTRO DE NACIMIENTOS',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [15,'SISTEMAS',$now]);
+		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [16,'UNIDAD ADMINISTRATIVA',$now]);
 	}
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Auth;
 use JWTAuth;
 use App\User;
+use App\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -32,11 +33,9 @@ class AuthController extends Controller
             return response()->error('Could not create token', 500);
         }
 
-        $user = Auth::user();
-
+        $user = User::with('admin')->find(Auth::user()->id);
         return response()->success(compact('user', 'token'));
     }
-
     public function register(Request $request)
     {
         $this->validate($request, [

@@ -10,7 +10,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
     protected $fillable = [
-        'nombre', 'username', 'email', 'password',
+        'nombre', 'username', 'email', 'password', 'perfil_id'
     ];
 
     protected $hidden = [
@@ -26,4 +26,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }  
+    public function perfil()
+    {        
+        return $this->hasOne('App\Perfil', 'id', 'perfil_id');
+    }
+    public function admin()
+    {        
+        return $this->hasOne('App\Admin');
+    }
 }

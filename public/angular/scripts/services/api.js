@@ -15,6 +15,10 @@ angular.module('App')
 						case 401:
 							if(localStorage.satellizer_token)
 								localStorage.removeItem('satellizer_token');
+							if(localStorage.admin_token)
+								localStorage.removeItem('admin_token');
+							if(localStorage.user)
+								localStorage.removeItem('user');
 							window.location('/');
 							break;
 						case 422:
