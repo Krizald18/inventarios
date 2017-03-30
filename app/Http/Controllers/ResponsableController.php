@@ -87,11 +87,12 @@ class ResponsableController extends Controller
             {
                 if($request->input('command') == 'transfer')
                 {
+                    $area = $request->has('area_id')? $request->input('area_id') : null;
                     foreach ($request->input('articulos') as $articulo) {
                         $i = Inventario::find($articulo);
                         $i->responsable_id = $request->input('nuevo_responsable');
-                        $i->area_id = null;
-                        
+                        $i->area_id = $area;
+
                         $re = Responsable::find($i->responsable_id);
                         if(isset($re->oficialia_id))
                         {

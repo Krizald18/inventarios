@@ -33,6 +33,15 @@
             <div ng-message="required">El campo Responsable es requerido</div>
           </div>
         </md-input-container>
+        <md-input-container flex="" class="md-block" ng-show="confirmado && areas.length > 0" style="margin-top: 25px;">
+          <label>Área</label>
+          <md-select name="area" ng-model="area_id" ng-required="areas.length > 0 && !area_id">
+            <md-option ng-repeat="x in areas track by x.id" value="{{x.id}}">{{x.area}}</md-option>
+          </md-select>
+          <div ng-messages="frmTrans.area.$error">
+            <div ng-message="required">El campo Área es requerido</div>
+          </div>
+        </md-input-container>
       </div>
     </md-dialog-content>
 
@@ -44,7 +53,7 @@
       <md-button ng-click="back()" ng-show="confirmado">
         Atras
       </md-button>
-      <md-button ng-click="confirmar()" ng-disabled = "seleccionados.length == 0">
+      <md-button ng-click="confirmar()" ng-disabled = "(seleccionados.length == 0 && !confirmado) || disableConfirm">
         {{!confirmado? "Continuar" :"Confirmar"}}
       </md-button>
     </md-dialog-actions>

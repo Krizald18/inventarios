@@ -356,37 +356,93 @@ angular.module('App')
 		    $scope.answer = () => $mdDialog.hide($scope.files01);
 		}
 		var TransferirController = ($scope, $mdDialog, API) => {
+			$scope.disableConfirm = false;
 			API.all("responsable").getList().then(res => $scope.allresp = res.plain());
 			$scope.confirmado = false;
 			$scope.seleccionados = [];
 			$scope.articulos = JSON.parse(localStorage.articulos);
-			console.log($scope.articulos);
 			if(localStorage.articulos)
 				localStorage.removeItem('articulos');
-			$scope.back = () => $scope.confirmado = false;
+			$scope.back = () => {
+				$scope.confirmado = false;
+				$scope.disableConfirm = false;
+			};
 		    $scope.cancel = () => $mdDialog.cancel();
 		    $scope.confirmar = () => {
 		    	if(!$scope.confirmado)
 		    	{
 		    		$scope.responsables = $scope.allresp.filter(r => r.id != $scope.seleccionados[0].responsable_id);
+					API.all("area").getList().then(res => $scope.areas_all = res.plain());
 		    		$scope.confirmado = true;
+		    		if($scope.nuevo_responsable)
+		    		{
+		    			if($scope.areas.length > 0)
+		    			{
+		    				if($scope.area_id)
+		    					$scope.disableConfirm = false;
+		    				else
+		    					$scope.disableConfirm = true;
+		    			}
+		    			else
+		    				$scope.disableConfirm = false;
+		    		}
+		    		else
+		    			$scope.disableConfirm = true;
 		    	}
 		    	else
 		    	{
 		    		$scope.frmTrans.$setSubmitted();
-		    		if($scope.nuevo_responsable)
+		    		if($scope.nuevo_responsable && (($scope.areas.length > 0 && $scope.area_id) || $scope.areas.length == 0))
 		    		{
 		    			let data = {
 		    				'articulos': $scope.seleccionados.map(s => s.id),
 		    				'nuevo_responsable': $scope.nuevo_responsable,
+		    				'area_id': $scope.area_id,
 		    				'command': 'transfer'
 		    			};
 		    			API.all('responsable').post(data).then(ad => {
+		    				if(localStorage.tiene_oficialia)
+								localStorage.removeItem('tiene_oficialia');
 	    					$mdDialog.hide($scope.seleccionados.length);
 		    			});
 		    		}
 		    	}
 		    }
+		    $scope.$watch('nuevo_responsable', a => {
+		    	if(a)
+		    	{
+		    		$scope.disableConfirm = false;
+		    		let r = $.grep($scope.responsables, re => re.id == a)[0];
+		    		if(r.oficialia_id)
+		    		{
+		    			localStorage.tiene_oficialia = true;
+		    			$scope.areas = angular.copy($scope.areas_all);
+		    		}
+		    		else
+		    		{
+		    			if(localStorage.tiene_oficialia)
+							localStorage.removeItem('tiene_oficialia');
+		    			$scope.areas = [];	
+		    		}
+		    		$scope.area_id = null;
+		    	}
+		    	else
+		    		$scope.areas = [];
+		    });
+		    $scope.$watch('area_id', a =>{
+		    	if($scope.nuevo_responsable)
+		    	{
+		    		if(a)
+		    			$scope.disableConfirm = false;
+		    		else
+		    		{
+			    		if(localStorage.tiene_oficialia)
+			    			$scope.disableConfirm = true;
+			    		else
+			    			$scope.disableConfirm = false;
+			    	}
+		    	}
+		    });
 		}
 		var BajarEvidenciasController = ($scope, $mdDialog, API) => {
 			let id = localStorage.resguardo_id;
