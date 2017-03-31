@@ -107,6 +107,14 @@
           </a>
         </li>
         <li id="liauth" ng-if="autenticado" hidden>
+         <a href="#/resguardo">
+           <i class="fa fa-file-text"></i>
+            <span class="nav-text">
+              Resguardos
+            </span>
+          </a>
+        </li>
+        <li id="liauth" ng-if="autenticado" hidden>
          <a href="#/agregar">
            <i class="fa fa-plus fa-2x"></i>
             <span class="nav-text">
@@ -124,28 +132,28 @@
           </a>
         </li>-->
         <li id="liauth" ng-if="autenticado" hidden>
-         <a href="#/baja">
-           <i class="fa fa-minus fa-2x"></i>
+          <a href="#/baja">
+            <i class="fa fa-minus fa-2x"></i>
             <span class="nav-text">
               Baja de Articulos
             </span>
           </a>
         </li>
+      </ul>
+      <ul class="logout" ng-if="autenticado">
         <li id="liauth" ng-if="autenticado" hidden>
-         <a href="#/resguardo">
-           <i class="fa fa-lock fa-2x"></i>
+          <a href="#/panel">
+            <i class="fa fa-bolt fa-2x"></i>
             <span class="nav-text">
-              Resguardos
+              Panel admin
             </span>
           </a>
         </li>
-      </ul>
-      <ul class="logout" ng-if="autenticado">
         <li>
           <a href="#" ng-click ="$event.preventDefault(); logout();">
             <i class="fa fa-power-off fa-2x"></i>
             <span class="nav-text">
-                Salir
+              Salir
             </span>
           </a>
         </li>  

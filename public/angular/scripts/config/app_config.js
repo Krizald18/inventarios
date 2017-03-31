@@ -54,6 +54,11 @@ angular.module('app.config')
 				controller: 'MainCtrl',
 				middleware: 'AuthenticatedOnly'
 			})
+			.when('/panel', {
+				templateUrl: 'angular/views/main.html',
+				controller: 'MainCtrl',
+				middleware: 'AuthenticatedOnly'
+			})
 			.otherwise({
 				redirectTo: '/'
 			});
