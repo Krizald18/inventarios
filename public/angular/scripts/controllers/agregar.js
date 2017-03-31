@@ -75,7 +75,17 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
 	var refreshCaracteristicas = () => {
 		delete($scope.caracteristicas);
 		if($scope.modelos && $scope.modelos.length > 0)
-			$scope.caracteristicas = $scope.modelos.map(modelo => modelo.caracteristica);
+		{
+			let cr = $scope.modelos.map(modelo => modelo.caracteristica);
+			$scope.caracteristicas = [];
+			$.each(cr, (i, o) =>{
+				var caract = $.grep($scope.caracteristicas, c => c.id == o.id);
+				if(caract.length == 0)
+					$scope.caracteristicas.push(o);
+				else
+					caract[0].multiple = true;
+			});		
+		}
 	};
   	$scope.cambioSubgrupo = val => {
   		var val = $scope.project.subgrupo_id;
@@ -215,7 +225,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
   		// si tiene marca filtrar solo modelos de esa marcaa
   		if(subgrupo || marca)
   		{
-  			console.log('tiene subgrupo o marca');
+  			// tiene subgrupo o marca
   			if(!$scope.project.subgrupo || ($scope.project.subgrupo && $scope.project.subgrupo.id != subgrupo))
   			{
   			// tenia puesto el subgrupo
@@ -227,7 +237,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
   				$scope.modelos = [];
   				if(subgrupo)
   				{
-  					console.log('tiene subgrupo');
+  					// tiene subgrupo
   					if(subgrupo.marcas && subgrupo.marcas.length > 0)
 						$.each(subgrupo.marcas, (j, o) => {
 							var ob = {};
@@ -236,7 +246,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
 							
 							if(marca)
 							{
-								console.log('tiene subgrupo y marca');
+								// tiene subgrupo y marca
 								if(o.id == marca)
 								{
 									ob.modelos = o.modelos.filter(modf => (modf.subgrupo_id == subgrupo.id) && (modf.marca_id == marca));
@@ -253,7 +263,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
 							}
 							else
 							{
-								console.log('tiene solo subgrupo');
+								// tiene solo subgrupo
 								ob.modelos = o.modelos.filter(mdl => mdl.subgrupo_id == subgrupo.id);
 
 								if(o.modelos && o.modelos.length > 0)
@@ -275,7 +285,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
   				}
   				else
   				{
-  					console.log('tiene solo marca');
+  					// tiene solo marca
 					$.each($scope.subgrupos, (i, subgrupo) => {
 						if(subgrupo.marcas && subgrupo.marcas.length > 0)
 						$.each(subgrupo.marcas, (j, o) => {
@@ -321,7 +331,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
 						
 						if(marca)
 						{
-							console.log('tiene subgrupo y marca');
+							// tiene subgrupo y marca
 							if(o.id == marca)
 							{
 								ob.modelos = o.modelos.filter(modf => (modf.subgrupo_id == subgrupo) && (modf.marca_id == marca));
@@ -338,7 +348,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
 						}
 						else
 						{
-							console.log('tiene solo subgrupo');
+							// tiene solo subgrupo
 							ob.modelos = o.modelos.filter(mdl => mdl.subgrupo_id == subgrupo);
 
 							if(o.modelos && o.modelos.length > 0)
@@ -362,7 +372,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
   		}
   		else
 		{
-			console.log('ni subgrupo ni marca');
+			// ni subgrupo ni marca
 			$scope.marcas = [];
 			$scope.modelos = [];
 			$.each($scope.subgrupos, (i, subgrupo) => {
@@ -497,7 +507,31 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
 		if(!$scope.project.caracteristica_id)
 			return;
 		
-		var modelo = $.grep($scope.modelos, md => md.caracteristica_id == $scope.project.caracteristica_id)[0];
+		var caract = $.grep($scope.caracteristicas, c => c.id == $scope.project.caracteristica_id)[0];
+		if(!caract.multiple)
+			var modelo = $.grep($scope.modelos, md => md.caracteristica_id == $scope.project.caracteristica_id)[0];
+		else
+		{
+			var md = $.grep($scope.modelos, md => md.caracteristica_id == $scope.project.caracteristica_id)[0];
+			if(!$scope.project.subgrupo_id)
+				$scope.project.subgrupo_id = md.subgrupo_id;
+			if(!$scope.project.marca_id)
+				$scope.project.marca_id = md.marca_id;		
+			if($scope.project.modelo_id)
+			{
+				var mod = $.grep($scope.modelos, md => md.id == $scope.project.modelo_id)[0];
+				var marca =  $.grep($scope.marcas, m => m.id == mod.marca_id)[0];
+				if(mod.caracteristica_id != $scope.project.caracteristica_id)
+				{
+					$scope.project.modelo = null;
+					$scope.project.modelo_id = null;
+					$scope.projectForm.$setPristine();
+					$scope.projectForm.$setUntouched();
+				}
+			}
+			setMarcas($scope.project.subgrupo_id, $scope.project.marca_id);
+		}
+
 
 		if(modelo)
 		{
@@ -514,30 +548,28 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
 						$scope.project.modelo_id = modelo.id;
 				}
 			}
-		}
+			var marca =  $.grep($scope.marcas, m => m.id == modelo.marca_id)[0];
 
-		var marca =  $.grep($scope.marcas, m => m.id == modelo.marca_id)[0];
-
-		if($scope.project.marca_id)
-		{
-			if($scope.project.marca_id != marca.id)
+			if($scope.project.marca_id)
+			{
+				if($scope.project.marca_id != marca.id)
+					$scope.project.marca_id = marca.id;
+			}
+			else
 				$scope.project.marca_id = marca.id;
-		}
-		else
-			$scope.project.marca_id = marca.id;
 
-		if($scope.project.subgrupo_id)
-		{
-			if($scope.project.subgrupo_id != modelo.subgrupo_id)
+			if($scope.project.subgrupo_id)
+			{
+				if($scope.project.subgrupo_id != modelo.subgrupo_id)
+					$scope.project.subgrupo_id = modelo.subgrupo_id;
+			}
+			else
 				$scope.project.subgrupo_id = modelo.subgrupo_id;
+			setMarcas($scope.project.subgrupo_id, $scope.project.marca_id);
+			// poner modelos que tengan el subgrupo de esta caracteristica
+			$scope.project.modelo = JSON.stringify(modelo);
+			$scope.project.modelo_id = modelo.id;
 		}
-		else
-			$scope.project.subgrupo_id = modelo.subgrupo_id;
-
-		setMarcas($scope.project.subgrupo_id, $scope.project.marca_id);
-		// poner modelos que tengan el subgrupo de esta caracteristica
-		$scope.project.modelo = JSON.stringify(modelo);
-		$scope.project.modelo_id = modelo.id;
 	};
 	$scope.cambioModelo = () => {
 		if(!$scope.project.modelo_id && !$scope.project.modelo)
