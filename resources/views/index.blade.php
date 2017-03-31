@@ -59,6 +59,10 @@
       div.lf-ng-md-file-input-drag-text-container layout-align-center-center.layout-row{
         height:120px;
       }
+      #ftrtxt{
+        float: right;
+        margin-right: 30px;
+      }
     </style>
   </head>
   <body ng-app="App">    
@@ -141,7 +145,7 @@
         </li>
       </ul>
       <ul class="logout" ng-if="autenticado">
-        <li id="liauth" ng-if="autenticado" hidden>
+        <li id="liauth" ng-if="autenticado && admin" hidden>
           <a href="#/panel">
             <i class="fa fa-bolt fa-2x"></i>
             <span class="nav-text">
@@ -166,7 +170,14 @@
   </div>
     <div id="footer">
       <div class="footer">
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USE/Inventarios Powered by YottaLabs ©2017–2019
+        <?php function auto_copyright($year = 'auto')
+        { 
+          if(intval($year) == 'auto'){ $year = date('Y'); }
+          if(intval($year) == date('Y')){ echo intval($year); }
+          if(intval($year) < date('Y')){ echo intval($year) . ' - ' . date('Y'); }
+          if(intval($year) > date('Y')){ echo date('Y'); }
+        } ?>
+        <div id="ftrtxt">USE/Inventarios <!--Powered by YottaLabs--> &copy;<?php auto_copyright("2017");?></div>
       </div>
     </div>
     <!-- build:js(.) scripts/vendor.js -->
