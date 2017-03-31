@@ -472,6 +472,7 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
 		if(!$scope.project.municipio_id)
 			return;
 		delete($scope.project.oficialia_id);
+		delete($scope.project.responsable_id);
 		var strSearch = $scope.project.municipio_id < 10 ? "0" + $scope.project.municipio_id: $scope.project.municipio_id;
 		$scope.oficialias = $scope.oficialias_bk.filter(ofs => ofs.id.substr(0,2) == strSearch);
 		$scope.projectForm.$setPristine();
