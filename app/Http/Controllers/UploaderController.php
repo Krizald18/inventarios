@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 
 class UploaderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['cors', 'auth:api']);
+    }
     public function uploadFile(Request $request, $id)
     {
     	if(!$request->has('uri'))

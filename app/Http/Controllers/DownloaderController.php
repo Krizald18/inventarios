@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class DownloaderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['cors', 'auth:api']);
+    }
     public function donwloadFile(Request $request, $id)
     {
     	if(!$request->has('type'))

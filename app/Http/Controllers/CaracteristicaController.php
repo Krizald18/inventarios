@@ -9,7 +9,7 @@ class CaracteristicaController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware(['cors', 'auth:api']);
+        $this->middleware(['cors', 'auth:api']);
     }
     public function index()
     {
