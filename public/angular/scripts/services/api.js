@@ -19,7 +19,7 @@ angular.module('App')
 								localStorage.removeItem('admin_token');
 							if(localStorage.user)
 								localStorage.removeItem('user');
-							window.location('/');
+							window.location.replace('#/login');
 							break;
 						case 422:
 							if(response.data.errors == undefined)

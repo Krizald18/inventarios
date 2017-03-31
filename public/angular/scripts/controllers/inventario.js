@@ -1,5 +1,7 @@
 'use strict';
 angular.module('App').controller('InventarioCtrl', function(API, $scope, $interval, $mdDialog, AlertService) {	
+	if(localStorage.admin_token)
+    	$scope.admin = true;
 	$scope.selected = [];
 	$scope.selected2 = [];
 	$scope.printqueue = [];

@@ -2,6 +2,8 @@
 angular.module('App')
 	.controller('ResguardoCtrl', function ($scope, $mdDialog, $timeout, $window, $q, API, FileUploader, AlertService) {
 	    // list of `state` value/display objects
+	    if(localStorage.admin_token)
+    		$scope.admin = true;
 	    $scope.selected2 = [];
 	    $scope.sinResguardo = false;
 	    $scope.selectedItem  = null;
