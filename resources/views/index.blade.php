@@ -222,6 +222,7 @@
     <script src="angular/scripts/controllers/agregar.js"></script>
     <script src="angular/scripts/controllers/login.js"></script>
     <script src="angular/scripts/controllers/register.js"></script>
+    <script src="angular/scripts/controllers/panel.js"></script>
     <script src="angular/scripts/controllers/about.js"></script>
     <script src="angular/scripts/services/api.js"></script>
     <script src="angular/scripts/services/toastservice.js"></script>
@@ -230,6 +231,11 @@
 </body>
 <script type="text/javascript">
   $( document ).ready(function() {
+    // Firefox 1.0+
+    let isFirefox = typeof InstallTrigger !== 'undefined';
+    let isChrome = !!window.chrome && !!window.chrome.webstore;
+    if(!isChrome && !isFirefox)
+      window.location.replace('/unsupported-browser');
     if(document.getElementById("ulauth") != undefined)
       document.getElementById("ulauth").removeAttribute("hidden");
     if(document.getElementById("liauth") != undefined)

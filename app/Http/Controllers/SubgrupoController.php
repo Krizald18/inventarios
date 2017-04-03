@@ -71,9 +71,12 @@ class SubgrupoController extends Controller
 
     public function destroy($id)
     {
+        return 'coming soon...';
+        /*
         $obj = Subgrupo::find($id);
         $obj->delete();
 
         return Subgrupo::with('grupo')->orderBy('subgrupo', 'asc')->get();
+        */
     }
 }

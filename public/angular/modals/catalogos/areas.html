@@ -1,0 +1,57 @@
+<md-dialog aria-label="Baja">
+  <form ng-cloak name="projectForm">
+    <md-dialog-content style="min-height: 300px; width: 650px;">
+      <div class="md-dialog-content">
+        <h4>Áreas</h4>
+      </div>
+      <div class="md-dialog-content" style="margin: -20px 20px 0 20px;">
+        <div layout="row">
+          <md-table-container ng-if="!addmode">
+          <table md-table>
+            <thead md-head>
+              <tr md-row>
+                <th md-column>Área</th>
+                <th md-column>Fecha de creación</th>
+                <th md-column style="padding-right: 10px;height: 15px;width: 100px;"></th>
+              </tr>
+            </thead>
+            <tbody md-body>
+              <tr md-row md-select="area" md-select-id="name" ng-repeat="area in areas">
+                <td md-cell>{{area.area}}</td>
+                <td md-cell>{{millisec(area.created_at) | date:'dd/MM/yyyy hh:mm:ss a'}}</td>
+                <td md-cell>
+                  <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(area);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin || area.articulos.length > 0">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                  </md-button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          </md-table-container>
+        </div>
+        <div layout="row" ng-if="addmode">
+          <md-input-container flex="100" class="md-block">
+            <label>Área</label>
+            <input name="area" type="text" md-maxlength="50" md-no-asterisk="" ng-model="nueva_area.area" ng-change="cambioArea()" required>
+            <div ng-messages="projectForm.area.$error">
+              <div ng-message="md-maxlength">El campo Área debe ser máximo 50 caracteres</div>
+              <div ng-message="required">El campo Área es requerido</div>
+            </div>
+          </md-input-container>
+        </div>
+        <div layout="row" ng-if="addmode">
+          <md-button flex="30" class="md-raised md-primary" ng-click="add();" style="height: 10px; margin-top: 20px; width: 22px;" ng-disabled="!nueva_area.area">Enviar</md-button>
+        </div>
+      </div><br>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="cancel()">
+       	Cancelar
+      </md-button>
+      <md-button ng-click="changemode()">
+        {{addmode? 'Atras': 'Agregar'}}
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

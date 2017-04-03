@@ -77,9 +77,12 @@ class MarcaController extends Controller
 
     public function destroy($id)
     {
+        return 'coming soon...';
+        /*
         $obj = Marca::find($id);
         $obj->delete();
 
         return Marca::orderBy('marca', 'asc')->get();
+        */
     }
 }

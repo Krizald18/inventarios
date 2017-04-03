@@ -63,9 +63,12 @@ class ModeloController extends Controller
 
     public function destroy($id)
     {
+        return 'coming soon...';
+        /*
         $obj = Modelo::find($id);
         $obj->delete();
 
         return Modelo::with('marca', 'caracteristica','subgrupo')->orderBy('modelo', 'asc')->get();
+        */
     }
 }

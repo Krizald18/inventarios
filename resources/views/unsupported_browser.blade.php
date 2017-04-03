@@ -1,15 +1,15 @@
 <!doctype html>
 <html ng-app="app">
 <head>
-    <title>Laravel 5 angular material starter</title>
+    <title>Error</title>
 </head>
 <body style="background-color: #FBFBFB;text-align:center;font-family: Helvetica, Arial;color: #717887">
 
 
-<h3 style="margin-top: 200px;font-size:20px;font-weight:bold;">Please update your browser</h3>
+<h3 style="margin-top: 200px;font-size:20px;font-weight:bold;">Navegador no permitido</h3>
 <br>
-<div style="font-size:16px;line-height: 23px;">You are using an old version of Internet Explorer<br>
-    Please update it or try one of these options.
+<div style="font-size:16px;line-height: 23px;">Esta aplicación fue desarrollada para ser utilizada en navegadores<br>
+    Chrome o Firefox, este navegador no es permitido.
 </div>
 <br>
 <br>

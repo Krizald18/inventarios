@@ -16,4 +16,8 @@ class Area extends Model
     protected $hidden = [
 
     ];
+    public function articulos()
+    {
+        return $this->hasMany('App\Inventario', 'area_id');
+    }
 }

@@ -63,9 +63,12 @@ class CaracteristicaController extends Controller
 
     public function destroy($id)
     {
+        return 'coming soon...';
+        /*
         $obj = Caracteristica::find($id);
         $obj->delete();
 
         return Caracteristica::with('subgrupo')->orderBy('descripcion', 'asc')->get();
+        */
     }
 }

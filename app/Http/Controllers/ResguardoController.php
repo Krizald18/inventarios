@@ -157,7 +157,7 @@ class ResguardoController extends Controller
             $a = (object) $articulo;
             $inv = Inventario::find($a->id);
             $inv->folio_resguardo = $folio;
-            $inv->save;
+            $inv->save();
         }
         //dd($articulos);
         $data = [

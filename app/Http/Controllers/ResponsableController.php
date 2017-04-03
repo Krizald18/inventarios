@@ -159,6 +159,8 @@ class ResponsableController extends Controller
 
     public function destroy($id)
     {
+        return 'coming soon...';
+        /*
         $obj = Responsable::find($id);
         $obj->delete();
 
@@ -168,5 +170,6 @@ class ResponsableController extends Controller
                             }))
                           ->orderBy('responsable', 'asc')
                           ->get();
+        */
     }
 }

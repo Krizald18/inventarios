@@ -20,13 +20,16 @@ angular.module('App')
 				.then(response => {
 					//remove this if you require email verification
 					$auth.setToken(response.data);
+
+					if(response.data.data.user.perfil_id == 1)
+						localStorage.setItem('admin_token', response.data.data.user.admin.token);
+					localStorage.setItem('user', response.data.data.user.id);
+
 					ToastService.show('Registro Exitoso.');
 					window.location = '/';
 				})
 				.catch($scope.failedRegistration.bind(this));
 		}
-
-
 
 		$scope.failedRegistration = response => {
 			if (response.status === 422) {
