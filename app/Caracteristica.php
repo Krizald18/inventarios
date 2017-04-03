@@ -16,4 +16,8 @@ class Caracteristica extends Model
     {   
         return $this->hasOne('App\Subgrupo', 'id', 'subgrupo_id');
     }
+    public function modelos()
+    {
+        return $this->hasMany('App\Modelo', 'caracteristica_id');
+    }
 }

@@ -155,12 +155,53 @@ angular.module('App')
 		    $scope.confirm = () => {
 
 		    }
-		}, CaracteristicasController = ($scope, $mdDialog) => {
-			console.log('CaracteristicasController funciona bien');
+		}, CaracteristicasController = ($scope, $mdDialog, API, ToastService) => {
+			$scope.addmode = false;
+			$scope.nueva_caracteristica = {};
+			if(localStorage.admin_token)
+    			$scope.admin = true;
+			API.all('caracteristica').getList().then(gr =>{
+				$scope.caracteristicas = gr.plain();
+			})
+			$scope.millisec = date_str => new Date(date_str).getTime();
 		    $scope.hide = () => $mdDialog.hide();
 		    $scope.cancel = () => $mdDialog.cancel();
-		    $scope.confirm = () => {
+		    $scope.changemode = () => {
+				$scope.addmode = !$scope.addmode;
+				$scope.nueva_caracteristica.caracteristica = "";
+		    }
+		    $scope.cambioCaracteristica = () => {
+				if($scope.nueva_caracteristica.caracteristica && $scope.nueva_caracteristica.caracteristica.length > 0)
+					$scope.nueva_caracteristica.caracteristica = $scope.nueva_caracteristica.caracteristica.charAt(0).toUpperCase() + $scope.nueva_caracteristica.caracteristica.slice(1);
+			};
+		    $scope.add = () => {
+		    	if(!$scope.nueva_caracteristica.caracteristica)
+					return;
+				let newgroup = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token,
+			    		'caracteristica': $scope.nueva_caracteristica.caracteristica
+			    	}
+				API.all('caracteristica').post(newgroup).then(rs => {
+					$scope.caracteristicas = rs.plain();
+		    		ToastService.show('Se ha agregado la caracteristica "'+ $scope.nueva_caracteristica.caracteristica + '"');
+					$scope.changemode();
+				});
+		    }
 
+		    $scope.delete = (caracteristica) => {
+		    	if(caracteristica && caracteristica.id)
+		    	{
+			    	let prot = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token
+			    	}
+			    	API.one('caracteristica', caracteristica.id).remove(prot)
+			    	.then(res => {
+			    		$scope.caracteristicas = res.plain();
+		    			ToastService.show('Se ha eliminado la caracteristica "'+ caracteristica.caracteristica + '"');
+			    	});
+			    }
 		    }
 		}, ResponsablesController = ($scope, $mdDialog) => {
 			console.log('ResponsablesController funciona bien');

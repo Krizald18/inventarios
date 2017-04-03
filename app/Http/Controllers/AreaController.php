@@ -105,6 +105,6 @@ class AreaController extends Controller
         $g = Area::findOrFail($id);
         $g->delete();
 
-        return self::index($request);
+        return self::index();
     }
 }
