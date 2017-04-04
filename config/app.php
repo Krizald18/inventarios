@@ -174,6 +174,7 @@ return [
         /*
          * Application Service Providers...
          */
+        App\Providers\ValidationServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\AuthServiceProvider::class,

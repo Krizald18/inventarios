@@ -120,7 +120,7 @@ class ResponsableController extends Controller
             }
             else{
                 // validar admin_token y user
-                // recive un id de un grupo, user (id) y  admin_token
+                // recive un id de un responsable, user (id) y  admin_token
                 if(!$request->has('user') || !$request->has('admin_token'))
                     return Response::json($request, 500);
                 $u = User::with('admin')->find($request->user);
@@ -176,7 +176,7 @@ class ResponsableController extends Controller
     public function destroy(Request $request, $id)
     {
         // validar admin_token y user
-        // recive un id de un grupo, user (id) y  admin_token
+        // recive un id de un responsable, user (id) y  admin_token
         if(!$request->has('user') || !$request->has('admin_token'))
             return Response::json($request, 500);
         $u = User::with('admin')->find($request->user);

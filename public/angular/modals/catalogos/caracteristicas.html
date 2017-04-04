@@ -4,7 +4,7 @@
       <div class="md-dialog-content">
         <h4>{{addmode? 'Agregar caracteristica': 'Caracteristicas'}}</h4>
       </div>
-      <div class="md-dialog-content" style="margin: -20px 20px 0 20px;">
+      <div class="md-dialog-content" style="margin: -40px 20px 0 20px;">
         <div layout="row">
           <md-table-container ng-if="!addmode">
           <table md-table>
@@ -18,7 +18,7 @@
             <tbody md-body>
               <tr md-row md-select="caracteristica" md-select-id="name" ng-repeat="caracteristica in caracteristicas">
                 <td md-cell>{{caracteristica.caracteristica}}</td>
-                <td md-cell>{{millisec(caracteristica.created_at) | date:'dd/MM/yyyy hh:mm:ss a'}}</td>
+                <td md-cell>{{millisec(caracteristica.created_at) | date:'dd/MM/yyyy'}}</td>
                 <td md-cell>
                   <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(caracteristica);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin || caracteristica.modelos.length > 0">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -32,9 +32,9 @@
         <div layout="row" ng-if="addmode">
           <md-input-container flex="100" class="md-block">
             <label>Caracteristica</label>
-            <input name="caracteristica" type="text" md-maxlength="50" md-no-asterisk="" ng-model="nueva_caracteristica.caracteristica" ng-change="cambioCaracteristica()" required>
+            <input name="caracteristica" type="text" md-maxlength="150" md-no-asterisk="" ng-model="nueva_caracteristica.caracteristica" ng-change="cambioCaracteristica()" required>
             <div ng-messages="projectForm.caracteristica.$error">
-              <div ng-message="md-maxlength">El campo Caracteristica debe ser máximo 50 caracteres</div>
+              <div ng-message="md-maxlength">El campo Caracteristica debe ser máximo 150 caracteres</div>
               <div ng-message="required">El campo Caracteristica es requerido</div>
             </div>
           </md-input-container>

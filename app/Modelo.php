@@ -24,4 +24,8 @@ class Modelo extends Model
     {        
         return $this->hasOne('App\Subgrupo', 'id', 'subgrupo_id');
     }
+    public function articulos()
+    {
+        return $this->hasMany('App\Inventario', 'modelo_id');
+    }
 }

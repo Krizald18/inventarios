@@ -4,7 +4,7 @@
       <div class="md-dialog-content">
         <h4>{{addmode? 'Agregar subgrupo': 'Subgrupos'}}</h4>
       </div>
-      <div class="md-dialog-content" style="margin: -20px 20px 0 20px;">
+      <div class="md-dialog-content" style="margin: -40px 20px 0 20px; width: 695px;">
         <div layout="row">
           <md-table-container ng-if="!addmode">
           <table md-table>
@@ -22,7 +22,7 @@
                 <td md-cell>{{subgrupo.subgrupo}}</td>
                 <td md-cell>{{subgrupo.grupo.grupo}}</td>
                 <td md-cell>{{subgrupo.marcas.length}}</td>
-                <td md-cell>{{millisec(subgrupo.created_at) | date:'dd/MM/yyyy hh:mm:ss a'}}</td>
+                <td md-cell>{{millisec(subgrupo.created_at) | date:'dd/MM/yyyy'}}</td>
                 <td md-cell>
                   <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(subgrupo);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin || subgrupo.marcas.length > 0">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>

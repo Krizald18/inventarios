@@ -4,7 +4,7 @@
       <div class="md-dialog-content">
         <h4>{{addmode? 'Agregar marca': 'Marcas'}}</h4>
       </div>
-      <div class="md-dialog-content" style="margin: -20px 20px 0 20px;">
+      <div class="md-dialog-content" style="margin: -40px 20px 0 20px;width: 545px;">
         <div layout="row">
           <md-table-container ng-if="!addmode">
           <table md-table>
@@ -20,7 +20,7 @@
               <tr md-row md-select="marca" md-select-id="name" ng-repeat="marca in marcas">
                 <td md-cell>{{marca.marca}}</td>
                 <td md-cell>{{marca.modelos.length}}</td>
-                <td md-cell>{{millisec(marca.created_at) | date:'dd/MM/yyyy hh:mm:ss a'}}</td>
+                <td md-cell>{{millisec(marca.created_at) | date:'dd/MM/yyyy'}}</td>
                 <td md-cell>
                   <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(marca);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin || marca.modelos.length > 0">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>

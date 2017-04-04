@@ -82,7 +82,8 @@ return [
     ],
     'string'               => 'El campo :attribute debe ser una cadena de caracteres.',
     'timezone'             => 'El :attribute debe ser una zona válida.',
-    'unique'               => ':attribute ya ha sido registrado.',
+    'unique'               => 'Ya existe un registro de :attribute igual al proporcionado.',
+    'unique_with'          => 'Ya existe un registro de :attribute igual al proporcionado.',
     'uploaded'             => 'Subir :attribute ha fallado.',
     'url'                  => 'El formato :attribute es inválido.',
 

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Modelo;
+use App\Marca;
+use App\User;
+use Response;
 
 class ModeloController extends Controller
 {
@@ -11,9 +14,12 @@ class ModeloController extends Controller
         $this->middleware(['cors', 'auth:api']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return Modelo::with('marca', 'caracteristica','subgrupo')->orderBy('modelo', 'asc')->get();
+        if($request->has('articulos'))
+        return Modelo::with('marca', 'caracteristica', 'articulos', 'subgrupo')->orderBy('modelo', 'asc')->orderBy('marca_id', 'asc')->orderBy('subgrupo_id', 'asc')->get();
+        else
+            return Modelo::with('marca', 'caracteristica','subgrupo')->orderBy('modelo', 'asc')->get();
     }
 
     public function create()
@@ -23,6 +29,50 @@ class ModeloController extends Controller
 
     public function store(Request $request)
     {
+        // validar admin_token y user
+        // recive un id de un modelo, user (id) y  admin_token
+        if(!$request->has('user') || !$request->has('admin_token'))
+            return Response::json($request, 500);
+        $u = User::with('admin')->find($request->user);
+
+        if($u->admin->token <> $request->admin_token)
+            return Response::json($request, 500);
+
+        $this->validate($request, [
+            'subgrupo_id' => 'required',
+            'marca_id' => 'required',
+            'caracteristica_id' => 'required',
+            'modelo' => 'required|unique_with:modelos,caracteristica_id,'.$request->caracteristica_id,
+        ]);
+
+        // ----------------checar si la marca esta asociada a ese subgrupo ---------------------
+        $m = Marca::with('subgrupos')->whereHas('subgrupos', function($q) use ($request) {
+                                            $q->where('subgrupo_id', '=', $request->subgrupo_id);
+                                        })->where('id', $request->marca_id)->get();
+        // marcas con ese id y que tengan ese subgrupo entre sus subgrupos. 0 no existe 1 si existe
+        if(count($m) == 0) {
+            // asociar marca con ese subgrupo
+            $marca = Marca::find($request->marca_id);
+            $marca->subgrupos()->attach($request->subgrupo_id);
+        }
+        // -------------------------------------------------------------------------------------
+
+        $nextid = \DB::table('modelos')->max('id');
+        if(isset($nextid))
+            $nextid = $nextid + 1;
+        else
+            $nextid = 1;
+
+        $g = new Modelo;
+        $g->id = $nextid;
+        $g->modelo = $request->modelo;
+        $g->caracteristica_id = $request->caracteristica_id;
+        $g->subgrupo_id = $request->subgrupo_id;
+        $g->marca_id = $request->marca_id;
+        $g->save();
+
+        return Modelo::with('marca', 'caracteristica', 'articulos', 'subgrupo')->orderBy('modelo', 'asc')->orderBy('marca_id', 'asc')->orderBy('subgrupo_id', 'asc')->get();
+        /*
         if($request->has('data'))
         {
             $o = (object) $request->input('data');
@@ -44,6 +94,7 @@ class ModeloController extends Controller
         }
         else
             return $request;
+        */
     }
 
     public function show($id)
@@ -61,14 +112,28 @@ class ModeloController extends Controller
         //
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        return 'coming soon...';
-        /*
-        $obj = Modelo::find($id);
-        $obj->delete();
+        // validar admin_token y user
+        // recive un id de un modelo, user (id) y  admin_token
+        if(!$request->has('user') || !$request->has('admin_token'))
+            return Response::json($request, 500);
+        $u = User::with('admin')->find($request->user);
 
-        return Modelo::with('marca', 'caracteristica','subgrupo')->orderBy('modelo', 'asc')->get();
-        */
+        if($u->admin->token <> $request->admin_token)
+            return Response::json($request, 500);
+
+        $g = Modelo::with('marca')->findOrFail($id);
+        $subgrupo_id = $g->subgrupo_id;
+        $g->delete();
+        
+        // si la marca se queda sin modelos en ese subgrupo, detach de ese subgrupo
+        $marca = Marca::with(array('modelos' => function($q) use ($subgrupo_id){
+                                $q->where('subgrupo_id', '=', $subgrupo_id);
+                            }))->find($g->marca->id);
+        if(count($marca->modelos) == 0)
+            $marca->subgrupos()->detach($subgrupo_id);
+        // -----
+        return Modelo::with('marca', 'caracteristica', 'articulos', 'subgrupo')->orderBy('modelo', 'asc')->orderBy('marca_id', 'asc')->orderBy('subgrupo_id', 'asc')->get();
     }
 }

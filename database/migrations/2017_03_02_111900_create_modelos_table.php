@@ -10,7 +10,7 @@ class CreateModelosTable extends Migration
     {
         Schema::create('modelos', function (Blueprint $table) {
             $table->integer('id')->unique();
-            $table->string('modelo')->unique();
+            $table->string('modelo');
 
             $table->integer('marca_id')->nullable();
             $table->foreign('marca_id')->references('id')->on('marcas');

@@ -4,10 +4,10 @@
       <div class="md-dialog-content">
         <h4>{{addmode? 'Agregar área': 'Áreas'}}</h4>
       </div>
-      <div class="md-dialog-content" style="margin: -20px 20px 0 20px;">
+      <div class="md-dialog-content" style="margin: -40px 20px 0 20px;">
         <div layout="row">
           <md-table-container ng-if="!addmode">
-          <table md-table>
+          <table md-table style="width: 545px;">
             <thead md-head>
               <tr md-row>
                 <th md-column>Área</th>
@@ -18,7 +18,7 @@
             <tbody md-body>
               <tr md-row md-select="area" md-select-id="name" ng-repeat="area in areas">
                 <td md-cell>{{area.area}}</td>
-                <td md-cell>{{millisec(area.created_at) | date:'dd/MM/yyyy hh:mm:ss a'}}</td>
+                <td md-cell>{{millisec(area.created_at) | date:'dd/MM/yyyy'}}</td>
                 <td md-cell>
                   <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(area);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin || area.articulos.length > 0">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>

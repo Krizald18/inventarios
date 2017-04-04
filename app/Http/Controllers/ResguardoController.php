@@ -35,8 +35,8 @@ class ResguardoController extends Controller
             else
                 $nextid = 1;
     */
-        $now = new \DateTime('now');
-        $year = $now->format('Y');
+            $now = new \DateTime('now');
+            $year = $now->format('Y');
             $j = new Resguardo;
             //$j->id = $nextid;
             $j->responsable_id = $o->responsable_id;

@@ -50,7 +50,7 @@ angular.module('App')
 					break;
 				case 3:
 					controller = ModelosController;
-					html_file = 'mdoelos';
+					html_file = 'modelos';
 					break;
 				case 4:
 					controller = CaracteristicasController;
@@ -79,7 +79,7 @@ angular.module('App')
 				templateUrl: 'angular/modals/catalogos/' + html_file + '.html',
 				parent: angular.element(document.body),
 				clickOutsideToClose: true,
-				fullscreen: true // Only for -xs, -sm breakpoints.
+				fullscreen: false // Only for -xs, -sm breakpoints.
 		    }).then(rs => {
 		    	// handle confirm from mdDialog (confirmar)
 		    	
@@ -233,12 +233,92 @@ angular.module('App')
 			    	});
 			    }
 		    }
-		}, ModelosController = ($scope, $mdDialog) => {
-			console.log('ModelosController funciona bien');
+		}, ModelosController = ($scope, $mdDialog, API, ToastService) => {
+			$scope.addmode = false;
+			$scope.nuevo_modelo = {};
+			if(localStorage.admin_token)
+    			$scope.admin = true;
+			API.all('modelo?articulos=true').getList().then(gr =>{
+				$scope.modelos = gr.plain();
+			});
+			API.all('subgrupo').getList().then(gr =>{
+				$scope.subgrupos = gr.plain();
+			});
+			API.all('marca').getList().then(gr =>{
+				$scope.marcas = gr.plain();
+			});
+			API.all('caracteristica').getList().then(gr =>{
+				$scope.caracteristicas_all = gr.plain();
+				$scope.caracteristicas = angular.copy($scope.caracteristicas_all);
+			});
+			$scope.millisec = date_str => new Date(date_str).getTime();
 		    $scope.hide = () => $mdDialog.hide();
 		    $scope.cancel = () => $mdDialog.cancel();
-		    $scope.confirm = () => {
+		    $scope.changemode = () => {
+				$scope.addmode = !$scope.addmode;
+				$scope.nuevo_modelo.modelo = "";
+				$scope.nuevo_modelo.subgrupo_id = null;
+				$scope.nuevo_modelo.marca_id = null;
+				$scope.nuevo_modelo.caracteristica_id = null;
+		    }
+		    $scope.cambioModelo = () => {
+				if($scope.nuevo_modelo.modelo && $scope.nuevo_modelo.modelo.length > 0)
+					$scope.nuevo_modelo.modelo = $scope.nuevo_modelo.modelo.charAt(0).toUpperCase() + $scope.nuevo_modelo.modelo.slice(1);
+			};
+			$scope.$watch('nuevo_modelo.caracteristica_id', cid => {
+				if(cid && !$scope.nuevo_modelo.subgrupo_id)
+				{
+					let crct = $.grep($scope.caracteristicas, c=> c.id == cid)[0];
+					if(crct.modelos.length > 0)
+						$scope.nuevo_modelo.subgrupo_id = crct.modelos[0].subgrupo_id;
+					else
+						return;
+					// $scope.caracteristicas = $scope.caracteristicas_all.filter(c => c.subgrupo_id == $scope.nuevo_modelo.subgrupo_id);
+				}
+			});
+			$scope.$watch('nuevo_modelo.subgrupo_id', sid => {
+				/*
+				if(sid)
+					$scope.caracteristicas = $scope.caracteristicas_all.filter(c => {
+						if(c.modelos.length > 0)
+						{
+							// mostrar caracteristicas para articulos de ese subgrupo sid
+							// no se pueden filtrar las caracteristicas por ahora por que no estan asociadas a un subgrupo
+						}
+					}
+				*/
+			});
+		    $scope.add = () => {
+		    	if(!$scope.nuevo_modelo.modelo)
+					return;
+				let newsubgroup = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token,
+			    		'modelo': $scope.nuevo_modelo.modelo,
+			    		'subgrupo_id': $scope.nuevo_modelo.subgrupo_id,
+			    		'marca_id': $scope.nuevo_modelo.marca_id,
+			    		'caracteristica_id': $scope.nuevo_modelo.caracteristica_id
+			    	}
+				API.all('modelo').post(newsubgroup).then(rs => {
+					$scope.modelos = rs.plain();
+		    		ToastService.show('Se ha agregado el modelo "'+ $scope.nuevo_modelo.modelo + '"');
+					$scope.changemode();
+				});
+		    }
 
+		    $scope.delete = (modelo) => {
+		    	if(modelo && modelo.id)
+		    	{
+			    	let prot = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token
+			    	}
+			    	API.one('modelo', modelo.id).remove(prot)
+			    	.then(res => {
+			    		$scope.modelos = res.plain();
+		    			ToastService.show('Se ha eliminado el modelo "'+ modelo.modelo + '"');
+			    	});
+			    }
 		    }
 		}, CaracteristicasController = ($scope, $mdDialog, API, ToastService) => {
 			$scope.addmode = false;
