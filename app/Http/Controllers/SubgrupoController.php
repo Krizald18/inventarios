@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Subgrupo;
+use App\User;
 use Response;
 
 class SubgrupoController extends Controller
@@ -21,7 +22,7 @@ class SubgrupoController extends Controller
                     ->orderBy('subgrupo', 'asc')->get();
         }
         else
-            return "";
+            return Subgrupo::with('grupo', 'marcas')->get();
     }
 
     public function create()
@@ -31,6 +32,34 @@ class SubgrupoController extends Controller
 
     public function store(Request $request)
     {
+        // validar admin_token y user
+        // recive un id de un grupo, user (id) y  admin_token
+        if(!$request->has('user') || !$request->has('admin_token'))
+            return Response::json($request, 500);
+        $u = User::with('admin')->find($request->user);
+
+        if($u->admin->token <> $request->admin_token)
+            return Response::json($request, 500);
+
+        $this->validate($request, [
+            'subgrupo' => 'required|unique:subgrupos',
+            'grupo_id' => 'required',
+        ]);
+
+        $nextid = \DB::table('subgrupos')->max('id');
+        if(isset($nextid))
+            $nextid = $nextid + 1;
+        else
+            $nextid = 1;
+
+        $g = new Subgrupo;
+        $g->id = $nextid;
+        $g->subgrupo = $request->subgrupo;
+        $g->grupo_id = $request->grupo_id;
+        $g->save();
+
+        return self::index($request);
+        /*
         if($request->has('data'))
         {
             $o = (object) $request->input('data');
@@ -52,6 +81,7 @@ class SubgrupoController extends Controller
         }
         else
             return $request;
+            */
     }
 
     public function show($id)
@@ -69,14 +99,20 @@ class SubgrupoController extends Controller
     
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        return 'coming soon...';
-        /*
-        $obj = Subgrupo::find($id);
-        $obj->delete();
+        // validar admin_token y user
+        // recive un id de un grupo, user (id) y  admin_token
+        if(!$request->has('user') || !$request->has('admin_token'))
+            return Response::json($request, 500);
+        $u = User::with('admin')->find($request->user);
 
-        return Subgrupo::with('grupo')->orderBy('subgrupo', 'asc')->get();
-        */
+        if($u->admin->token <> $request->admin_token)
+            return Response::json($request, 500);
+
+        $g = Subgrupo::findOrFail($id);
+        $g->delete();
+
+        return self::index($request);
     }
 }

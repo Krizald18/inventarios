@@ -2,7 +2,7 @@
   <form ng-cloak name="projectForm">
     <md-dialog-content style="min-height: 300px; width: 650px;">
       <div class="md-dialog-content">
-        <h4>Caracteristicas</h4>
+        <h4>{{addmode? 'Agregar caracteristica': 'Caracteristicas'}}</h4>
       </div>
       <div class="md-dialog-content" style="margin: -20px 20px 0 20px;">
         <div layout="row">
@@ -12,7 +12,7 @@
               <tr md-row>
                 <th md-column>Caracteristica</th>
                 <th md-column>Fecha de creación</th>
-                <th md-column style="padding-right: 10px;height: 15px;width: 100px;"></th>
+                <th md-column style="color:#f97070;padding-right: 10px;height: 15px;width: 100px;">Eliminar</th>
               </tr>
             </thead>
             <tbody md-body>

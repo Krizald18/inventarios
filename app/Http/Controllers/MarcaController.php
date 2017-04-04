@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Marca;
+use App\User;
+use Response;
 
 class MarcaController extends Controller
 {
@@ -30,6 +32,32 @@ class MarcaController extends Controller
 
     public function store(Request $request)
     {
+        // validar admin_token y user
+        // recive un id de un grupo, user (id) y  admin_token
+        if(!$request->has('user') || !$request->has('admin_token'))
+            return Response::json($request, 500);
+        $u = User::with('admin')->find($request->user);
+
+        if($u->admin->token <> $request->admin_token)
+            return Response::json($request, 500);
+
+        $this->validate($request, [
+            'marca' => 'required|unique:marcas',
+        ]);
+
+        $nextid = \DB::table('marcas')->max('id');
+        if(isset($nextid))
+            $nextid = $nextid + 1;
+        else
+            $nextid = 1;
+
+        $g = new Marca;
+        $g->id = $nextid;
+        $g->marca = $request->marca;
+        $g->save();
+
+        return self::index();
+        /*
         if($request->has('data'))
         {
             $o = (object) $request->input('data');
@@ -51,6 +79,7 @@ class MarcaController extends Controller
         }
         else
             return $request;
+            */
     }
 
     public function show($id)
@@ -75,14 +104,20 @@ class MarcaController extends Controller
         //
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        return 'coming soon...';
-        /*
-        $obj = Marca::find($id);
-        $obj->delete();
+        // validar admin_token y user
+        // recive un id de un grupo, user (id) y  admin_token
+        if(!$request->has('user') || !$request->has('admin_token'))
+            return Response::json($request, 500);
+        $u = User::with('admin')->find($request->user);
 
-        return Marca::orderBy('marca', 'asc')->get();
-        */
+        if($u->admin->token <> $request->admin_token)
+            return Response::json($request, 500);
+
+        $g = Marca::findOrFail($id);
+        $g->delete();
+
+        return self::index();
     }
 }

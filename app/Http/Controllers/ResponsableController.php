@@ -6,6 +6,8 @@ use App\Responsable;
 use App\Inventario;
 use App\Resguardo;
 use App\Evidencia;
+use App\User;
+use Response;
 // use App\Oficialia;
 
 class ResponsableController extends Controller
@@ -17,7 +19,7 @@ class ResponsableController extends Controller
 
     public function index()
     {
-        return Responsable::with('usuario', 'articulos_asignados')
+        return Responsable::with('usuario')
                             ->with(array('resguardos' => function($q){
                                     $q->with(array('articulos' => function($a){
                                         $a->with(array('modelo' => function($q){
@@ -65,21 +67,7 @@ class ResponsableController extends Controller
 
             $j->save();
 
-            return Responsable::with('usuario', 'articulos_asignados')
-                            ->with(array('resguardos' => function($q){
-                                    $q->with(array('articulos' => function($a){
-                                        $a->with(array('modelo' => function($q){
-                                            $q->with('marca');
-                                            $q->with('caracteristica');
-                                            $q->with('subgrupo');
-                                        }));
-                                    }));
-                                }))
-                            ->with(array('oficialia' => function($q){
-                                $q->with('municipio');
-                            }))
-                            ->orderBy('responsable', 'asc')
-                            ->get();
+            return self::index();
         }
         else
         {
@@ -130,7 +118,35 @@ class ResponsableController extends Controller
                 }
 
             }
-            return $request;
+            else{
+                // validar admin_token y user
+                // recive un id de un grupo, user (id) y  admin_token
+                if(!$request->has('user') || !$request->has('admin_token'))
+                    return Response::json($request, 500);
+                $u = User::with('admin')->find($request->user);
+
+                if($u->admin->token <> $request->admin_token)
+                    return Response::json($request, 500);
+
+                $this->validate($request, [
+                    'responsable' => 'required|unique:responsables',
+                ]);
+
+                $nextid = \DB::table('responsables')->max('id');
+                if(isset($nextid))
+                    $nextid = $nextid + 1;
+                else
+                    $nextid = 1;
+
+                $g = new Responsable;
+                $g->id = $nextid;
+                $g->responsable = $request->responsable;
+                if($request->has('oficialia_id'))
+                    $g->oficialia_id = $request->oficialia_id;
+                $g->save();
+
+                return self::index($request);
+            }
         }
     }
 
@@ -157,19 +173,20 @@ class ResponsableController extends Controller
         //
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        return 'coming soon...';
-        /*
-        $obj = Responsable::find($id);
-        $obj->delete();
+        // validar admin_token y user
+        // recive un id de un grupo, user (id) y  admin_token
+        if(!$request->has('user') || !$request->has('admin_token'))
+            return Response::json($request, 500);
+        $u = User::with('admin')->find($request->user);
 
-        return Responsable::with('usuario', 'articulos_asignados', 'resguardos')
-                          ->with(array('oficialia' => function($q){
-                                $q->with('municipio');
-                            }))
-                          ->orderBy('responsable', 'asc')
-                          ->get();
-        */
+        if($u->admin->token <> $request->admin_token)
+            return Response::json($request, 500);
+
+        $g = Responsable::findOrFail($id);
+        $g->delete();
+
+        return self::index();
     }
 }

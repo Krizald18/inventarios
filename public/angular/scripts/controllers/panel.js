@@ -2,20 +2,7 @@
 angular.module('App')
 	.controller('PanelCtrl', function ($scope, $mdDialog) {
 		var COLORS = ["#f44336", "#ff1744", "#d50000", "#ff4081", "#ba68c8", "#d1c4e9", "#7c4dff", "#5c6bc0", "#8c9eff", "#536dfe", "#64b5f6", "#1e88e5", "#b3e5fc", "#4fc3f7", "#00b0ff", "#4dd0e1", "#84ffff", "#80cbc4", "#1de9b6", "#00bfa5", "#66bb6a", "#69f0ae", "#00e676", "#c5e1a5", "#b2ff59", "#e6ee9c", "#f4ff81", "#fff59d", "#fdd835", "#fbc02d", "#f57f17", "#ffea00", "#ff6f00", "#ffab91", "#ff8a65", "#ff5722", "#bcaaa4", "#bcaaa4", "#cfd8dc", "#b0bec5", "#90a4ae", "#78909c"];
-		$scope.colorTiles = (function() {
-			var tiles = [];
-			var options = ['Grupos', 'Subgrupos', 'Marcas', 'Modelos', 'Caracteristicas', 'Responsables', 'Áreas', 'Usuarios']
-			for (var i = 0; i < options.length; i++) {
-			  tiles.push({
-			  	id: i,
-			    color: randomColor(tiles),
-			    option: options[i],
-			  });
-			}
-			return tiles;
-		})();
-
-		function randomColor(tiles) {
+		var randomColor = tiles => {
 			var c = COLORS[Math.floor(Math.random() * COLORS.length)];
 			if(tiles && tiles.length > 0)
 			{
@@ -31,10 +18,21 @@ angular.module('App')
 			else
 				return c;
 		}
+		$scope.colorTiles = (() => {
+			var tiles = [];
+			var options = ['Grupos', 'Subgrupos', 'Marcas', 'Modelos', 'Caracteristicas', 'Responsables', 'Áreas', 'Usuarios'];
+			for (var i = 0; i < options.length; i++) {
+			  tiles.push({
+			  	id: i,
+			    color: randomColor(tiles),
+			    option: options[i],
+			  });
+			}
+			return tiles;
+		})();
 
-		function randomSpan() {
-			return 1;
-		}
+		
+
 		$scope.open = opt => {
 			var controller = null, html_file = '';
 			switch(opt){
@@ -134,19 +132,106 @@ angular.module('App')
 			    	});
 			    }
 		    }
-		}, SubgruposController = ($scope, $mdDialog) => {
-			console.log('SubgruposController funciona bien');
+		}, SubgruposController = ($scope, $mdDialog, API, ToastService) => {
+			$scope.addmode = false;
+			$scope.nuevo_subgrupo = {};
+			if(localStorage.admin_token)
+    			$scope.admin = true;
+			API.all('subgrupo').getList().then(gr =>{
+				$scope.subgrupos = gr.plain();
+			});
+			API.all('grupo').getList().then(gr =>{
+				$scope.grupos = gr.plain();
+			});
+			$scope.millisec = date_str => new Date(date_str).getTime();
 		    $scope.hide = () => $mdDialog.hide();
 		    $scope.cancel = () => $mdDialog.cancel();
-		    $scope.confirm = () => {
-
+		    $scope.changemode = () => {
+				$scope.addmode = !$scope.addmode;
+				$scope.nuevo_subgrupo.subgrupo = "";
+				$scope.nuevo_subgrupo.grupo_id = null;
 		    }
-		}, MarcasController = ($scope, $mdDialog) => {
-			console.log('MarcasController funciona bien');
+		    $scope.cambioSubgrupo = () => {
+				if($scope.nuevo_subgrupo.subgrupo && $scope.nuevo_subgrupo.subgrupo.length > 0)
+					$scope.nuevo_subgrupo.subgrupo = $scope.nuevo_subgrupo.subgrupo.charAt(0).toUpperCase() + $scope.nuevo_subgrupo.subgrupo.slice(1);
+			};
+		    $scope.add = () => {
+		    	if(!$scope.nuevo_subgrupo.subgrupo)
+					return;
+				let newsubgroup = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token,
+			    		'subgrupo': $scope.nuevo_subgrupo.subgrupo,
+			    		'grupo_id': $scope.nuevo_subgrupo.grupo_id
+			    	}
+				API.all('subgrupo').post(newsubgroup).then(rs => {
+					$scope.subgrupos = rs.plain();
+		    		ToastService.show('Se ha agregado el subgrupo "'+ $scope.nuevo_subgrupo.subgrupo + '"');
+					$scope.changemode();
+				});
+		    }
+
+		    $scope.delete = (subgrupo) => {
+		    	if(subgrupo && subgrupo.id)
+		    	{
+			    	let prot = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token
+			    	}
+			    	API.one('subgrupo', subgrupo.id).remove(prot)
+			    	.then(res => {
+			    		$scope.subgrupos = res.plain();
+		    			ToastService.show('Se ha eliminado el subgrupo "'+ subgrupo.subgrupo + '"');
+			    	});
+			    }
+		    }
+		}, MarcasController = ($scope, $mdDialog, API, ToastService) => {
+			$scope.addmode = false;
+			$scope.nueva_marca = {};
+			if(localStorage.admin_token)
+    			$scope.admin = true;
+			API.all('marca').getList().then(gr =>{
+				$scope.marcas = gr.plain();
+			})
+			$scope.millisec = date_str => new Date(date_str).getTime();
 		    $scope.hide = () => $mdDialog.hide();
 		    $scope.cancel = () => $mdDialog.cancel();
-		    $scope.confirm = () => {
+		    $scope.changemode = () => {
+				$scope.addmode = !$scope.addmode;
+				$scope.nueva_marca.marca = "";
+		    }
+		    $scope.cambioMarca = () => {
+				if($scope.nueva_marca.marca && $scope.nueva_marca.marca.length > 0)
+					$scope.nueva_marca.marca = $scope.nueva_marca.marca.toUpperCase();
+			};
+		    $scope.add = () => {
+		    	if(!$scope.nueva_marca.marca)
+					return;
+				let newgroup = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token,
+			    		'marca': $scope.nueva_marca.marca.toUpperCase()
+			    	}
+				API.all('marca').post(newgroup).then(rs => {
+					$scope.marcas = rs.plain();
+		    		ToastService.show('Se ha agregado el marca "'+ $scope.nueva_marca.marca + '"');
+					$scope.changemode();
+				});
+		    }
 
+		    $scope.delete = (marca) => {
+		    	if(marca && marca.id)
+		    	{
+			    	let prot = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token
+			    	}
+			    	API.one('marca', marca.id).remove(prot)
+			    	.then(res => {
+			    		$scope.marcas = res.plain();
+		    			ToastService.show('Se ha eliminado el marca "'+ marca.marca + '"');
+			    	});
+			    }
 		    }
 		}, ModelosController = ($scope, $mdDialog) => {
 			console.log('ModelosController funciona bien');
@@ -203,12 +288,57 @@ angular.module('App')
 			    	});
 			    }
 		    }
-		}, ResponsablesController = ($scope, $mdDialog) => {
-			console.log('ResponsablesController funciona bien');
+		}, ResponsablesController = ($scope, $mdDialog, API, ToastService) => {
+			$scope.addmode = false;
+			$scope.nuevo_responsable = {};
+			if(localStorage.admin_token)
+    			$scope.admin = true;
+			API.all('responsable').getList().then(gr =>{
+				$scope.responsables = gr.plain();
+			});
+			API.all('oficialia').getList().then(gr =>{
+				$scope.oficialias = gr.plain();
+			});
 		    $scope.hide = () => $mdDialog.hide();
 		    $scope.cancel = () => $mdDialog.cancel();
-		    $scope.confirm = () => {
+		    $scope.changemode = () => {
+				$scope.addmode = !$scope.addmode;
+				$scope.nuevo_responsable.responsable = "";
+				$scope.nuevo_responsable.oficialia_id = null;
+		    }
+		    $scope.cambioResponsable = () => {
+				if($scope.nuevo_responsable.responsable && $scope.nuevo_responsable.responsable.length > 0)
+					$scope.nuevo_responsable.responsable = $scope.nuevo_responsable.responsable.charAt(0).toUpperCase() + $scope.nuevo_responsable.responsable.slice(1);
+			};
+		    $scope.add = () => {
+		    	if(!$scope.nuevo_responsable.responsable)
+					return;
+				let newsubgroup = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token,
+			    		'responsable': $scope.nuevo_responsable.responsable,
+			    		'oficialia_id': $scope.nuevo_responsable.oficialia_id
+			    	}
+				API.all('responsable').post(newsubgroup).then(rs => {
+					$scope.responsables = rs.plain();
+		    		ToastService.show('Se ha agregado el responsable "'+ $scope.nuevo_responsable.responsable + '"');
+					$scope.changemode();
+				});
+		    }
 
+		    $scope.delete = (responsable) => {
+		    	if(responsable && responsable.id)
+		    	{
+			    	let prot = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token
+			    	}
+			    	API.one('responsable', responsable.id).remove(prot)
+			    	.then(res => {
+			    		$scope.responsables = res.plain();
+		    			ToastService.show('Se ha eliminado el responsable "'+ responsable.responsable + '"');
+			    	});
+			    }
 		    }
 		}, AreasController = ($scope, $mdDialog, API, ToastService) => {
 			$scope.addmode = false;
