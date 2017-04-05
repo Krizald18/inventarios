@@ -1,6 +1,6 @@
 'use strict';
 angular.module('App')
-	.controller('RegisterCtrl', function ($scope, ToastService, $auth) {
+	.controller('RegisterCtrl', ['$scope', 'ToastService', '$auth', function ($scope, ToastService, $auth) {
 		if($auth.isAuthenticated())
 			window.location = '/';
 		$scope.nombre = '';
@@ -39,4 +39,4 @@ angular.module('App')
 			}
 			ToastService.error(response.statusText);
 		}
-	});
+	}]);

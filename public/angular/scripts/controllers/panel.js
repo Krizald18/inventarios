@@ -1,6 +1,6 @@
 'use strict';
 angular.module('App')
-	.controller('PanelCtrl', function ($scope, $mdDialog) {
+	.controller('PanelCtrl', ['$scope', '$mdDialog', function ($scope, $mdDialog) {
 		var COLORS = ["#f44336", "#ff1744", "#d50000", "#ff4081", "#ba68c8", "#d1c4e9", "#7c4dff", "#5c6bc0", "#8c9eff", "#536dfe", "#64b5f6", "#1e88e5", "#b3e5fc", "#4fc3f7", "#00b0ff", "#4dd0e1", "#84ffff", "#80cbc4", "#1de9b6", "#00bfa5", "#66bb6a", "#69f0ae", "#00e676", "#c5e1a5", "#b2ff59", "#e6ee9c", "#f4ff81", "#fff59d", "#fdd835", "#fbc02d", "#f57f17", "#ffea00", "#ff6f00", "#ffab91", "#ff8a65", "#ff5722", "#bcaaa4", "#bcaaa4", "#cfd8dc", "#b0bec5", "#90a4ae", "#78909c"];
 		var randomColor = tiles => {
 			var c = COLORS[Math.floor(Math.random() * COLORS.length)];
@@ -122,7 +122,7 @@ angular.module('App')
 				});
 		    }
 
-		    $scope.delete = (grupo) => {
+		    $scope.delete = grupo => {
 		    	if(grupo && grupo.id)
 		    	{
 			    	let prot = {
@@ -179,7 +179,7 @@ angular.module('App')
 				});
 		    }
 
-		    $scope.delete = (subgrupo) => {
+		    $scope.delete = subgrupo => {
 		    	if(subgrupo && subgrupo.id)
 		    	{
 			    	let prot = {
@@ -231,7 +231,7 @@ angular.module('App')
 				});
 		    }
 
-		    $scope.delete = (marca) => {
+		    $scope.delete = marca => {
 		    	if(marca && marca.id)
 		    	{
 			    	let prot = {
@@ -322,7 +322,7 @@ angular.module('App')
 				});
 		    }
 
-		    $scope.delete = (modelo) => {
+		    $scope.delete = modelo => {
 		    	if(modelo && modelo.id)
 		    	{
 			    	let prot = {
@@ -374,7 +374,7 @@ angular.module('App')
 				});
 		    }
 
-		    $scope.delete = (caracteristica) => {
+		    $scope.delete = caracteristica => {
 		    	if(caracteristica && caracteristica.id)
 		    	{
 			    	let prot = {
@@ -430,7 +430,7 @@ angular.module('App')
 				});
 		    }
 
-		    $scope.delete = (responsable) => {
+		    $scope.delete = responsable => {
 		    	if(responsable && responsable.id)
 		    	{
 			    	let prot = {
@@ -482,7 +482,7 @@ angular.module('App')
 				});
 		    }
 
-		    $scope.delete = (area) => {
+		    $scope.delete = area => {
 		    	if(area && area.id)
 		    	{
 			    	let prot = {
@@ -496,7 +496,7 @@ angular.module('App')
 			    	});
 			    }
 		    }
-		}, UsuariosController = ($scope, $mdDialog) => {
+		}, UsuariosController = ($scope, $mdDialog, API, ToastService) => {
 			console.log('UsuariosController funciona bien');
 		    $scope.hide = () => $mdDialog.hide();
 		    $scope.cancel = () => $mdDialog.cancel();
@@ -504,4 +504,12 @@ angular.module('App')
 
 		    }
 		};
-	});
+		GruposController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
+		SubgruposController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
+		MarcasController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
+		ModelosController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
+		CaracteristicasController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
+		ResponsablesController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
+		AreasController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
+		UsuariosController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
+	}]);

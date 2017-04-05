@@ -1,8 +1,8 @@
 angular.module('app.config')
-	.config(function($qProvider) {
+	.config(['$qProvider', function($qProvider) {
 		$qProvider.errorOnUnhandledRejections(false);
-	})
-	.config(function($authProvider) {
+	}])
+	.config(['$authProvider', function($authProvider) {
 		'ngInject';
 		$authProvider.httpInterceptor = function() {
 			return true;
@@ -10,8 +10,8 @@ angular.module('app.config')
 		$authProvider.loginUrl = '/api/auth/login';
 		$authProvider.signupUrl = '/api/auth/register';
 		$authProvider.tokenRoot = 'data';//compensates success response macro
-	})
-	.config(function($routeProvider, $locationProvider) {
+	}])
+	.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 		$locationProvider.hashPrefix('');
 		$routeProvider
 			.when('/', {
@@ -62,8 +62,8 @@ angular.module('app.config')
 			.otherwise({
 				redirectTo: '/'
 			});
-	})
-	.config(function($middlewareProvider) {
+	}])
+	.config(['$middlewareProvider', function($middlewareProvider) {
 		$middlewareProvider.map({
 			/* Redirect if not authenticated // validate token structure */
 			'AuthenticatedOnly': function isAuthenticated($window) {
@@ -120,9 +120,9 @@ angular.module('app.config')
 				this.next();
 			}
 		});
-	}).config(function($mdThemingProvider) {
+	}]).config(['$mdThemingProvider', function($mdThemingProvider) {
 
-	}).directive('ngEnter', function () {
+	}]).directive('ngEnter', function () {
 		return function (scope, element, attrs) {
 			element.bind("keydown keypress", function (event) {
 				if(event.which === 13) {

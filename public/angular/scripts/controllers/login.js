@@ -1,5 +1,5 @@
 'use strict';
-angular.module('App').controller('LoginCtrl', function ($scope, $auth, ToastService, API) {
+angular.module('App').controller('LoginCtrl', ['$scope', '$auth', 'ToastService', 'API', function ($scope, $auth, ToastService, API) {
 	if($auth.isAuthenticated())
 		window.location = '/';
     $scope.username = '';
@@ -39,4 +39,4 @@ angular.module('App').controller('LoginCtrl', function ($scope, $auth, ToastServ
 		}
 		ToastService.error(response.statusText);
 	}
-});
+}]);

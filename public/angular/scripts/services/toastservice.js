@@ -34,4 +34,4 @@ class ToastService {
 }
 
 angular.module('App')
-	.service('ToastService', ToastService);
+	.service('ToastService', ['$mdToast', ToastService]);

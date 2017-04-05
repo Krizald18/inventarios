@@ -1,5 +1,5 @@
 'use strict';
-angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertService, ToastService) {	
+angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService', 'ToastService', function (API, $scope, AlertService, ToastService) {	
 	$scope.selected = [];
 	$scope.loading = true;
 	$scope.project = {};
@@ -683,4 +683,4 @@ angular.module('App').controller('AgregarCtrl', function (API, $scope, AlertServ
 				AlertService.error("El Número de inventario y El Número de serie proporcionados ya existen en el sistema, ingrese otros números");
 		});
 	};
-});
+}]);

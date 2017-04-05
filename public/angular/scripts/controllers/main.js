@@ -1,5 +1,5 @@
 'use strict';
-angular.module('App').controller('MainCtrl',  function($scope, $auth) {
+angular.module('App').controller('MainCtrl', ['$scope', '$auth', function($scope, $auth) {
 	$scope.refreshbodyheight = () => {
 		var body = document.body,
 		    html = document.documentElement;
@@ -25,4 +25,4 @@ angular.module('App').controller('MainCtrl',  function($scope, $auth) {
 	setTimeout(() => {
 		$scope.refreshbodyheight();
 	}, 1500);
-});
+}]);

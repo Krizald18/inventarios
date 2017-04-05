@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-	.service('API', function (Restangular, ToastService, $window) {
+	.service('API', ['Restangular', 'ToastService', '$window', function (Restangular, ToastService, $window) {
 		let headers = {
 			'Content-Type': 'application/json',
 			'Accept': 'application/x.laravel.v1+json'
@@ -40,4 +40,4 @@ angular.module('App')
 					}
 				});
 		});
-});
+}]);

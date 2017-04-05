@@ -1,5 +1,5 @@
 angular.module('App')
-	.controller('SidebarCtrl', function ($scope, $auth) {
+	.controller('SidebarCtrl', ['$scope', '$auth', function ($scope, $auth) {
 		if(localStorage.admin_token)
 	    	$scope.admin = true;
 	    else
@@ -26,4 +26,4 @@ angular.module('App')
 			localStorage.removeItem('user');
 			location.reload();
 		}
-	});
+	}]);

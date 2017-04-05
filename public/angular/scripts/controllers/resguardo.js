@@ -1,6 +1,7 @@
 'use strict';
 angular.module('App')
-	.controller('ResguardoCtrl', function ($scope, $mdDialog, $timeout, $window, $q, API, FileUploader, AlertService) {
+	.controller('ResguardoCtrl', ['$scope', '$mdDialog', '$timeout', '$window', '$q', 'API', 'FileUploader', 'AlertService', 
+		function ($scope, $mdDialog, $timeout, $window, $q, API, FileUploader, AlertService) {
 	    // list of `state` value/display objects
 	    if(localStorage.admin_token)
     		$scope.admin = true;
@@ -509,4 +510,7 @@ angular.module('App')
 				document.body.removeChild(link);
 			}
 		}
-	});
+		DialogController.$inject = ['$scope', '$mdDialog'];
+		TransferirController.$inject = ['$scope', '$mdDialog', 'API'];
+		BajarEvidenciasController.$inject = ['$scope', '$mdDialog', 'API'];
+	}]);

@@ -39,4 +39,4 @@ class AlertService {
 }
 
 angular.module('App')
-	.service('AlertService', AlertService);
+	.service('AlertService', ['$mdDialog', AlertService]);;
