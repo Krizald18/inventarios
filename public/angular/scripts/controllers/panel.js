@@ -477,7 +477,7 @@ angular.module('App')
 			    	}
 				API.all('area').post(newgroup).then(rs => {
 					$scope.areas = rs.plain();
-		    		ToastService.show('Se ha agregado el area "'+ $scope.nueva_area.area + '"');
+		    		ToastService.show('Se ha agregado el área "'+ $scope.nueva_area.area + '"');
 					$scope.changemode();
 				});
 		    }
@@ -492,16 +492,55 @@ angular.module('App')
 			    	API.one('area', area.id).remove(prot)
 			    	.then(res => {
 			    		$scope.areas = res.plain();
-		    			ToastService.show('Se ha eliminado el area "'+ area.area + '"');
+		    			ToastService.show('Se ha eliminado el área "'+ area.area + '"');
 			    	});
 			    }
 		    }
 		}, UsuariosController = ($scope, $mdDialog, API, ToastService) => {
-			console.log('UsuariosController funciona bien');
+			$scope.loading = true;
+			$scope.addmode = false;
+			$scope.nueva_area = {};
+			if(localStorage.admin_token)
+    			$scope.admin = true;
+    		let prot = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token
+			    	}
+			API.all('user').getList(prot).then(gr =>{
+				$scope.usuarios = gr.plain();
+				$scope.loading = false;
+			})
+			$scope.millisec = date_str => new Date(date_str).getTime();
 		    $scope.hide = () => $mdDialog.hide();
 		    $scope.cancel = () => $mdDialog.cancel();
-		    $scope.confirm = () => {
-
+		    $scope.changemode = () => {
+				$scope.addmode = !$scope.addmode;
+				$scope.loading = false;
+		    }
+		    $scope.setResponsable = () => {
+		    	
+		    };
+		    $scope.setAdmin = () => {
+		    	
+		    };
+		    $scope.removeAdmin = () => {
+		    	
+		    };
+		    $scope.delete = usuario => {
+		    	
+		    	return;
+		    	if(usuario && usuario.id)
+		    	{
+			    	let prot = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token
+			    	}
+			    	API.one('usuario', usuario.id).remove(prot)
+			    	.then(res => {
+			    		$scope.usuarios = res.plain();
+		    			ToastService.show('Se ha eliminado el usuario "'+ usuario.nombre + '"');
+			    	});
+			    }
 		    }
 		};
 		GruposController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];

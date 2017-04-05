@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
+use Response;
 
 class UserController extends Controller
 {
@@ -10,16 +11,48 @@ class UserController extends Controller
     {
         $this->middleware(['cors', 'auth:api']);
     }
-    public function allUsers()
+    public function allUsers(Request $request)
     {
-        return User::orderBy('nombre', 'asc')->get();
+        // validar admin_token y user
+        // recive user (id) y admin_token
+        if(!$request->has('user') || !$request->has('admin_token'))
+            return Response::json($request, 500);
+        $u = User::with('admin')->find($request->user);
+
+        if($u->admin->token <> $request->admin_token)
+            return Response::json($request, 500);
+        return User::with('responsable')
+                   ->with(array('responsable' => function($q){
+                        $q->with('articulos_asignados');
+                    }))
+                   ->orderBy('nombre', 'asc')->get();
     }
-    public function getUser($id)
+    public function getUser(Request $request, $id)
     {
-        return User::find($id);
+        // validar admin_token y user
+        // recive un id de un id, user (id) y admin_token
+        if(!$request->has('user') || !$request->has('admin_token'))
+            return Response::json($request, 500);
+        $u = User::with('admin')->find($request->user);
+
+        if($u->admin->token <> $request->admin_token)
+            return Response::json($request, 500);
+        return User::with(array('responsable' => function($q){
+                                $q->with('articulos_asignados');
+                            }))->find($id);
     }
-    public function index()
+    public function index(Request $request)
     {
-        return User::all();
+        // validar admin_token y user
+        // recive user (id) y admin_token
+        if(!$request->has('user') || !$request->has('admin_token'))
+            return Response::json($request, 500);
+        $u = User::with('admin')->find($request->user);
+
+        if($u->admin->token <> $request->admin_token)
+            return Response::json($request, 500);
+        return User::with(array('responsable' => function($q){
+                                $q->with('articulos_asignados');
+                            }))->get();
     }
 }

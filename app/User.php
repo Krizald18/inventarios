@@ -14,7 +14,7 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     protected $hidden = [
-        'username', 'password', 'remember_token', 'created_at', 'updated_at', 'pivot'
+        'password', 'remember_token', 'created_at', 'updated_at', 'pivot'
     ];
 
     public function getJWTIdentifier()
@@ -33,5 +33,9 @@ class User extends Authenticatable implements JWTSubject
     public function admin()
     {        
         return $this->hasOne('App\Admin');
+    }
+    public function responsable()
+    {        
+        return $this->belongsTo('App\Responsable', 'id', 'usuario_id');
     }
 }

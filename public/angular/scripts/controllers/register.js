@@ -7,7 +7,10 @@ angular.module('App')
 		$scope.username = '';
 		$scope.email = '';
 		$scope.password = '';
-	
+		$scope.$watch('nombre', n => {
+			if($scope.nombre)
+				$scope.nombre = n.charAt(0).toUpperCase() + n.slice(1);
+		})
 		$scope.register = () => {
 			let user = {
 				nombre: $scope.nombre,

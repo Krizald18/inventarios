@@ -23,14 +23,13 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->only('username', 'password');
-
         try {
             // verify the credentials and create a token for the user
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->error('Invalid credentials', 401);
+                return response()->error('Credenciales invalidas', 401);
             }
         } catch (\JWTException $e) {
-            return response()->error('Could not create token', 500);
+            return response()->error('Error al crear token', 500);
         }
 
         $user = User::with('admin')->find(Auth::user()->id);

@@ -27,16 +27,13 @@ angular.module('App').controller('LoginCtrl', ['$scope', '$auth', 'ToastService'
 				else
 					window.location = '/';
 				ToastService.show('Sesión iniciada');
-			})
-			.catch($scope.failedLogin.bind());
+			}, response => {
+				$scope.failedLogin(response);
+			}).catch($scope.failedLogin.bind());
 	}
 
 	$scope.failedLogin = response => {
-		if (response.status === 422) {
-			for (let error in response.data.errors) {
-				return ToastService.error(response.data.errors[error][0]);
-			}
-		}
-		ToastService.error(response.statusText);
+		if([401,422].indexOf(response.status) !== -1)
+			return ToastService.error(response.data.errors.message[0]);
 	}
 }]);

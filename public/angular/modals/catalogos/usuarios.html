@@ -1,0 +1,93 @@
+<style type="text/css">
+  button.md-raised.md-button{
+    line-height: 27px !important;
+    margin: 0px 0px !important;
+    min-height: 25px !important;
+  }
+  th.danger.md-column.ng-isolate-scope{
+    color:#f97070; 
+    padding-right: 10px;
+    height: 15px;
+    width: 100px;
+  }
+</style>
+<md-dialog aria-label="Baja">
+  <form ng-cloak name="projectForm">
+    <md-toolbar>
+      <div class="md-toolbar-tools" style="background-color: white; color: rgba(0,0,0,0.87);">
+        <h4 style="margin-top: 25px;margin-left: 20px;">{{addmode? 'Agregar usuario': 'Usuarios'}}</h4>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+        <md-progress-circular md-mode="indeterminate" ng-if="loading"></md-progress-circular>
+      </div>
+    </md-toolbar>
+    <md-dialog-content style="min-height: 200px; min-width: 700px;">
+      <div class="md-dialog-content" style="margin: -30px 20px 0 20px;">
+        <div layout="row" ng-if="!addmode" style="width: 953px;">
+          <md-table-container>
+          <table md-table style="width: 935px;">
+            <thead md-head>
+              <tr md-row>
+                <th md-column>Usuario</th>
+                <th md-column>Nombre</th>
+                <th md-column>Correo</th>
+                <th md-column>Responsable</th>
+                <th md-column>Artículos</th>
+                <th md-column class="danger">Admin</th>
+                <th md-column class="danger">Eliminar</th>
+              </tr>
+            </thead>
+            <tbody md-body>
+              <tr md-row md-select="usuario" md-select-id="name" ng-repeat="usuario in usuarios">
+                <td md-cell style="width: 130px;">
+                  <span>
+                    <i ng-if="usuario.perfil_id == 1" class="fa fa-bolt fa-fw" aria-hidden="true" style="left:3px;width: 5px;"></i>
+                    <span ng-if="usuario.perfil_id == 1" style="left:4px;position: relative;top: -5px;">&nbsp;{{usuario.username}}</span>
+                    <i ng-if="usuario.perfil_id != 1" class="fa fa-user fa-fw" aria-hidden="true" style="width: 5px;"></i>
+                    <span ng-if="usuario.perfil_id != 1" style="position: relative;top:-5px;">&nbsp;{{usuario.username}}</span>
+                  </span>
+                </td>
+                <td md-cell>{{usuario.nombre}}</td>
+                <td md-cell>{{usuario.email}}</td>
+                <td md-cell>
+                  <md-button ng-if="!usuario.responsable" type="submit" aria-label="agregar" class="md-raised" ng-click="setResponsable();">Asignar <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                  </md-button>
+                  {{usuario.responsable? usuario.responsable.responsable:''}}</td>
+                <td md-cell>{{usuario.responsable.articulos_asignados? usuario.responsable.articulos_asignados.length : 0}}</td>
+                <td md-cell>
+                  <md-button ng-if="usuario.perfil_id == 1" class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); setAdmin(usuario);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                  </md-button>
+                  <md-button ng-if="usuario.perfil_id != 1" class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); removeAdmin(usuario);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin">
+                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                  </md-button>
+                </td>
+                <td md-cell>
+                  <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(usuario);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin || usuario.responsable && usuario.responsable.articulos_asignados.length > 0">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                  </md-button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          </md-table-container>
+        </div>
+        <div layout="row" ng-if="addmode" style="margin-top:25px;width: 700px;">
+          
+        </div>
+        <br>
+      </div>      
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Cancelar
+      </md-button>
+      <md-button ng-click="changemode()" disabled>
+        {{addmode? 'Atras': 'Agregar'}}
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

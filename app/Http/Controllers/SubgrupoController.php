@@ -22,7 +22,7 @@ class SubgrupoController extends Controller
                     ->orderBy('subgrupo', 'asc')->get();
         }
         else
-            return Subgrupo::with('grupo', 'marcas')->get();
+            return Subgrupo::with('grupo', 'marcas')->orderBy('subgrupo', 'asc')->get();
     }
 
     public function create()
