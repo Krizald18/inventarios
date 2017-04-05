@@ -1,13 +1,19 @@
 <md-dialog aria-label="Baja">
   <form ng-cloak name="projectForm">
-    <md-dialog-content style="min-height: 300px; width: 800px;">
-      <div class="md-dialog-content">
-        <h4>{{addmode? 'Agregar subgrupo': 'Subgrupos'}}</h4>
+    <md-toolbar>
+      <div class="md-toolbar-tools" style="background-color: white; color: rgba(0,0,0,0.87);">
+        <h4 style="margin-top: 25px;margin-left: 20px;">{{addmode? 'Agregar subgrupo': 'Subgrupos'}}</h4>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
       </div>
-      <div class="md-dialog-content" style="margin: -40px 20px 0 20px; width: 695px;">
+    </md-toolbar>
+    <md-dialog-content style="min-height: 200px; width: 800px;">
+      <div class="md-dialog-content" style="margin: -30px 20px 0 20px; width: 760px;">
         <div layout="row">
           <md-table-container ng-if="!addmode">
-          <table md-table>
+          <table md-table style="width: 705px;">
             <thead md-head>
               <tr md-row>
                 <th md-column>Subgrupo</th>
@@ -33,7 +39,7 @@
           </table>
           </md-table-container>
         </div>
-        <div layout="row" ng-if="addmode">
+        <div layout="row" ng-if="addmode" style="margin-top: 20px;">
           <md-input-container flex="50" class="md-block">
             <label>Subgrupo</label>
             <input name="subgrupo" type="text" md-maxlength="50" md-no-asterisk="" ng-model="nuevo_subgrupo.subgrupo" ng-change="cambioSubgrupo()" required>
