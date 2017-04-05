@@ -7,6 +7,7 @@
         <md-button class="md-icon-button" ng-click="cancel()">
           <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
         </md-button>
+        <md-progress-circular md-mode="indeterminate" ng-if="loading"></md-progress-circular>
       </div>
     </md-toolbar>
     <md-dialog-content style="min-height: 200px; min-width: 700px;">

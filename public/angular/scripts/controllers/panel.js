@@ -89,12 +89,14 @@ angular.module('App')
 		    });
 		}
 		var GruposController = ($scope, $mdDialog, API, ToastService) => {
+			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nuevo_grupo = {};
 			if(localStorage.admin_token)
     			$scope.admin = true;
 			API.all('grupo').getList().then(gr =>{
 				$scope.grupos = gr.plain();
+				$scope.loading = false;
 			})
 			$scope.millisec = date_str => new Date(date_str).getTime();
 		    $scope.hide = () => $mdDialog.hide();
@@ -102,10 +104,12 @@ angular.module('App')
 		    $scope.changemode = () => {
 				$scope.addmode = !$scope.addmode;
 				$scope.nuevo_grupo.grupo = "";
+				$scope.loading = false;
 		    }
 		    $scope.add = () => {
 		    	if(!$scope.nuevo_grupo.grupo)
 					return;
+				$scope.loading = true;
 				let newgroup = {
 			    		'user': localStorage.user,
 			    		'admin_token' : localStorage.admin_token,
@@ -133,12 +137,14 @@ angular.module('App')
 			    }
 		    }
 		}, SubgruposController = ($scope, $mdDialog, API, ToastService) => {
+			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nuevo_subgrupo = {};
 			if(localStorage.admin_token)
     			$scope.admin = true;
 			API.all('subgrupo').getList().then(gr =>{
 				$scope.subgrupos = gr.plain();
+				$scope.loading = false;
 			});
 			API.all('grupo').getList().then(gr =>{
 				$scope.grupos = gr.plain();
@@ -150,6 +156,7 @@ angular.module('App')
 				$scope.addmode = !$scope.addmode;
 				$scope.nuevo_subgrupo.subgrupo = "";
 				$scope.nuevo_subgrupo.grupo_id = null;
+				$scope.loading = false;
 		    }
 		    $scope.cambioSubgrupo = () => {
 				if($scope.nuevo_subgrupo.subgrupo && $scope.nuevo_subgrupo.subgrupo.length > 0)
@@ -158,6 +165,7 @@ angular.module('App')
 		    $scope.add = () => {
 		    	if(!$scope.nuevo_subgrupo.subgrupo)
 					return;
+				$scope.loading = true;
 				let newsubgroup = {
 			    		'user': localStorage.user,
 			    		'admin_token' : localStorage.admin_token,
@@ -186,12 +194,14 @@ angular.module('App')
 			    }
 		    }
 		}, MarcasController = ($scope, $mdDialog, API, ToastService) => {
+			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nueva_marca = {};
 			if(localStorage.admin_token)
     			$scope.admin = true;
 			API.all('marca').getList().then(gr =>{
 				$scope.marcas = gr.plain();
+				$scope.loading = false;
 			})
 			$scope.millisec = date_str => new Date(date_str).getTime();
 		    $scope.hide = () => $mdDialog.hide();
@@ -199,6 +209,7 @@ angular.module('App')
 		    $scope.changemode = () => {
 				$scope.addmode = !$scope.addmode;
 				$scope.nueva_marca.marca = "";
+				$scope.loading = false;
 		    }
 		    $scope.cambioMarca = () => {
 				if($scope.nueva_marca.marca && $scope.nueva_marca.marca.length > 0)
@@ -207,6 +218,7 @@ angular.module('App')
 		    $scope.add = () => {
 		    	if(!$scope.nueva_marca.marca)
 					return;
+				$scope.loading = true;
 				let newgroup = {
 			    		'user': localStorage.user,
 			    		'admin_token' : localStorage.admin_token,
@@ -234,12 +246,14 @@ angular.module('App')
 			    }
 		    }
 		}, ModelosController = ($scope, $mdDialog, API, ToastService) => {
+			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nuevo_modelo = {};
 			if(localStorage.admin_token)
     			$scope.admin = true;
 			API.all('modelo?articulos=true').getList().then(gr =>{
 				$scope.modelos = gr.plain();
+				$scope.loading = false;
 			});
 			API.all('subgrupo').getList().then(gr =>{
 				$scope.subgrupos = gr.plain();
@@ -260,6 +274,7 @@ angular.module('App')
 				$scope.nuevo_modelo.subgrupo_id = null;
 				$scope.nuevo_modelo.marca_id = null;
 				$scope.nuevo_modelo.caracteristica_id = null;
+				$scope.loading = false;
 		    }
 		    $scope.cambioModelo = () => {
 				if($scope.nuevo_modelo.modelo && $scope.nuevo_modelo.modelo.length > 0)
@@ -291,6 +306,7 @@ angular.module('App')
 		    $scope.add = () => {
 		    	if(!$scope.nuevo_modelo.modelo)
 					return;
+				$scope.loading = true;
 				let newsubgroup = {
 			    		'user': localStorage.user,
 			    		'admin_token' : localStorage.admin_token,
@@ -321,12 +337,14 @@ angular.module('App')
 			    }
 		    }
 		}, CaracteristicasController = ($scope, $mdDialog, API, ToastService) => {
+			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nueva_caracteristica = {};
 			if(localStorage.admin_token)
     			$scope.admin = true;
 			API.all('caracteristica').getList().then(gr =>{
 				$scope.caracteristicas = gr.plain();
+				$scope.loading = false;
 			})
 			$scope.millisec = date_str => new Date(date_str).getTime();
 		    $scope.hide = () => $mdDialog.hide();
@@ -334,6 +352,7 @@ angular.module('App')
 		    $scope.changemode = () => {
 				$scope.addmode = !$scope.addmode;
 				$scope.nueva_caracteristica.caracteristica = "";
+				$scope.loading = false;
 		    }
 		    $scope.cambioCaracteristica = () => {
 				if($scope.nueva_caracteristica.caracteristica && $scope.nueva_caracteristica.caracteristica.length > 0)
@@ -342,6 +361,7 @@ angular.module('App')
 		    $scope.add = () => {
 		    	if(!$scope.nueva_caracteristica.caracteristica)
 					return;
+				$scope.loading = true;
 				let newgroup = {
 			    		'user': localStorage.user,
 			    		'admin_token' : localStorage.admin_token,
@@ -369,12 +389,14 @@ angular.module('App')
 			    }
 		    }
 		}, ResponsablesController = ($scope, $mdDialog, API, ToastService) => {
+			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nuevo_responsable = {};
 			if(localStorage.admin_token)
     			$scope.admin = true;
 			API.all('responsable').getList().then(gr =>{
 				$scope.responsables = gr.plain();
+				$scope.loading = false;
 			});
 			API.all('oficialia').getList().then(gr =>{
 				$scope.oficialias = gr.plain();
@@ -385,6 +407,7 @@ angular.module('App')
 				$scope.addmode = !$scope.addmode;
 				$scope.nuevo_responsable.responsable = "";
 				$scope.nuevo_responsable.oficialia_id = null;
+				$scope.loading = false;
 		    }
 		    $scope.cambioResponsable = () => {
 				if($scope.nuevo_responsable.responsable && $scope.nuevo_responsable.responsable.length > 0)
@@ -393,6 +416,7 @@ angular.module('App')
 		    $scope.add = () => {
 		    	if(!$scope.nuevo_responsable.responsable)
 					return;
+				$scope.loading = true;
 				let newsubgroup = {
 			    		'user': localStorage.user,
 			    		'admin_token' : localStorage.admin_token,
@@ -421,12 +445,14 @@ angular.module('App')
 			    }
 		    }
 		}, AreasController = ($scope, $mdDialog, API, ToastService) => {
+			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nueva_area = {};
 			if(localStorage.admin_token)
     			$scope.admin = true;
 			API.all('area').getList().then(gr =>{
 				$scope.areas = gr.plain();
+				$scope.loading = false;
 			})
 			$scope.millisec = date_str => new Date(date_str).getTime();
 		    $scope.hide = () => $mdDialog.hide();
@@ -434,6 +460,7 @@ angular.module('App')
 		    $scope.changemode = () => {
 				$scope.addmode = !$scope.addmode;
 				$scope.nueva_area.area = "";
+				$scope.loading = false;
 		    }
 		    $scope.cambioArea = () => {
 				if($scope.nueva_area.area && $scope.nueva_area.area.length > 0)
@@ -442,6 +469,7 @@ angular.module('App')
 		    $scope.add = () => {
 		    	if(!$scope.nueva_area.area)
 					return;
+				$scope.loading = true;
 				let newgroup = {
 			    		'user': localStorage.user,
 			    		'admin_token' : localStorage.admin_token,

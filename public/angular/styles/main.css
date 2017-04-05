@@ -196,3 +196,10 @@ body {
 .tabsdemoStaticTabs .after-tabs-area > md-checkbox {
   margin-top: 26px;
   margin-left: 0; }
+
+md-progress-circular.ng-scope.ng-isolate-scope.md-mode-indeterminate svg {
+  height: 30px !important;
+  margin-top: 15px;
+  transform-origin: 50% 50% 0 !important;
+  width: 30px !important;
+}
