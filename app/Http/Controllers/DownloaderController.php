@@ -15,8 +15,10 @@ class DownloaderController extends Controller
     }
     public function donwloadFile(Request $request, $id)
     {
-    	if(!$request->has('type'))
-    		return 'sin tipo';
+    	$this->validate($request, [
+            'type' => 'required',
+        ]);
+
         if($request->type == 'resguardo')
         {
             // id es id de evidencia

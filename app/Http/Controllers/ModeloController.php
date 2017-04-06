@@ -31,19 +31,18 @@ class ModeloController extends Controller
     {
         // validar admin_token y user
         // recive un id de un modelo, user (id) y  admin_token
-        if(!$request->has('user') || !$request->has('admin_token'))
-            return Response::json($request, 500);
-        $u = User::with('admin')->find($request->user);
-
-        if($u->admin->token <> $request->admin_token)
-            return Response::json($request, 500);
-
         $this->validate($request, [
+            'user' => 'required',
+            'admin_token' => 'required',
             'subgrupo_id' => 'required',
             'marca_id' => 'required',
             'caracteristica_id' => 'required',
             'modelo' => 'required|unique_with:modelos,caracteristica_id,'.$request->caracteristica_id,
         ]);
+
+        $u = User::with('admin')->find($request->user);
+        if($u->admin->token <> $request->admin_token)
+            return Response::json($request, 500);
 
         // ----------------checar si la marca esta asociada a ese subgrupo ---------------------
         $m = Marca::with('subgrupos')->whereHas('subgrupos', function($q) use ($request) {
@@ -116,10 +115,12 @@ class ModeloController extends Controller
     {
         // validar admin_token y user
         // recive un id de un modelo, user (id) y  admin_token
-        if(!$request->has('user') || !$request->has('admin_token'))
-            return Response::json($request, 500);
-        $u = User::with('admin')->find($request->user);
+        $this->validate($request, [
+            'user' => 'required',
+            'admin_token' => 'required',
+        ]);
 
+        $u = User::with('admin')->find($request->user);
         if($u->admin->token <> $request->admin_token)
             return Response::json($request, 500);
 

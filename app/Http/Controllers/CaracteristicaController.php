@@ -26,16 +26,15 @@ class CaracteristicaController extends Controller
     {
         // validar admin_token y user
         // recive un id de un caracteristica, user (id) y  admin_token
-        if(!$request->has('user') || !$request->has('admin_token'))
-            return Response::json($request, 500);
-        $u = User::with('admin')->find($request->user);
-
-        if($u->admin->token <> $request->admin_token)
-            return Response::json($request, 500);
-
         $this->validate($request, [
+            'user' => 'required',
+            'admin_token' => 'required',
             'caracteristica' => 'required|unique:caracteristicas',
         ]);
+
+        $u = User::with('admin')->find($request->user);
+        if($u->admin->token <> $request->admin_token)
+            return Response::json($request, 500);
 
         $nextid = \DB::table('caracteristicas')->max('id');
         if(isset($nextid))
@@ -93,10 +92,12 @@ class CaracteristicaController extends Controller
     {
         // validar admin_token y user
         // recive un id de un caracteristica, user (id) y  admin_token
-        if(!$request->has('user') || !$request->has('admin_token'))
-            return Response::json($request, 500);
-        $u = User::with('admin')->find($request->user);
+        $this->validate($request, [
+            'user' => 'required',
+            'admin_token' => 'required',
+        ]);
 
+        $u = User::with('admin')->find($request->user);
         if($u->admin->token <> $request->admin_token)
             return Response::json($request, 500);
 
