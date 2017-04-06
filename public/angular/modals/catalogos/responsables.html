@@ -29,7 +29,7 @@
                 <td md-cell>{{responsable.oficialia.oficialia}}</td>
                 <td md-cell>{{responsable.articulos_asignados.length}}</td>
                 <td md-cell>
-                  <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(responsable);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin || responsable.articulos_asignados.length > 0">
+                  <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(responsable);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin || responsable.articulos_asignados.length > 0 || responsable.id == 244">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                   </md-button>
                 </td>

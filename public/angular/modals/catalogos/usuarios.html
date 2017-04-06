@@ -25,16 +25,16 @@
     </md-toolbar>
     <md-dialog-content style="min-height: 200px; min-width: 500px;">
       <div class="md-dialog-content" style="margin: -30px 20px 0 20px;">
-        <div layout="row" ng-if="!editmode" style="width: 953px;">
+        <div layout="row" ng-if="!editmode" style="width: 650px;">
           <md-table-container>
-          <table md-table style="width: 935px;">
+          <table md-table style="width: 650px;">
             <thead md-head>
               <tr md-row>
                 <th md-column>Usuario</th>
                 <th md-column>Nombre</th>
                 <th md-column>Correo</th>
-                <th md-column>Responsable</th>
-                <th md-column>Artículos</th>
+                <!--<th md-column>Responsable</th>
+                <th md-column>Artículos</th>-->
                 <th md-column class="danger">Admin</th>
                 <th md-column class="danger">Eliminar</th>
               </tr>
@@ -51,19 +51,19 @@
                 </td>
                 <td md-cell>{{usuario.nombre}}</td>
                 <td md-cell>{{usuario.email}}</td>
-                <td md-cell>
+                <!--<td md-cell>
                   <md-button ng-if="!usuario.responsable" type="submit" aria-label="agregar" class="md-raised" ng-click="setResponsable(usuario);">Asignar <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                   </md-button>
                   {{usuario.responsable? usuario.responsable.responsable:''}}</td>
-                <td md-cell>{{usuario.responsable.articulos_asignados? usuario.responsable.articulos_asignados.length : 0}}</td>
+                <td md-cell>{{usuario.responsable.articulos_asignados? usuario.responsable.articulos_asignados.length : 0}}</td>-->
                 <td md-cell>
                   <md-button class="md-icon-button" aria-label="admin" ng-click="$event.preventDefault(); toggleAdmin(usuario);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin">
-                    <span ng-if="usuario.perfil_id != 1" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    <span ng-if="usuario.perfil_id == 1" class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                    <span ng-if="usuario.perfil_id == 1" class="glyphicon glyphicon-ok" aria-hidden="true" style="color: #63ff8a;"></span>
+                    <span ng-if="usuario.perfil_id != 1" class="glyphicon glyphicon-remove" aria-hidden="true" style="color: #f24848;"></span>
                   </md-button>
                 </td>
                 <td md-cell>
-                  <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(usuario);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin || usuario.responsable && usuario.responsable.articulos_asignados.length > 0">
+                  <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(usuario);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                   </md-button>
                 </td>

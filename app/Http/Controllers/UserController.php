@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Admin;
+use App\Responsable;
 use Response;
 
 class UserController extends Controller
@@ -113,11 +114,16 @@ class UserController extends Controller
         if(!isset($u->admin) || isset($u->admin) && $u->admin->token <> $request->admin_token)
             return Response::json('Error al validar token', 401);
 
-        $g = User::findOrFail($id);
+        $g = User::with('responsable')->findOrFail($id);
+        if(isset($g->responsable))
+        {
+            $r = Responsable::find($g->responsable->id);
+            $r->usuario_id = null;
+            $r->save();
+        }
         if(isset($g->admin))
             $g->admin()->delete();
         $g->delete();
-
         return self::index($request);
     }
 }
