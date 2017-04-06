@@ -42,8 +42,8 @@ class SubgrupoController extends Controller
         ]);
 
         $u = User::with('admin')->find($request->user);
-        if($u->admin->token <> $request->admin_token)
-            return Response::json($request, 500);
+        if(!isset($u->admin) || isset($u->admin) && $u->admin->token <> $request->admin_token)
+            return Response::json('Error al validar token', 401);
 
         $nextid = \DB::table('subgrupos')->max('id');
         if(isset($nextid))
@@ -108,8 +108,8 @@ class SubgrupoController extends Controller
         ]);
 
         $u = User::with('admin')->find($request->user);
-        if($u->admin->token <> $request->admin_token)
-            return Response::json($request, 500);
+        if(!isset($u->admin) || isset($u->admin) && $u->admin->token <> $request->admin_token)
+            return Response::json('Error al validar token', 401);
 
         $g = Subgrupo::findOrFail($id);
         $g->delete();

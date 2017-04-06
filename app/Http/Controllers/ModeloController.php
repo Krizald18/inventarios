@@ -41,8 +41,8 @@ class ModeloController extends Controller
         ]);
 
         $u = User::with('admin')->find($request->user);
-        if($u->admin->token <> $request->admin_token)
-            return Response::json($request, 500);
+        if(!isset($u->admin) || isset($u->admin) && $u->admin->token <> $request->admin_token)
+            return Response::json('Error al validar token', 401);
 
         // ----------------checar si la marca esta asociada a ese subgrupo ---------------------
         $m = Marca::with('subgrupos')->whereHas('subgrupos', function($q) use ($request) {
@@ -121,8 +121,8 @@ class ModeloController extends Controller
         ]);
 
         $u = User::with('admin')->find($request->user);
-        if($u->admin->token <> $request->admin_token)
-            return Response::json($request, 500);
+        if(!isset($u->admin) || isset($u->admin) && $u->admin->token <> $request->admin_token)
+            return Response::json('Error al validar token', 401);
 
         $g = Modelo::with('marca')->findOrFail($id);
         $subgrupo_id = $g->subgrupo_id;

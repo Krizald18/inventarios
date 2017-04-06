@@ -63,12 +63,14 @@ class UploaderController extends Controller
     {
         // validar admin_token y user
         // recive un id de una evidencia, user (id) y  admin_token
-        if(!$request->has('user') || !$request->has('admin_token'))
-            return Response::json($request, 500);
-        $u = User::with('admin')->find($request->user);
+        $this->validate($request, [
+            'user' => 'required',
+            'admin_token' => 'required',
+        ]);
 
-        if($u->admin->token <> $request->admin_token)
-            return Response::json($request, 500);
+        $u = User::with('admin')->find($request->user);
+        if(!isset($u->admin) || isset($u->admin) && $u->admin->token <> $request->admin_token)
+            return Response::json('Error al validar token', 401);
 
         $e = Evidencia::findOrFail($id);
         $rid = $e->resguardo_id;

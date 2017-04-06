@@ -41,8 +41,8 @@ class MarcaController extends Controller
         ]);
 
         $u = User::with('admin')->find($request->user);
-        if($u->admin->token <> $request->admin_token)
-            return Response::json($request, 500);
+        if(!isset($u->admin) || isset($u->admin) && $u->admin->token <> $request->admin_token)
+            return Response::json('Error al validar token', 401);
 
         $nextid = \DB::table('marcas')->max('id');
         if(isset($nextid))
@@ -113,8 +113,8 @@ class MarcaController extends Controller
         ]);
 
         $u = User::with('admin')->find($request->user);
-        if($u->admin->token <> $request->admin_token)
-            return Response::json($request, 500);
+        if(!isset($u->admin) || isset($u->admin) && $u->admin->token <> $request->admin_token)
+            return Response::json('Error al validar token', 401);
 
         $g = Marca::findOrFail($id);
         $g->delete();

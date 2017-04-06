@@ -33,8 +33,8 @@ class CaracteristicaController extends Controller
         ]);
 
         $u = User::with('admin')->find($request->user);
-        if($u->admin->token <> $request->admin_token)
-            return Response::json($request, 500);
+        if(!isset($u->admin) || isset($u->admin) && $u->admin->token <> $request->admin_token)
+            return Response::json('Error al validar token', 401);
 
         $nextid = \DB::table('caracteristicas')->max('id');
         if(isset($nextid))
@@ -98,8 +98,8 @@ class CaracteristicaController extends Controller
         ]);
 
         $u = User::with('admin')->find($request->user);
-        if($u->admin->token <> $request->admin_token)
-            return Response::json($request, 500);
+        if(!isset($u->admin) || isset($u->admin) && $u->admin->token <> $request->admin_token)
+            return Response::json('Error al validar token', 401);
 
         $g = Caracteristica::findOrFail($id);
         $g->delete();
