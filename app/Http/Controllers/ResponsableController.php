@@ -116,21 +116,41 @@ class ResponsableController extends Controller
                     }
                     return 'done!';
                 }
+                else if($request->input('command') == 'set_user')
+                {
+                    // validar admin_token y user
+                    // recive un id de un responsable, user (id) y  admin_token
+                    $this->validate($request, [
+                        'user' => 'required',
+                        'admin_token' => 'required',
+                        'responsable_id' => 'required',
+                        'usuario_id' => 'required',
+                    ]);
 
+                    $u = User::with('admin')->find($request->user);
+                    if(!isset($u->admin) || isset($u->admin) && $u->admin->token <> $request->admin_token)
+                        return Response::json('Error al validar token', 401);
+
+                    $r = Responsable::with('usuario')->find($request->responsable_id);
+                    $r->usuario_id = $request->usuario_id;
+                    $r->save();
+                    return self::show($r->id);
+                }
             }
             else{
                 // validar admin_token y user
                 // recive un id de un responsable, user (id) y  admin_token
-                if(!$request->has('user') || !$request->has('admin_token'))
-                    return Response::json($request, 500);
-                $u = User::with('admin')->find($request->user);
-
-                if($u->admin->token <> $request->admin_token)
-                    return Response::json($request, 500);
-
                 $this->validate($request, [
+                    'user' => 'required',
+                    'admin_token' => 'required',
                     'responsable' => 'required|unique:responsables',
                 ]);
+
+                $u = User::with('admin')->find($request->user);
+
+                if(!isset($u->admin) || isset($u->admin) && $u->admin->token <> $request->admin_token)
+                    return Response::json('Error al validar token', 401);
+
 
                 $nextid = \DB::table('responsables')->max('id');
                 if(isset($nextid))

@@ -88,7 +88,7 @@ angular.module('App')
 		    	
 		    });
 		}
-		var GruposController = ($scope, $mdDialog, API, ToastService) => {
+		var GruposController = ($scope, $mdDialog, API, ToastService, AlertService) => {
 			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nuevo_grupo = {};
@@ -115,13 +115,18 @@ angular.module('App')
 			    		'admin_token' : localStorage.admin_token,
 			    		'grupo': $scope.nuevo_grupo.grupo
 			    	}
-				API.all('grupo').post(newgroup).then(rs => {
-					$scope.grupos = rs.plain();
-		    		ToastService.show('Se ha agregado el grupo "'+ $scope.nuevo_grupo.grupo + '"');
-					$scope.changemode();
-				});
-		    }
-
+				API.all('grupo').post(newgroup)
+					.then(rs => {
+						$scope.grupos = rs.plain();
+			    		ToastService.show('Se ha agregado el grupo "'+ $scope.nuevo_grupo.grupo + '"');
+						$scope.changemode();
+					}).catch(err => {
+			    		if(err.status == 300)
+			    			ToastService.show(err.data)
+			    		else if (err.status == 401)
+			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+			   		});
+		    };
 		    $scope.delete = grupo => {
 		    	if(grupo && grupo.id)
 		    	{
@@ -133,10 +138,15 @@ angular.module('App')
 			    	.then(res => {
 			    		$scope.grupos = res.plain();
 		    			ToastService.show('Se ha eliminado el grupo "'+ grupo.grupo + '"');
-			    	});
+			    	}).catch(err => {
+			    		if(err.status == 300)
+			    			ToastService.show(err.data)
+			    		else if (err.status == 401)
+			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+			   		});
 			    }
 		    }
-		}, SubgruposController = ($scope, $mdDialog, API, ToastService) => {
+		}, SubgruposController = ($scope, $mdDialog, API, ToastService, AlertService) => {
 			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nuevo_subgrupo = {};
@@ -172,11 +182,17 @@ angular.module('App')
 			    		'subgrupo': $scope.nuevo_subgrupo.subgrupo,
 			    		'grupo_id': $scope.nuevo_subgrupo.grupo_id
 			    	}
-				API.all('subgrupo').post(newsubgroup).then(rs => {
-					$scope.subgrupos = rs.plain();
-		    		ToastService.show('Se ha agregado el subgrupo "'+ $scope.nuevo_subgrupo.subgrupo + '"');
-					$scope.changemode();
-				});
+				API.all('subgrupo').post(newsubgroup)
+					.then(rs => {
+						$scope.subgrupos = rs.plain();
+			    		ToastService.show('Se ha agregado el subgrupo "'+ $scope.nuevo_subgrupo.subgrupo + '"');
+						$scope.changemode();
+					}).catch(err => {
+			    		if(err.status == 300)
+			    			ToastService.show(err.data)
+			    		else if (err.status == 401)
+			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+			   		});
 		    }
 
 		    $scope.delete = subgrupo => {
@@ -190,10 +206,15 @@ angular.module('App')
 			    	.then(res => {
 			    		$scope.subgrupos = res.plain();
 		    			ToastService.show('Se ha eliminado el subgrupo "'+ subgrupo.subgrupo + '"');
-			    	});
+			    	}).catch(err => {
+			    		if(err.status == 300)
+			    			ToastService.show(err.data)
+			    		else if (err.status == 401)
+			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+			   		});
 			    }
 		    }
-		}, MarcasController = ($scope, $mdDialog, API, ToastService) => {
+		}, MarcasController = ($scope, $mdDialog, API, ToastService, AlertService) => {
 			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nueva_marca = {};
@@ -224,11 +245,17 @@ angular.module('App')
 			    		'admin_token' : localStorage.admin_token,
 			    		'marca': $scope.nueva_marca.marca.toUpperCase()
 			    	}
-				API.all('marca').post(newgroup).then(rs => {
-					$scope.marcas = rs.plain();
-		    		ToastService.show('Se ha agregado el marca "'+ $scope.nueva_marca.marca + '"');
-					$scope.changemode();
-				});
+				API.all('marca').post(newgroup)
+					.then(rs => {
+						$scope.marcas = rs.plain();
+			    		ToastService.show('Se ha agregado el marca "'+ $scope.nueva_marca.marca + '"');
+						$scope.changemode();
+					}).catch(err => {
+			    		if(err.status == 300)
+			    			ToastService.show(err.data)
+			    		else if (err.status == 401)
+			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+			   		});
 		    }
 
 		    $scope.delete = marca => {
@@ -242,10 +269,15 @@ angular.module('App')
 			    	.then(res => {
 			    		$scope.marcas = res.plain();
 		    			ToastService.show('Se ha eliminado el marca "'+ marca.marca + '"');
-			    	});
+			    	}).catch(err => {
+			    		if(err.status == 300)
+			    			ToastService.show(err.data)
+			    		else if (err.status == 401)
+			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+			   		});
 			    }
 		    }
-		}, ModelosController = ($scope, $mdDialog, API, ToastService) => {
+		}, ModelosController = ($scope, $mdDialog, API, ToastService, AlertService) => {
 			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nuevo_modelo = {};
@@ -319,7 +351,12 @@ angular.module('App')
 					$scope.modelos = rs.plain();
 		    		ToastService.show('Se ha agregado el modelo "'+ $scope.nuevo_modelo.modelo + '"');
 					$scope.changemode();
-				});
+				}).catch(err => {
+		    		if(err.status == 300)
+		    			ToastService.show(err.data)
+		    		else if (err.status == 401)
+		    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+		   		});
 		    }
 
 		    $scope.delete = modelo => {
@@ -333,10 +370,15 @@ angular.module('App')
 			    	.then(res => {
 			    		$scope.modelos = res.plain();
 		    			ToastService.show('Se ha eliminado el modelo "'+ modelo.modelo + '"');
-			    	});
+			    	}).catch(err => {
+			    		if(err.status == 300)
+			    			ToastService.show(err.data)
+			    		else if (err.status == 401)
+			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+			   		});
 			    }
 		    }
-		}, CaracteristicasController = ($scope, $mdDialog, API, ToastService) => {
+		}, CaracteristicasController = ($scope, $mdDialog, API, ToastService, AlertService) => {
 			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nueva_caracteristica = {};
@@ -371,7 +413,12 @@ angular.module('App')
 					$scope.caracteristicas = rs.plain();
 		    		ToastService.show('Se ha agregado la caracteristica "'+ $scope.nueva_caracteristica.caracteristica + '"');
 					$scope.changemode();
-				});
+				}).catch(err => {
+		    		if(err.status == 300)
+		    			ToastService.show(err.data)
+		    		else if (err.status == 401)
+		    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+		   		});
 		    }
 
 		    $scope.delete = caracteristica => {
@@ -385,10 +432,15 @@ angular.module('App')
 			    	.then(res => {
 			    		$scope.caracteristicas = res.plain();
 		    			ToastService.show('Se ha eliminado la caracteristica "'+ caracteristica.caracteristica + '"');
-			    	});
+			    	}).catch(err => {
+			    		if(err.status == 300)
+			    			ToastService.show(err.data)
+			    		else if (err.status == 401)
+			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+			   		});
 			    }
 		    }
-		}, ResponsablesController = ($scope, $mdDialog, API, ToastService) => {
+		}, ResponsablesController = ($scope, $mdDialog, API, ToastService, AlertService) => {
 			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nuevo_responsable = {};
@@ -423,11 +475,17 @@ angular.module('App')
 			    		'responsable': $scope.nuevo_responsable.responsable,
 			    		'oficialia_id': $scope.nuevo_responsable.oficialia_id
 			    	}
-				API.all('responsable').post(newsubgroup).then(rs => {
-					$scope.responsables = rs.plain();
-		    		ToastService.show('Se ha agregado el responsable "'+ $scope.nuevo_responsable.responsable + '"');
-					$scope.changemode();
-				});
+				API.all('responsable').post(newsubgroup)
+					.then(rs => {
+						$scope.responsables = rs.plain();
+			    		ToastService.show('Se ha agregado el responsable "'+ $scope.nuevo_responsable.responsable + '"');
+						$scope.changemode();
+					}).catch(err => {
+			    		if(err.status == 300)
+			    			ToastService.show(err.data)
+			    		else if (err.status == 401)
+			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+			   		});
 		    }
 
 		    $scope.delete = responsable => {
@@ -441,10 +499,15 @@ angular.module('App')
 			    	.then(res => {
 			    		$scope.responsables = res.plain();
 		    			ToastService.show('Se ha eliminado el responsable "'+ responsable.responsable + '"');
-			    	});
+			    	}).catch(err => {
+			    		if(err.status == 300)
+			    			ToastService.show(err.data)
+			    		else if (err.status == 401)
+			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+			   		});
 			    }
 		    }
-		}, AreasController = ($scope, $mdDialog, API, ToastService) => {
+		}, AreasController = ($scope, $mdDialog, API, ToastService, AlertService) => {
 			$scope.loading = true;
 			$scope.addmode = false;
 			$scope.nueva_area = {};
@@ -453,7 +516,7 @@ angular.module('App')
 			API.all('area').getList().then(gr =>{
 				$scope.areas = gr.plain();
 				$scope.loading = false;
-			})
+			});
 			$scope.millisec = date_str => new Date(date_str).getTime();
 		    $scope.hide = () => $mdDialog.hide();
 		    $scope.cancel = () => $mdDialog.cancel();
@@ -479,7 +542,12 @@ angular.module('App')
 					$scope.areas = rs.plain();
 		    		ToastService.show('Se ha agregado el área "'+ $scope.nueva_area.area + '"');
 					$scope.changemode();
-				});
+				}).catch(err => {
+		    		if(err.status == 300)
+		    			ToastService.show(err.data)
+		    		else if (err.status == 401)
+		    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+		   		});
 		    }
 
 		    $scope.delete = area => {
@@ -493,12 +561,17 @@ angular.module('App')
 			    	.then(res => {
 			    		$scope.areas = res.plain();
 		    			ToastService.show('Se ha eliminado el área "'+ area.area + '"');
-			    	});
+			    	}).catch(err => {
+			    		if(err.status == 300)
+			    			ToastService.show(err.data)
+			    		else if (err.status == 401)
+			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+			   		});
 			    }
 		    }
-		}, UsuariosController = ($scope, $mdDialog, API, ToastService) => {
+		}, UsuariosController = ($scope, $mdDialog, API, ToastService, AlertService) => {
 			$scope.loading = true;
-			$scope.addmode = false;
+			$scope.editmode = false;
 			$scope.nueva_area = {};
 			if(localStorage.admin_token)
     			$scope.admin = true;
@@ -506,49 +579,105 @@ angular.module('App')
 			    		'user': localStorage.user,
 			    		'admin_token' : localStorage.admin_token
 			    	}
-			API.all('user').getList(prot).then(gr =>{
-				$scope.usuarios = gr.plain();
-				$scope.loading = false;
-			})
+			API.all('user').getList(prot)
+				.then(gr =>{
+					$scope.usuarios = gr.plain();
+					$scope.loading = false;
+				}).catch(err => {
+		    		if(err.status == 300)
+		    			ToastService.show(err.data)
+		    		else if (err.status == 401)
+		    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+		   		});
+			API.all('responsable').getList(prot)
+				.then(gr =>{
+					$scope.responsables = gr.plain();
+				}).catch(err => {
+		    		if(err.status == 300)
+		    			ToastService.show(err.data)
+		    		else if (err.status == 401)
+		    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+		   		});
 			$scope.millisec = date_str => new Date(date_str).getTime();
 		    $scope.hide = () => $mdDialog.hide();
 		    $scope.cancel = () => $mdDialog.cancel();
 		    $scope.changemode = () => {
-				$scope.addmode = !$scope.addmode;
+				$scope.editmode = !$scope.editmode;
 				$scope.loading = false;
 		    }
-		    $scope.setResponsable = () => {
-		    	
+		    $scope.setResponsable = user => {
+		    	$scope.user = user;
+		    	$scope.changemode();
 		    };
-		    $scope.setAdmin = () => {
-		    	
+		    $scope.guardar = () => {
+		    	if($scope.user && $scope.user.responsable_id)
+		    	{
+		    		let prot = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token,
+			    		'usuario_id': $scope.user.id,
+			    		'responsable_id': $scope.user.responsable_id,
+			    		'command': 'set_user'
+			    	};
+			    	API.all('responsable').post(prot)
+				    	.then(res => {
+				    		$scope.user.responsable = res.plain(); // recive un objeto responsable al cual se asocio el usuario
+			    			ToastService.show('El usuario "'+ $scope.user.nombre + '" se asoció al responsable ' + $scope.user.responsable.responsable);
+			    			$scope.changemode();
+				    	}).catch(err => {
+				    		if(err.status == 300)
+				    			ToastService.show(err.data)
+				    		else if (err.status == 401)
+				    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+				   		});
+		    	}
 		    };
-		    $scope.removeAdmin = () => {
-		    	
+		    $scope.toggleAdmin = (user) => {
+		    	if (!user)
+		    		return;
+		    	let prot = {
+			    		'user': localStorage.user,
+			    		'admin_token' : localStorage.admin_token,
+			    		'usuario_id': user.id,
+			    		'command': 'toggle_admin'
+			    	};
+				API.one('user', user.id).customPOST(prot, '', {}, {})
+			    	.then(res => {
+			    		user.perfil_id = res.plain().perfil_id;
+		    			ToastService.show('El usuario ' + user.nombre + (user.perfil_id == 1? ' cambió a administrador': ' ya no es administrador'));
+			    	}).catch(err => {
+			    		if(err.status == 300)
+			    			ToastService.show(err.data)
+			    		else if (err.status == 401)
+			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+			   		});
 		    };
 		    $scope.delete = usuario => {
-		    	
-		    	return;
 		    	if(usuario && usuario.id)
 		    	{
 			    	let prot = {
 			    		'user': localStorage.user,
 			    		'admin_token' : localStorage.admin_token
 			    	}
-			    	API.one('usuario', usuario.id).remove(prot)
+			    	API.one('user', usuario.id).remove(prot)
 			    	.then(res => {
 			    		$scope.usuarios = res.plain();
 		    			ToastService.show('Se ha eliminado el usuario "'+ usuario.nombre + '"');
-			    	});
+			    	}).catch(err => {
+			    		if(err.status == 300)
+			    			ToastService.show(err.data)
+			    		else if (err.status == 401)
+			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+			   		});
 			    }
 		    }
 		};
-		GruposController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
-		SubgruposController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
-		MarcasController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
-		ModelosController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
-		CaracteristicasController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
-		ResponsablesController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
-		AreasController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
-		UsuariosController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService'];
+		GruposController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService', 'AlertService'];
+		SubgruposController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService', 'AlertService'];
+		MarcasController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService', 'AlertService'];
+		ModelosController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService', 'AlertService'];
+		CaracteristicasController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService', 'AlertService'];
+		ResponsablesController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService', 'AlertService'];
+		AreasController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService', 'AlertService'];
+		UsuariosController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService', 'AlertService'];
 	}]);
