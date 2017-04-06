@@ -72,9 +72,9 @@
           </table>
           </md-table-container>
         </div>
-        <div style="margin-left:20px;margin-top:25px;width: 600px;" ng-if="editmode">
+        <div style="margin-left:20px;margin-top:25px;width: 500px;" ng-if="editmode">
           <div layout="row">
-            <div flex = "50">
+            <div flex = "40">
               <h5><strong>Usuario: </strong>{{user.username}}</h5>
             </div>
             <div flex = "50">
@@ -82,7 +82,7 @@
             </div>
           </div>        
           <div layout="row">
-            <div flex = "50">
+            <div flex = "40">
               <h5><strong>Nombre: </strong>{{user.nombre}}</h5>
             </div>
             <div flex = "50">
@@ -90,13 +90,13 @@
             </div>
           </div><br>
           <div layout="row">
-            <md-input-container flex="50" class="md-block">
+            <md-input-container flex="60" class="md-block">
               <label>Responsable</label>
               <md-select name ="responsable" ng-model="user.responsable_id">
                 <md-option ng-repeat="x in responsables track by x.id" value="{{x.id}}">{{x.responsable}}</md-option>
               </md-select>
             </md-input-container>
-            <div flex="50">
+            <div flex="40">
               <md-button type="submit" aria-label="guardar" class="md-raised md-warn" ng-click="guardar();" style="left: 10px;top: 21px;" ng-disabled="!admin || !user.responsable_id">Guardar <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
               </md-button>
             </div>
@@ -111,7 +111,7 @@
         Salir
       </md-button>
       <md-button ng-click="changemode()" ng-disabled="!editmode">
-        {{editmode? 'Atras': 'Agregar'}}
+        {{editmode? 'Atras': 'Editar'}}
       </md-button>
     </md-dialog-actions>
   </form>
