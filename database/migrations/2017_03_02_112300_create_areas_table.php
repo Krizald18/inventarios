@@ -12,6 +12,7 @@ class CreateAreasTable extends Migration
             $table->integer('id')->unique();
             $table->string('area')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

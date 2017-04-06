@@ -46,7 +46,7 @@ class CreateInventariosTable extends Migration
             ->references('id')->on('resguardos');
 
       $table->timestamps();
-
+      $table->softDeletes();
 /*
       $table->foreign('grupo_id')
             ->references('id')->on('grupos')

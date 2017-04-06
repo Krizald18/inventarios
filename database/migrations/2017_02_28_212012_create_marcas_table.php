@@ -12,6 +12,7 @@ class CreateMarcasTable extends Migration
             $table->integer('id')->unique();
             $table->string('marca')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

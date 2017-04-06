@@ -17,6 +17,7 @@ class CreateSubgruposTable extends Migration
                   ->references('id')->on('grupos');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

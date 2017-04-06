@@ -21,6 +21,7 @@ class CreateResponsablesTable extends Migration
                   ->references('id')->on('oficialias');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

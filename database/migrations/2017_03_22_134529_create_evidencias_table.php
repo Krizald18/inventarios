@@ -16,6 +16,7 @@ class CreateEvidenciasTable extends Migration
             $table->integer('resguardo_id')->unsigned()->nullable();
             $table->foreign('resguardo_id')->references('id')->on('resguardos');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

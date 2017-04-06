@@ -12,6 +12,7 @@ class CreateCaracteristicasTable extends Migration
             $table->integer('id')->unique();
             $table->string('caracteristica')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

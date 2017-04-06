@@ -22,6 +22,7 @@ class CreateModelosTable extends Migration
             $table->foreign('subgrupo_id')->references('id')->on('subgrupos');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

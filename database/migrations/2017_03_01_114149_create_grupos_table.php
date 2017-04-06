@@ -12,6 +12,7 @@ class CreateGruposTable extends Migration
             $table->integer('id')->unique();
             $table->string('grupo')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

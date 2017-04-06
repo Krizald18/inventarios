@@ -19,6 +19,7 @@ class CreateResguardosTable extends Migration
             $table->integer('responsable_id')->nullable();
             $table->foreign('responsable_id')->references('id')->on('responsables');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
     public function down()
