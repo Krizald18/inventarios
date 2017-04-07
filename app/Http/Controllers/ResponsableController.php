@@ -37,8 +37,10 @@ class ResponsableController extends Controller
                                 }));
                             }))
                             ->with(array('oficialia' => function($q){
+                                $q->orderBy('oficialia', 'asc');
                                 $q->with('municipio');
                             }))
+                            ->orderBy('oficialia_id', 'asc')
                             ->orderBy('responsable', 'asc')
                             ->get();
     }

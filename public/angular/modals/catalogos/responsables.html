@@ -17,17 +17,17 @@
           <table md-table style="width: 705px;">
             <thead md-head>
               <tr md-row>
-                <th md-column>Responsable</th>
                 <th md-column>Oficialia o Area</th>
+                <th md-column>Responsable</th>
                 <th md-column>Articulos Asignados</th>
                 <th md-column style="color:#f97070; padding-right: 10px;height: 15px;width: 100px;">Eliminar</th>
               </tr>
             </thead>
             <tbody md-body>
               <tr md-row md-select="responsable" md-select-id="name" ng-repeat="responsable in responsables">
-                <td md-cell>{{responsable.responsable}}</td>
                 <td md-cell>{{responsable.oficialia.oficialia}}</td>
-                <td md-cell>{{responsable.articulos_asignados.length}}</td>
+                <td md-cell>{{responsable.responsable}}</td>
+                <td md-cell ng-click="jumpResguardos(responsable);">{{responsable.articulos_asignados.length}}</td>
                 <td md-cell>
                   <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(responsable);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin || responsable.articulos_asignados.length > 0 || responsable.id == 244">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>

@@ -17,7 +17,7 @@ class ModeloController extends Controller
     public function index(Request $request)
     {
         if($request->has('articulos'))
-        return Modelo::with('marca', 'caracteristica', 'articulos', 'subgrupo')->orderBy('modelo', 'asc')->orderBy('marca_id', 'asc')->orderBy('subgrupo_id', 'asc')->get();
+            return Modelo::with('marca', 'caracteristica', 'articulos', 'subgrupo')->orderBy('marca_id', 'asc')->orderBy('subgrupo_id', 'asc')->orderBy('modelo', 'asc')->get();
         else
             return Modelo::with('marca', 'caracteristica','subgrupo')->orderBy('modelo', 'asc')->get();
     }
@@ -70,7 +70,7 @@ class ModeloController extends Controller
         $g->marca_id = $request->marca_id;
         $g->save();
 
-        return Modelo::with('marca', 'caracteristica', 'articulos', 'subgrupo')->orderBy('modelo', 'asc')->orderBy('marca_id', 'asc')->orderBy('subgrupo_id', 'asc')->get();
+        return Modelo::with('marca', 'caracteristica', 'articulos', 'subgrupo')->orderBy('marca_id', 'asc')->orderBy('subgrupo_id', 'asc')->orderBy('modelo', 'asc')->get();
         /*
         if($request->has('data'))
         {

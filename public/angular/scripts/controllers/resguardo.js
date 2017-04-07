@@ -116,7 +116,26 @@ angular.module('App')
 	    		$scope.refreshbodyheight();
 	    	}
 	    })
-	    API.all("responsable").getList().then(res => $scope.responsables = res.plain());
+	    API.all("responsable").getList().then(res => {
+	    	$scope.responsables = res.plain();
+	    	var re = sessionStorage.getItem('responsable_id');
+			if(re)
+			{
+				$scope.showing = $.grep($scope.responsables, r => r.id == re)[0];
+				if($scope.showing.resguardos.length == 0)
+				{
+					$scope.showing.con_resguardo = [];
+					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados;
+				}
+				else	
+				{
+					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a));
+					$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a));
+				}
+				$scope.sinResguardo = ($scope.showing.sin_resguardo.length == 0);
+				sessionStorage.removeItem('responsable_id');
+			}
+	    });
 	    function querySearch(query) {
 	      var results = query ? $scope.responsables.filter( createFilterFor(query) ) : $scope.responsables;
 	      var deferred = $q.defer();

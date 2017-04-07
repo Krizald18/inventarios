@@ -17,20 +17,20 @@
           <table md-table style="width: 900px;">
             <thead md-head>
               <tr md-row>
-                <th md-column>Modelo</th>
-                <th md-column>Caracteristica</th>
                 <th md-column>Marca</th>
                 <th md-column>Subgrupo</th>
+                <th md-column>Modelo</th>
+                <th md-column>Caracteristica</th>
                 <th md-column>En Inventario</th>
                 <th md-column style="color:#f97070; padding-right: 10px;height: 15px;width: 100px;">Eliminar</th>
               </tr>
             </thead>
             <tbody md-body>
               <tr md-row md-select="modelo" md-select-id="name" ng-repeat="modelo in modelos">
-                <td md-cell>{{modelo.modelo}}</td>
-                <td md-cell>{{modelo.caracteristica.caracteristica}}</td>
                 <td md-cell>{{modelo.marca.marca}}</td>
                 <td md-cell>{{modelo.subgrupo.subgrupo}}</td>
+                <td md-cell>{{modelo.modelo}}</td>
+                <td md-cell>{{modelo.caracteristica.caracteristica}}</td>
                 <td md-cell>{{modelo.articulos.length}}</td>
                 <td md-cell>
                   <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(modelo);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin || modelo.articulos.length > 0">
@@ -44,11 +44,12 @@
         </div>
         <div layout="row" ng-if="addmode" style="margin-top:25px;width: 700px;">
           <md-input-container flex="50" class="md-block">
-            <label>Modelo</label>
-            <input name="modelo" type="text" md-maxlength="50" md-no-asterisk="" ng-model="nuevo_modelo.modelo" ng-change="cambioModelo()" required>
-            <div ng-messages="projectForm.modelo.$error">
-              <div ng-message="md-maxlength">El campo Modelo debe ser máximo 50 caracteres</div>
-              <div ng-message="required">El campo Modelo es requerido</div>
+            <label>Marca</label>
+            <md-select name="marca" ng-model="nuevo_modelo.marca_id" ng-disabled="!marcas || marcas.length == 0" ng-required="!nuevo_modelo.marca_id">
+              <md-option ng-repeat="x in marcas track by x.id" value="{{x.id}}">{{x.marca}}</md-option>
+            </md-select>
+            <div ng-messages="projectForm.marca.$error">
+              <div ng-message="required">El campo Marca es requerido</div>
             </div>
           </md-input-container>
           <md-input-container flex="50" class="md-block">
@@ -61,14 +62,13 @@
             </div>
           </md-input-container>
         </div>
-        <div layout="row" ng-if="addmode" style="margin-top:-25px;width: 700px;">
+        <div layout="row" ng-if="addmode" style="width: 700px;">
           <md-input-container flex="50" class="md-block">
-            <label>Marca</label>
-            <md-select name="marca" ng-model="nuevo_modelo.marca_id" ng-disabled="!marcas || marcas.length == 0" ng-required="!nuevo_modelo.marca_id">
-              <md-option ng-repeat="x in marcas track by x.id" value="{{x.id}}">{{x.marca}}</md-option>
-            </md-select>
-            <div ng-messages="projectForm.marca.$error">
-              <div ng-message="required">El campo Marca es requerido</div>
+            <label>Modelo</label>
+            <input name="modelo" type="text" md-maxlength="50" md-no-asterisk="" ng-model="nuevo_modelo.modelo" ng-change="cambioModelo()" required>
+            <div ng-messages="projectForm.modelo.$error">
+              <div ng-message="md-maxlength">El campo Modelo debe ser máximo 50 caracteres</div>
+              <div ng-message="required">El campo Modelo es requerido</div>
             </div>
           </md-input-container>
           <md-input-container flex="50" class="md-block">
@@ -84,7 +84,7 @@
         <div layout="row" ng-if="addmode">
           <md-button flex="30" class="md-raised md-primary" ng-click="add();" style="height: 10px; margin-top: 20px; width: 22px;" ng-disabled="!nuevo_modelo.modelo || !nuevo_modelo.subgrupo_id || !nuevo_modelo.marca_id || !nuevo_modelo.caracteristica_id">Guardar</md-button>
         </div>
-      </div><br>
+      </div>
     </md-dialog-content>
     <md-dialog-actions layout="row">
       <span flex></span>

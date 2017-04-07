@@ -487,7 +487,17 @@ angular.module('App')
 			    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
 			   		});
 		    }
-
+			$scope.jumpResguardos = responsable => {
+				if(responsable)
+				{
+					if(responsable.articulos_asignados.length > 0)
+					{
+						sessionStorage.setItem('responsable_id', responsable.id);
+						window.location = '#/resguardo';
+						$scope.hide();
+					}
+				}
+			}
 		    $scope.delete = responsable => {
 		    	if(responsable && responsable.id)
 		    	{
