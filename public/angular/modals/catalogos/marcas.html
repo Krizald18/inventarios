@@ -49,17 +49,17 @@
           </md-input-container>
         </div>
         <div layout="row" ng-if="addmode">
-          <md-button flex="30" class="md-raised md-primary" ng-click="add();" style="height: 10px; margin-top: 20px; width: 22px;" ng-disabled="!nueva_marca.marca">Enviar</md-button>
+          <md-button flex="30" class="md-raised md-primary" ng-click="add();" style="height: 10px; margin-top: 20px; width: 22px;" ng-disabled="!nueva_marca.marca">Guardar</md-button>
         </div>
       </div><br>
     </md-dialog-content>
     <md-dialog-actions layout="row">
       <span flex></span>
-      <md-button ng-click="cancel()">
-       	Salir
-      </md-button>
       <md-button ng-click="changemode()">
         {{addmode? 'Atras': 'Agregar'}}
+      </md-button>
+      <md-button ng-click="cancel()">
+        Salir
       </md-button>
     </md-dialog-actions>
   </form>

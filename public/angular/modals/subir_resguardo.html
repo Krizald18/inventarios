@@ -15,11 +15,11 @@
 
     <md-dialog-actions layout="row">
       <span flex></span>
-      <md-button ng-click="answer('not useful')">
-       	Cancelar
-      </md-button>
       <md-button ng-click="answer()" ng-disabled = "!files01 || (files01 && files01.length == 0)">
         Subir
+      </md-button>
+      <md-button ng-click="answer('not useful')">
+        Cancelar
       </md-button>
     </md-dialog-actions>
   </form>

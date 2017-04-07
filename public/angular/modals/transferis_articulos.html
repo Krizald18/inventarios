@@ -47,14 +47,14 @@
 
     <md-dialog-actions layout="row">
       <span flex></span>
-      <md-button ng-click="cancel()">
-       	Cancelar
+      <md-button ng-click="confirmar()" ng-disabled = "(seleccionados.length == 0 && !confirmado) || disableConfirm">
+        {{!confirmado? "Continuar" :"Confirmar"}}
       </md-button>
       <md-button ng-click="back()" ng-show="confirmado">
         Atras
       </md-button>
-      <md-button ng-click="confirmar()" ng-disabled = "(seleccionados.length == 0 && !confirmado) || disableConfirm">
-        {{!confirmado? "Continuar" :"Confirmar"}}
+      <md-button ng-click="cancel()">
+        Cancelar
       </md-button>
     </md-dialog-actions>
   </form>

@@ -82,17 +82,17 @@
           </md-input-container>
         </div>
         <div layout="row" ng-if="addmode">
-          <md-button flex="30" class="md-raised md-primary" ng-click="add();" style="height: 10px; margin-top: 20px; width: 22px;" ng-disabled="!nuevo_modelo.modelo || !nuevo_modelo.subgrupo_id || !nuevo_modelo.marca_id || !nuevo_modelo.caracteristica_id">Enviar</md-button>
+          <md-button flex="30" class="md-raised md-primary" ng-click="add();" style="height: 10px; margin-top: 20px; width: 22px;" ng-disabled="!nuevo_modelo.modelo || !nuevo_modelo.subgrupo_id || !nuevo_modelo.marca_id || !nuevo_modelo.caracteristica_id">Guardar</md-button>
         </div>
       </div><br>
     </md-dialog-content>
     <md-dialog-actions layout="row">
       <span flex></span>
-      <md-button ng-click="cancel()">
-        Salir
-      </md-button>
       <md-button ng-click="changemode()">
         {{addmode? 'Atras': 'Agregar'}}
+      </md-button>
+      <md-button ng-click="cancel()">
+        Salir
       </md-button>
     </md-dialog-actions>
   </form>

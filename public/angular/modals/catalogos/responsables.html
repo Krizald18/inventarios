@@ -18,7 +18,7 @@
             <thead md-head>
               <tr md-row>
                 <th md-column>Responsable</th>
-                <th md-column>Oficialia</th>
+                <th md-column>Oficialia o Area</th>
                 <th md-column>Articulos Asignados</th>
                 <th md-column style="color:#f97070; padding-right: 10px;height: 15px;width: 100px;">Eliminar</th>
               </tr>
@@ -59,17 +59,17 @@
         </md-input-container>
         </div>
         <div layout="row" ng-if="addmode">
-          <md-button flex="30" class="md-raised md-primary" ng-click="add();" style="height: 10px; margin-top: 20px; width: 22px;" ng-disabled="!nuevo_responsable.responsable">Enviar</md-button>
+          <md-button flex="30" class="md-raised md-primary" ng-click="add();" style="height: 10px; margin-top: 20px; width: 22px;" ng-disabled="!nuevo_responsable.responsable">Guardar</md-button>
         </div>
       </div><br>
     </md-dialog-content>
     <md-dialog-actions layout="row">
       <span flex></span>
-      <md-button ng-click="cancel()">
-       	Salir
-      </md-button>
       <md-button ng-click="changemode()">
         {{addmode? 'Atras': 'Agregar'}}
+      </md-button>
+      <md-button ng-click="cancel()">
+        Salir
       </md-button>
     </md-dialog-actions>
   </form>
