@@ -83,7 +83,6 @@
               <li><a href="/#/">Inicio</a></li>
             </ul>
             <ul id="ulauth" class="nav navbar-nav" style="position: fixed; right: 10%;" hidden>
-              <li ng-if="!autenticado"><a ng-href="/#/register">Registrarse</a></li>
               <li ng-if="!autenticado"><a ng-href="/#/login">Entrar</a></li>
               <li ng-if="autenticado"><a ng-href="/#/" ng-click ="$event.preventDefault(); logout();">Salir</a></li>
             </ul>

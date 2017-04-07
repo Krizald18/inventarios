@@ -29,11 +29,11 @@ angular.module('app.config')
 				controller: 'LoginCtrl',
 				middleware: 'resize'
 			})
-			.when('/register', {
+			/*.when('/register', {
 				templateUrl: 'angular/views/register.html',
 				controller: 'RegisterCtrl',
 				middleware: 'resize'
-			})
+			})*/
 			.when('/inventario', {
 				templateUrl: 'angular/views/inventario.html',
 				controller: 'InventarioCtrl',

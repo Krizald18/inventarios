@@ -569,12 +569,62 @@ angular.module('App')
 			   		});
 			    }
 		    }
-		}, UsuariosController = ($scope, $mdDialog, API, ToastService, AlertService) => {
+		}, UsuariosController = ($scope, $mdDialog, API, ToastService, AlertService, $auth) => {
 			$scope.loading = true;
 			$scope.editmode = false;
-			$scope.nueva_area = {};
+			$scope.nuevo_usuario = {};
+			$scope.nuevo_usuario.nombre = '';
+			$scope.nuevo_usuario.username = '';
+			$scope.nuevo_usuario.email = '';
+			$scope.nuevo_usuario.password = '';
 			if(localStorage.admin_token)
     			$scope.admin = true;
+			$scope.$watch('nuevo_usuario.nombre', n => {
+				if($scope.nuevo_usuario.nombre)
+					$scope.nuevo_usuario.nombre = n.charAt(0).toUpperCase() + n.slice(1);
+			})
+			$scope.register = () => {
+				let user = {
+					nombre: $scope.nuevo_usuario.nombre,
+					username: $scope.nuevo_usuario.username,
+					email: $scope.nuevo_usuario.email,
+					password: $scope.nuevo_usuario.password
+				};
+
+				$auth.signup(user)
+					.then(response => {
+						//remove this if you require email verification
+						//$auth.setToken(response.data);
+						ToastService.show('Registro Exitoso.');
+						$scope.changemode();
+						$scope.loading = true;
+						let prot = {
+				    		'user': localStorage.user,
+				    		'admin_token' : localStorage.admin_token
+						    }
+						API.all('user').getList(prot)
+							.then(gr =>{
+								$scope.usuarios = gr.plain();
+								$scope.loading = false;
+							}).catch(err => {
+					    		if(err.status == 300)
+					    			ToastService.show(err.data)
+					    		else if (err.status == 401)
+					    			AlertService.error('El usuario actual ha perdido privilegios de administrador, se requiere volver a iniciar sesión');
+					   		});
+					})
+					.catch($scope.failedRegistration.bind(this));
+			}
+
+			$scope.failedRegistration = response => {
+				if (response.status === 422) {
+					for (let error in response.data.errors) {
+						return ToastService.error(response.data.errors[error][0]);
+					}
+				}
+				ToastService.error(response.statusText);
+			}
+
     		let prot = {
 			    		'user': localStorage.user,
 			    		'admin_token' : localStorage.admin_token
@@ -604,6 +654,10 @@ angular.module('App')
 		    $scope.changemode = () => {
 				$scope.editmode = !$scope.editmode;
 				$scope.loading = false;
+				$scope.nuevo_usuario.nombre = '';
+				$scope.nuevo_usuario.username = '';
+				$scope.nuevo_usuario.email = '';
+				$scope.nuevo_usuario.password = '';
 		    }
 		    $scope.setResponsable = user => {
 		    	$scope.user = user;
@@ -679,5 +733,5 @@ angular.module('App')
 		CaracteristicasController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService', 'AlertService'];
 		ResponsablesController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService', 'AlertService'];
 		AreasController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService', 'AlertService'];
-		UsuariosController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService', 'AlertService'];
+		UsuariosController.$inject = ['$scope', '$mdDialog', 'API', 'ToastService', 'AlertService', '$auth'];
 	}]);

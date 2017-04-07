@@ -15,7 +15,7 @@
   <form ng-cloak name="projectForm">
     <md-toolbar>
       <div class="md-toolbar-tools" style="background-color: white; color: rgba(0,0,0,0.87);">
-        <h4 style="margin-top: 25px;margin-left: 20px;">{{editmode? 'Asignar responsable a usuario': 'Usuarios'}}</h4>
+        <h4 style="margin-top: 25px;margin-left: 20px;">{{editmode? 'Registrar usuario': 'Usuarios'}}</h4>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
           <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
@@ -24,10 +24,10 @@
       </div>
     </md-toolbar>
     <md-dialog-content style="min-height: 200px; min-width: 500px;">
-      <div class="md-dialog-content" style="margin: -30px 20px 0 20px;">
-        <div layout="row" ng-if="!editmode" style="width: 650px;">
+      <div class="md-dialog-content" style="margin: -30px 0px 0 0px;">
+        <div layout="row" ng-if="!editmode" style="width: 700px; margin-left: 20px;">
           <md-table-container>
-          <table md-table style="width: 650px;">
+          <table md-table style="width: 675px;">
             <thead md-head>
               <tr md-row>
                 <th md-column>Usuario</th>
@@ -41,7 +41,7 @@
             </thead>
             <tbody md-body>
               <tr md-row md-select="usuario" md-select-id="name" ng-repeat="usuario in usuarios">
-                <td md-cell style="width: 130px;">
+                <td md-cell style="padding-right: 5px; width: 164px;">
                   <span>
                     <i ng-if="usuario.perfil_id == 1" class="fa fa-bolt fa-fw" aria-hidden="true" style="left:3px;width: 5px;"></i>
                     <span ng-if="usuario.perfil_id == 1" style="left:4px;position: relative;top: -5px;">&nbsp;{{usuario.username}}</span>
@@ -49,8 +49,8 @@
                     <span ng-if="usuario.perfil_id != 1" style="position: relative;top:-5px;">&nbsp;{{usuario.username}}</span>
                   </span>
                 </td>
-                <td md-cell>{{usuario.nombre}}</td>
-                <td md-cell>{{usuario.email}}</td>
+                <td md-cell style="padding-right: 5px;">{{usuario.nombre}}</td>
+                <td md-cell style="padding-right: 5px;">{{usuario.email? usuario.email: 'Sin asignar'}}</td>
                 <!--<td md-cell>
                   <md-button ng-if="!usuario.responsable" type="submit" aria-label="agregar" class="md-raised" ng-click="setResponsable(usuario);">Asignar <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                   </md-button>
@@ -72,46 +72,47 @@
           </table>
           </md-table-container>
         </div>
-        <div style="margin-left:20px;margin-top:25px;width: 500px;" ng-if="editmode">
-          <div layout="row">
-            <div flex = "40">
-              <h5><strong>Usuario: </strong>{{user.username}}</h5>
+        <div style="margin-left:20px;margin-top:25px;width: 450px;" ng-if="editmode">
+          <form ng-submit="register()" style="margin-top:5%;">
+            <div layout="row" >
+              <div flex="70">
+                <md-input-container class="RegisterForm-inputContainer">
+                  <label>Nombre</label>
+                  <input type="text" ng-model="nuevo_usuario.nombre">
+                </md-input-container>
+                <md-input-container class="RegisterForm-inputContainer">
+                  <label>Usuario</label>
+                  <input type="text" ng-model="nuevo_usuario.username">
+                </md-input-container>
+                <md-input-container class="RegisterForm-inputContainer">
+                  <label>Correo</label>
+                  <input type="email" ng-model="nuevo_usuario.email">
+                </md-input-container>
+                <md-input-container class="RegisterForm-inputContainer">
+                  <label>Contraseña</label>
+                  <input type="password" ng-model="nuevo_usuario.password">
+                </md-input-container>
+                <md-input-container class="RegisterForm-inputContainer">
+                  <md-button class="RegisterForm-submit md-primary md-raised" ng-disabled = "!nuevo_usuario.nombre || !nuevo_usuario.username || !nuevo_usuario.email || !nuevo_usuario.password || nuevo_usuario.password.length < 5" ng-click="register()">Registrar</md-button>
+                </md-input-container>
+              </div>
+              <div flex="30">
+                <md-input-container class="RegisterForm-inputContainer" flex="30">
+                  <img src="images/adduser.png" alt="add" height="70" width="70" style="margin-left: 30px;">
+                </md-input-container>
+              </div>
             </div>
-            <div flex = "50">
-              <h5><strong>Correo: </strong>{{user.email}}</h5>
-            </div>
-          </div>        
-          <div layout="row">
-            <div flex = "40">
-              <h5><strong>Nombre: </strong>{{user.nombre}}</h5>
-            </div>
-            <div flex = "50">
-              <h5><strong>Admin: </strong>{{user.perfil_id == 1? 'Si': 'No'}}</h5>
-            </div>
-          </div><br>
-          <div layout="row">
-            <md-input-container flex="60" class="md-block">
-              <label>Responsable</label>
-              <md-select name ="responsable" ng-model="user.responsable_id">
-                <md-option ng-repeat="x in responsables track by x.id" value="{{x.id}}">{{x.responsable}}</md-option>
-              </md-select>
-            </md-input-container>
-            <div flex="40">
-              <md-button type="submit" aria-label="guardar" class="md-raised md-warn" ng-click="guardar();" style="left: 10px;top: 21px;" ng-disabled="!admin || !user.responsable_id">Guardar <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
-              </md-button>
-            </div>
-          </div>
+          </form>
         </div>
-        <br>
       </div>      
     </md-dialog-content>
     <md-dialog-actions layout="row">
       <span flex></span>
+      <md-button ng-click="changemode()">
+        {{editmode? 'Atras': 'Agregar'}}
+      </md-button>
       <md-button ng-click="cancel()">
         Salir
-      </md-button>
-      <md-button ng-click="changemode()" ng-disabled="!editmode">
-        {{editmode? 'Atras': 'Editar'}}
       </md-button>
     </md-dialog-actions>
   </form>

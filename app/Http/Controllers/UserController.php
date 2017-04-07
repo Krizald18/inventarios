@@ -115,6 +115,10 @@ class UserController extends Controller
             return Response::json('Error al validar token', 401);
 
         $g = User::with('responsable')->findOrFail($id);
+        // si es el ultimo admin no puede dejar de serlo
+        $admin = \DB::table('admins')->distinct('user_id')->count('user_id');
+        if($admin == 1)
+            return Response::json('No se puede remover al ultimo admin existente', 300);
         if(isset($g->responsable))
         {
             $r = Responsable::find($g->responsable->id);

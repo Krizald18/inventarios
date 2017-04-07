@@ -2,12 +2,9 @@
   margin-top: 30%;
   width: 60%;
 }
-.RegisterForm-inputContainer{
-  margin-top: 20px;
-  margin-bottom: 0px;
-  margin-left: 200px;
-  width: 50%;
-  min-width: 200px;
+.RegisterForm-inputContainer{  
+  margin-bottom: -20px;
+  width: 100%;
 }
 
 .RegisterForm-submit{
