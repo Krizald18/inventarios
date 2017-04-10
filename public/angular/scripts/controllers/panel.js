@@ -97,7 +97,7 @@ angular.module('App')
 			API.all('grupo').getList().then(gr =>{
 				$scope.grupos = gr.plain();
 				$scope.loading = false;
-			})
+			});
 			$scope.millisec = date_str => new Date(date_str).getTime();
 		    $scope.hide = () => $mdDialog.hide();
 		    $scope.cancel = () => $mdDialog.cancel();
@@ -149,11 +149,12 @@ angular.module('App')
 		}, SubgruposController = ($scope, $mdDialog, API, ToastService, AlertService) => {
 			$scope.loading = true;
 			$scope.addmode = false;
+			$scope.main = true;
 			$scope.nuevo_subgrupo = {};
 			if(localStorage.admin_token)
     			$scope.admin = true;
 			API.all('subgrupo').getList().then(gr =>{
-				$scope.subgrupos = gr.plain();
+				$scope.subgrupos_origin = gr.plain();
 				$scope.loading = false;
 			});
 			API.all('grupo').getList().then(gr =>{
@@ -165,18 +166,29 @@ angular.module('App')
 		    $scope.changemode = () => {
 				$scope.addmode = !$scope.addmode;
 				$scope.nuevo_subgrupo.subgrupo = "";
-				$scope.nuevo_subgrupo.grupo_id = null;
+				//$scope.nuevo_subgrupo.grupo_id = null;
 				$scope.loading = false;
 		    }
 		    $scope.cambioSubgrupo = () => {
 				if($scope.nuevo_subgrupo.subgrupo && $scope.nuevo_subgrupo.subgrupo.length > 0)
 					$scope.nuevo_subgrupo.subgrupo = $scope.nuevo_subgrupo.subgrupo.charAt(0).toUpperCase() + $scope.nuevo_subgrupo.subgrupo.slice(1);
 			};
+			$scope.subgrupo = grupo =>{
+				if(grupo)
+				{
+					$scope.subgrupos = $scope.subgrupos_origin.filter(s => s.grupo.id == grupo.id);
+					//if($scope.subgrupos.length > 0)
+						$scope.main = !$scope.main;
+					$scope.nuevo_subgrupo.grupo_id = grupo.id;
+				}
+				else
+					$scope.main = !$scope.main;
+			};
 		    $scope.add = () => {
 		    	if(!$scope.nuevo_subgrupo.subgrupo)
 					return;
 				$scope.loading = true;
-				let newsubgroup = {
+				var newsubgroup = {
 			    		'user': localStorage.user,
 			    		'admin_token' : localStorage.admin_token,
 			    		'subgrupo': $scope.nuevo_subgrupo.subgrupo,
@@ -184,7 +196,11 @@ angular.module('App')
 			    	}
 				API.all('subgrupo').post(newsubgroup)
 					.then(rs => {
-						$scope.subgrupos = rs.plain();
+						$scope.subgrupos_origin = rs.plain();
+						$scope.subgrupos = $scope.subgrupos_origin.filter(s => s.grupo.id == newsubgroup.grupo_id);
+						API.all('grupo').getList().then(gr =>{
+							$scope.grupos = gr.plain();
+						});
 			    		ToastService.show('Se ha agregado el subgrupo "'+ $scope.nuevo_subgrupo.subgrupo + '"');
 						$scope.changemode();
 					}).catch(err => {
@@ -198,13 +214,19 @@ angular.module('App')
 		    $scope.delete = subgrupo => {
 		    	if(subgrupo && subgrupo.id)
 		    	{
+		    		$scope.loading = true;
 			    	let prot = {
 			    		'user': localStorage.user,
 			    		'admin_token' : localStorage.admin_token
 			    	}
 			    	API.one('subgrupo', subgrupo.id).remove(prot)
 			    	.then(res => {
-			    		$scope.subgrupos = res.plain();
+			    		$scope.subgrupos_origin = res.plain();
+						$scope.subgrupos = $scope.subgrupos_origin.filter(s => s.grupo.id == subgrupo.grupo.id);
+						API.all('grupo').getList().then(gr =>{
+							$scope.grupos = gr.plain();
+						});
+						$scope.loading = false;
 		    			ToastService.show('Se ha eliminado el subgrupo "'+ subgrupo.subgrupo + '"');
 			    	}).catch(err => {
 			    		if(err.status == 300)

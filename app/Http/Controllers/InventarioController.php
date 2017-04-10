@@ -16,25 +16,49 @@ class InventarioController extends Controller
     {
         if($request->has('numero_inventario') && $request->has('numero_serie')) 
         {   // recive numero de serie y numero de inventario, regresa 1 si existe numero_inventario, 2 si existe numero_serie, 3 si existen los dos
-            $inventario = \DB::table('inventarios')
-                     ->select(\DB::raw('count(*) as response'))
-                     ->where('numero_inventario', '=', $request->numero_inventario)
-                     ->get();
+            if($request->has('id'))
+            {
+                $i = Inventario::findOrFail($request->id);
+                if($i->numero_inventario == $request->numero_inventario)
+                    $numInvPass = true;
+                else
+                    $inventario = \DB::table('inventarios')
+                                     ->select(\DB::raw('count(*) as response'))
+                                     ->where('id', '<>', $request->id)
+                                     ->where('numero_inventario', '=', $request->numero_inventario)
+                                     ->get();
+                if($i->numero_serie == $request->numero_serie)
+                    $numSerPass = true;
+                else
+                    $serie = \DB::table('inventarios')
+                                     ->select(\DB::raw('count(*) as response'))
+                                     ->where('id', '<>', $request->id)
+                                     ->where('numero_serie', '=', $request->numero_serie)
+                                     ->get();
+            }
+            else
+            {
+                $inventario = \DB::table('inventarios')
+                         ->select(\DB::raw('count(*) as response'))
+                         ->where('numero_inventario', '=', $request->numero_inventario)
+                         ->get();
 
-            $serie = \DB::table('inventarios')
-                     ->select(\DB::raw('count(*) as response'))
-                     ->where('numero_serie', '=', $request->numero_serie)
-                     ->get();
-
-            $numero_inventario = (object) $inventario[0];
-            $numero_serie = (object) $serie[0];
+                $serie = \DB::table('inventarios')
+                         ->select(\DB::raw('count(*) as response'))
+                         ->where('numero_serie', '=', $request->numero_serie)
+                         ->get();
+            }
+            if(isset($inventario))
+                $numero_inventario = (object) $inventario[0];
+            if(isset($serie))
+                $numero_serie = (object) $serie[0];
 
             $resp = (object) array('response' => 0);
 
-            if($numero_inventario->response > 0)
+            if(!isset($numInvPass) && $numero_inventario->response > 0)
                 $resp->response = 1;
 
-            if($numero_serie->response > 0) // 3 both
+            if(!isset($numSerPass) && $numero_serie->response > 0) // 3 both
                 $resp->response = $resp->response + 2;
             
             return Response::json($resp, 200);
@@ -465,7 +489,10 @@ class InventarioController extends Controller
         if($request->has('data'))
         {
             $o = (object) $request->input('data');
-            $j = new Inventario;
+            if(isset($o->id))
+                $j = Inventario::findOrFail($o->id);
+            else
+                $j = new Inventario;
 
             if(isset($o->numero_inventario) && !is_null($o->numero_inventario))
                 $j->numero_inventario = $o->numero_inventario;

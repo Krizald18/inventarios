@@ -4,7 +4,7 @@
       <div layout="row">
         <md-input-container flex="50" class="md-block">
           <label>Número de Inventario</label>
-          <input name="numero_inv" type="text" md-maxlength="50" md-no-asterisk="" ng-model="project.numero_inventario" required>
+          <input name="numero_inv" type="text" md-maxlength="50" md-auto-hide="!editOnly" md-no-asterisk="" ng-model="project.numero_inventario" ng-required="!project.numero_inventario">
           <div ng-messages="projectForm.numero_inv.$error">
             <div ng-message="md-maxlength">El campo Número de Inventario debe ser máximo 50 caracteres</div>
             <div ng-message="required">El campo Número de Inventario es requerido</div>
@@ -12,7 +12,7 @@
         </md-input-container>
         <md-input-container flex="50" class="md-block">
           <label>Número de Serie</label>
-          <input name="numero_ser" type="text" md-maxlength="50" md-no-asterisk="" ng-model="project.numero_serie" required>
+          <input name="numero_ser" type="text" md-maxlength="50" md-no-asterisk="" ng-model="project.numero_serie" ng-required="!project.numero_serie">
           <div ng-messages="projectForm.numero_ser.$error">
             <div ng-message="md-maxlength">El campo Número de Serie debe ser máximo 50 caracteres</div>
             <div ng-message="required">El campo Número de Serie es requerido</div>
@@ -135,7 +135,7 @@
           </md-checkbox>
         </md-input-container>
 
-        <md-input-container flex="50" class="md-block">
+        <md-input-container flex="50" class="md-block" ng-if="!editOnly">
           <md-switch class="md-primary" name="keefForm" ng-model="project.keefForm">
             No borrar formulario al guardar
           </md-switch>

@@ -10,11 +10,35 @@
         <md-progress-circular md-mode="indeterminate" ng-if="loading"></md-progress-circular>
       </div>
     </md-toolbar>
-    <md-dialog-content style="min-height: 200px; width: 800px;">
-      <div class="md-dialog-content" style="margin: -30px 20px 0 20px; width: 760px;">
+    <md-dialog-content style="min-height: 200px; width: 700px;" ng-if="main">
+      <div class="md-dialog-content" style="margin: -30px 20px 0 20px; min-width: 660px;">
         <div layout="row">
-          <md-table-container ng-if="!addmode">
-          <table md-table style="width: 705px;">
+          <md-table-container>
+          <table md-table style="width: 610px;">
+            <thead md-head>
+              <tr md-row>
+                <th md-column>Grupo</th>
+                <th md-column>Subgrupos</th>
+                <th md-column>Fecha de creación</th>
+              </tr>
+            </thead>
+            <tbody md-body>
+              <tr md-row md-select="grupo" md-select-id="name" ng-repeat="grupo in grupos" ng-click="subgrupo(grupo);">
+                <td md-cell>{{grupo.grupo}}</td>
+                <td md-cell>{{grupo.subgrupos.length}}</td>
+                <td md-cell>{{millisec(grupo.created_at) | date:'dd/MM/yyyy'}}</td>
+              </tr>
+            </tbody>
+          </table>
+          </md-table-container>
+        </div>
+      </div>
+    </md-dialog-content>
+    <md-dialog-content style="min-height: 200px; width: 810px;" ng-if="!main && !addmode">
+      <div class="md-dialog-content" style="margin: -30px 20px 0 20px;">
+        <div layout="row">
+          <md-table-container>
+          <table md-table style="width: 700px;">
             <thead md-head>
               <tr md-row>
                 <th md-column>Subgrupo</th>
@@ -40,7 +64,11 @@
           </table>
           </md-table-container>
         </div>
-        <div layout="row" ng-if="addmode" style="margin-top: 20px;">
+      </div>
+    </md-dialog-content>
+    <md-dialog-content style="min-height: 200px; width: 810px;" ng-if="!main && addmode">
+      <div class="md-dialog-content" style="margin: -30px 20px 0 20px;">
+        <div layout="row" style="margin-top: 20px;">
           <md-input-container flex="50" class="md-block">
             <label>Subgrupo</label>
             <input name="subgrupo" type="text" md-maxlength="50" md-no-asterisk="" ng-model="nuevo_subgrupo.subgrupo" ng-change="cambioSubgrupo()" required>
@@ -49,9 +77,9 @@
               <div ng-message="required">El campo Subgrupo es requerido</div>
             </div>
           </md-input-container>
-          <md-input-container flex="50" class="md-block">
+        <md-input-container flex="50" class="md-block">
           <label>Grupo</label>
-          <md-select name="grupo" ng-model="nuevo_subgrupo.grupo_id" ng-disabled="!grupos || grupos.length == 0" ng-required="!nuevo_subgrupo.grupo_id">
+          <md-select name="grupo" ng-model="nuevo_subgrupo.grupo_id" ng-disabled="true || !grupos || grupos.length == 0" ng-required="!nuevo_subgrupo.grupo_id">
             <md-option ng-repeat="x in grupos track by x.id" value="{{x.id}}">{{x.grupo}}</md-option>
           </md-select>
           <div ng-messages="projectForm.grupo.$error">
@@ -66,12 +94,16 @@
     </md-dialog-content>
     <md-dialog-actions layout="row">
       <span flex></span>
-      <md-button ng-click="changemode()">
+      <md-button ng-click="changemode()" ng-disabled = "main">
         {{addmode? 'Atras': 'Agregar'}}
+      </md-button>
+      <md-button ng-click="subgrupo()" ng-if = "!addmode" ng-disabled = "main">
+        Atras
       </md-button>
       <md-button ng-click="cancel()">
         Salir
       </md-button>
     </md-dialog-actions>
+    </div>
   </form>
 </md-dialog>

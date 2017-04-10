@@ -152,8 +152,11 @@ angular.module('App').controller('InventarioCtrl', ['API', '$scope', '$interval'
 			    	
 			    });
 		};
-		$scope.millisec = (date_str) => new Date(date_str).getTime();
-		$scope.editar = articulo => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
+		$scope.millisec = date_str => new Date(date_str).getTime();
+		$scope.editar = () => {
+			sessionStorage.articulo = JSON.stringify($scope.selected[0]);
+			window.location = "#/agregar";
+		};
 		var BajaInventarioController = ($scope, $mdDialog) => {
 			$scope.articulo = JSON.parse(localStorage.articulo);
 			$scope.articulo.fecha_baja = new Date();

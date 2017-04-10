@@ -1,6 +1,7 @@
 'use strict';
 angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService', 'ToastService', function (API, $scope, AlertService, ToastService) {	
 	$scope.selected = [];
+	$scope.editOnly = false;
 	$scope.loading = true;
 	$scope.project = {};
 	$scope.project.status = true;
@@ -12,14 +13,46 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 	
 	API.all("grupo?full=true").getList().then(grp => {
 		$scope.grupos = grp.plain();
+		if(sessionStorage.articulo)
+		{
+			$scope.editOnly = true;
+			$scope.project = JSON.parse(sessionStorage.articulo);
+			$scope.project.subgrupo_id = $scope.project.modelo.subgrupo_id;
+			$scope.project.modelo_id = $scope.project.modelo.id;
+			$scope.project.marca_id = $scope.project.modelo.marca_id;
+			$scope.project.caracteristica_id = $scope.project.modelo.caracteristica_id;
+			$scope.project.area_id = $scope.project.area.id;
+			$scope.project.oficialia_id = $scope.project.oficialia.id;
+			for (let grupo of $scope.grupos) {
+				for (let subgrupo of grupo.subgrupos) {
+					if(subgrupo.id == $scope.project.subgrupo_id)
+					{
+						$scope.project.grupo_id = grupo.id;
+						break;
+					}
+				}
+				if($scope.project.grupo_id)
+					break;
+			}
+			setTimeout(()=> {
+				$scope.cambioModelo();				
+			}, 1000);
+			setTimeout(()=> {
+				$scope.cambioModelo();
+			}, 2000);
+		}
 		if($scope.grupos.length == 1)
-			$scope.project.grupo_id = $scope.grupos[0].id;		
+			$scope.project.grupo_id = $scope.grupos[0].id;
 	});
 	$scope.oficialias = API.all("oficialia").getList().then(response => {
 		$scope.oficialias = response.plain();
 		$scope.oficialias_bk = angular.copy($scope.oficialias);
 	});
-	$scope.municipios = API.all("municipio").getList().$object;
+	API.all("municipio").getList().then(m=>{
+		$scope.municipios = m.plain();
+		if($scope.project.oficialia)
+			$scope.project.municipio = JSON.stringify($.grep($scope.municipios, m => m.id == $scope.project.oficialia.municipio_id)[0]);
+	});
 	$scope.areas = API.all("area").getList().$object;
 	$scope.responsables = API.all("responsable").getList().$object;
 
@@ -624,6 +657,9 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 		if(frmObj.responsable_id != undefined) // 6
 			obj.responsable_id = parseInt(frmObj.responsable_id);
 
+		if($scope.editOnly)
+			obj.id = JSON.parse(sessionStorage.articulo).id;
+
 		obj.status = frmObj.status? frmObj.status : false;
 		obj.fecha_baja = null;
 		saver(obj);
@@ -636,6 +672,8 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 		
 		urlval += "api/inventario?numero_inventario=" + obj.numero_inventario;
 		urlval += "&numero_serie=" + obj.numero_serie;
+		if($scope.editOnly)
+			urlval += "&id=" + obj.id;
 
 		API.oneUrl('validador', urlval).get()
 		.then(tn =>{
@@ -673,6 +711,11 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 					}
 					$scope.projectForm.$setPristine();
 					$scope.projectForm.$setUntouched();
+					if(sessionStorage.getItem('articulo'))
+					{
+						sessionStorage.removeItem('articulo');
+						window.location = "#/inventario";
+					}
 				});
 			}
 			else if(x == 1)
