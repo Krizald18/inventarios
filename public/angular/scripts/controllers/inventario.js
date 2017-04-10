@@ -119,7 +119,10 @@ angular.module('App').controller('InventarioCtrl', ['API', '$scope', '$interval'
 		};
 		$scope.remove = () => {
 			if($scope.printqueue.length > 0 && $scope.selected2.length > 0)
+			{
 				$scope.printqueue = $scope.printqueue.filter(o => $.grep($scope.selected2, x => x.id == o.id).length == 0);
+				$scope.selected2 = [];
+			}
 		};
 		$scope.baja = () => {
 			// mandar objeto articulo, adjuntar fecha_baja al articulo y comentarios
