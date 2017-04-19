@@ -1,7 +1,7 @@
 'use strict';
 angular.module('App').controller('LoginCtrl', ['$scope', '$auth', 'ToastService', 'API', function ($scope, $auth, ToastService, API) {
 	if($auth.isAuthenticated())
-		window.location = '/';
+		window.location = '/#/inventario';
     $scope.username = '';
     $scope.password = '';
 
@@ -25,8 +25,8 @@ angular.module('App').controller('LoginCtrl', ['$scope', '$auth', 'ToastService'
 					window.location = red;
 				}
 				else
-					window.location = '/';
-				ToastService.show('Sesión iniciada');
+					window.location = '/#/inventario';
+				ToastService.show('Sesión iniciada');					
 			}, response => {
 				$scope.failedLogin(response);
 			}).catch($scope.failedLogin.bind());

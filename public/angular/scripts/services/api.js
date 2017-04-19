@@ -13,12 +13,8 @@ angular.module('App')
 				.setErrorInterceptor(function(response) {
 				    switch(response.status) {
 						case 401:
-							if(localStorage.satellizer_token)
-								localStorage.removeItem('satellizer_token');
-							if(localStorage.admin_token)
-								localStorage.removeItem('admin_token');
-							if(localStorage.user)
-								localStorage.removeItem('user');
+							$window.localStorage.clear();
+							$window.sessionStorage.clear();
 							window.location.replace('#/login');
 							break;
 						case 422:

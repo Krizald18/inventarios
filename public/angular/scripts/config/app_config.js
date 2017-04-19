@@ -17,7 +17,7 @@ angular.module('app.config')
 			.when('/', {
 				templateUrl: 'angular/views/home.html',
 				controller: 'MainCtrl',
-				middleware: 'resize'
+				middleware: 'AuthenticatedOnly'
 			})
 			.when('/about', {
 				templateUrl: 'angular/views/about.html',
@@ -110,9 +110,9 @@ angular.module('app.config')
 					this.next();
 				else
 				{
-					if(token)
-						localStorage.removeItem('satellizer_token');
-					this.redirectTo('/');
+					localStorage.clear();
+					sessionStorage.clear();
+					this.redirectTo('/login');
 				}
 			},
 			'resize': function res() {

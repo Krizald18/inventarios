@@ -21,9 +21,8 @@ angular.module('App')
 				$scope.autenticado = false;
 		});
 		$scope.logout = () => {
-			localStorage.removeItem('satellizer_token');
-			localStorage.removeItem('admin_token');
-			localStorage.removeItem('user');
+			localStorage.clear();
+			sessionStorage.clear();
 			location.reload();
 		}
 	}]);
