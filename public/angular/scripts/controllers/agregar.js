@@ -21,8 +21,8 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 			$scope.project.modelo_id = $scope.project.modelo.id;
 			$scope.project.marca_id = $scope.project.modelo.marca_id;
 			$scope.project.caracteristica_id = $scope.project.modelo.caracteristica_id;
-			$scope.project.area_id = $scope.project.area.id;
-			$scope.project.oficialia_id = $scope.project.oficialia.id;
+			$scope.project.area_id = $scope.project.area? $scope.project.area.id : null;
+			$scope.project.oficialia_id = $scope.project.oficialia? $scope.project.oficialia.id: null;
 			for (let grupo of $scope.grupos) {
 				for (let subgrupo of grupo.subgrupos) {
 					if(subgrupo.id == $scope.project.subgrupo_id)
@@ -100,7 +100,7 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 	};
 	var buscaMarca = (modelo, marca) => {
 		// regresa true si la marca contiene a ese modelo
-		if(marca.modelos && marca.modelos.length == 0)
+		if(!marca || marca.modelos && marca.modelos.length == 0)
 			return false;
 		let x = $.grep(marca.modelos, mod => mod.id == modelo);
 		return x.length != 0;
@@ -546,12 +546,8 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 			var modelo = $.grep($scope.modelos, md => md.caracteristica_id == $scope.project.caracteristica_id)[0];
 		else
 		{
-			var md = $.grep($scope.modelos, md => md.caracteristica_id == $scope.project.caracteristica_id)[0];
-			if(!$scope.project.subgrupo_id)
-				$scope.project.subgrupo_id = md.subgrupo_id;
-			if(!$scope.project.marca_id)
-				$scope.project.marca_id = md.marca_id;		
-			if($scope.project.modelo_id)
+			
+
 			{
 				var mod = $.grep($scope.modelos, md => md.id == $scope.project.modelo_id)[0];
 				var marca =  $.grep($scope.marcas, m => m.id == mod.marca_id)[0];
@@ -609,19 +605,17 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 		if(!$scope.project.modelo_id && !$scope.project.modelo)
 			return;
 		if($scope.firstTime)
-		{
 			$scope.project.modelo = JSON.stringify($.grep($scope.modelos, m => m.id == $scope.project.modelo_id)[0]);
-		}
 		
 		$scope.project.modelo_id =  JSON.parse($scope.project.modelo).id;
-		if(!$scope.project.marca_id)
-		{
-			var marca = $.grep($scope.marcas, marca => buscaMarca($scope.project.modelo_id, marca))[0];
-			$scope.project.marca_id = marca.id;
-		}
 		if(!$scope.project.subgrupo_id)
 			$scope.project.subgrupo_id = JSON.parse($scope.project.modelo).subgrupo_id;
 		$scope.project.caracteristica_id = JSON.parse($scope.project.modelo).caracteristica.id;
+		if(!$scope.project.marca_id)
+		{
+			let md = $.grep($scope.modelos, md => md.caracteristica_id == $scope.project.caracteristica_id)[0];
+			$scope.project.marca_id = md.marca_id;
+		}
 		setMarcas($scope.project.subgrupo_id, $scope.project.marca_id);
 	};
 
