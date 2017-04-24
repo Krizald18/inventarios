@@ -9,10 +9,16 @@ angular.module('App')
 			else
 				$scope.autenticado = false;
 		$scope.$watch(() => localStorage.admin_token, (newVal,oldVal) => {
-			if(localStorage.admin_token)
+			if(newVal)
 	    		$scope.admin = true;
 	    	else
 	    		$scope.admin = false;
+		});
+		$scope.$watch(() => localStorage.nombre, (newVal,oldVal) => {
+			if(newVal)
+	    		$scope.nombre = newVal;
+	    	else
+	    		$scope.nombre = null;
 		});
 		$scope.$watch(() => localStorage.satellizer_token, (newVal,oldVal) => {
 			if ($auth.isAuthenticated()) 

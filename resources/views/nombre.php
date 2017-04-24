@@ -1,0 +1,1 @@
+<li ng-if="autenticado" style="color: white; margin-top: 15px;">{{nombre}}</li>

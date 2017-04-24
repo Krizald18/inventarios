@@ -17,6 +17,7 @@ angular.module('App').controller('LoginCtrl', ['$scope', '$auth', 'ToastService'
 				if(response.data.data.user.perfil_id == 1)
 					localStorage.setItem('admin_token', response.data.data.user.admin.token);
 				localStorage.setItem('user', response.data.data.user.id);
+				localStorage.setItem('nombre', response.data.data.user.nombre);
 
 				if(sessionStorage.getItem('prev')) 
 				{
