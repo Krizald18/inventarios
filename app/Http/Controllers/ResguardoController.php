@@ -29,16 +29,18 @@ class ResguardoController extends Controller
         if($request->has('data'))
         {
             $o = (object) $request->input('data');
-            /*$nextid = \DB::table('resguardos')->max('id');
-            if(isset($nextid))
-                $nextid = $nextid + 1;
-            else
-                $nextid = 1;
-    */
+            
+            if(isset($o->set_note) && isset($o->id) && isset($o->nota))
+            {
+                $r = Resguardo::findOrFail($o->id);
+                $r->observaciones = $o->nota;
+                $r->save();
+                return self::show($o->id);
+            }
+
             $now = new \DateTime('now');
             $year = $now->format('Y');
             $j = new Resguardo;
-            //$j->id = $nextid;
             $j->responsable_id = $o->responsable_id;
             $j->push();
 
@@ -153,6 +155,7 @@ class ResguardoController extends Controller
         $o = (object) $request->input('pdf_data');
         $folio = 'RE-'.strval($year).( intval($o->id) < 100? ( intval($o->id) < 10? '00'.$o->id: '0'.$o->id ) : $o->id );
         $articulos = $o->articulos;
+        $nota = isset($o->nota)? $o->nota: "";
         foreach ($articulos as $articulo) {
             $a = (object) $articulo;
             $inv = Inventario::find($a->id);
@@ -170,7 +173,8 @@ class ResguardoController extends Controller
             'estado' => 'SINALOA',
             'day' => $day,
             'month' => $month,
-            'year' => $year
+            'year' => $year,
+            'nota' => $nota
         ];
 
         $id = $o->id;

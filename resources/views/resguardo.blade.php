@@ -73,6 +73,9 @@
 		    
 		  @endforelse
 		</table>
+		@if (strlen($nota) > 0)
+			<div style="background-color:yellow; margin-top: 50px;">{{$nota}}</div>
+		@endif
 	</div>
 	<htmlpagefooter name="page-footer">
 		<p>_________________________________________________<br>{{$oficial}}<br>{{$oficialia && $num_oficialia != 0? 'OFICIAL '.$num_oficialia.' DE '.$oficialia.',':''}} 

@@ -160,6 +160,7 @@ angular.module('App')
 	    	});
     		let pdf_data = {};
     		pdf_data.id = resguardo.id;
+    		pdf_data.nota = resguardo.observaciones;
     		pdf_data.oficial = $scope.showing.responsable;
     		pdf_data.num_oficialia = $scope.showing.oficialia && $scope.showing.oficialia.id? $scope.showing.oficialia.id: null;
     		pdf_data.oficialia = $scope.showing.oficialia && $scope.showing.oficialia.oficialia? $scope.showing.oficialia.oficialia: null;
@@ -373,6 +374,35 @@ angular.module('App')
 				});
 		    });
 		}
+		$scope.ponerNota = function(ev, resguardo) {
+	    // Appending dialog to document.body to cover sidenav in docs app
+	    	var obs_orig = resguardo.observaciones;
+		    var confirm = $mdDialog.prompt()
+		      .title('Nota')
+		      .placeholder('Nota')
+		      .ariaLabel('Nota')
+		      .initialValue(resguardo.observaciones)
+		      .clickOutsideToClose(true)
+		      .targetEvent(null)
+		      .parent(angular.element(document.body))
+		      .ok('Guardar')
+		      .cancel('Cancelar');
+
+		    $mdDialog.show(confirm).then(function(result) {
+		    	let data = {
+		    		'id': resguardo.id,
+		    		'set_note': true,
+		    		'nota': result
+		    	}
+		    	resguardo.observaciones = result;
+		      	API.all('resguardo').post({data:data})
+		      		.then(response => resguardo = response);
+		    }, function() {
+		    	if(resguardo.observaciones != obs_orig)
+		    		resguardo.observaciones = obs_orig;
+		    });
+		 };
+
 		var DialogController = ($scope, $mdDialog) => {
 			$scope.changed = () => $scope.files01 = $scope.files01.filter(file => file.lfFile.type == "application/pdf");
 		    $scope.hide = () => $mdDialog.hide();

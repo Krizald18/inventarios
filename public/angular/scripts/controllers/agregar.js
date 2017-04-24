@@ -40,6 +40,7 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 			setTimeout(()=> {
 				$scope.cambioModelo();
 			}, 2000);
+			sessionStorage.clear();
 		}
 		if($scope.grupos.length == 1)
 			$scope.project.grupo_id = $scope.grupos[0].id;
