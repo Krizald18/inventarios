@@ -74,7 +74,7 @@
 		  @endforelse
 		</table>
 		@if (strlen($nota) > 0)
-			<div style="background-color:yellow; margin-top: 50px;">{{$nota}}</div>
+			<div style="background-color:#f0f0f0; margin-top: 50px;">&nbsp;&nbsp;&nbsp;{{$nota}}</div>
 		@endif
 	</div>
 	<htmlpagefooter name="page-footer">

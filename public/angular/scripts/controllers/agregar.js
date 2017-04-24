@@ -41,6 +41,7 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 				$scope.cambioModelo();
 			}, 2000);
 			sessionStorage.clear();
+			sessionStorage.setItem('editMode', true);
 		}
 		if($scope.grupos.length == 1)
 			$scope.project.grupo_id = $scope.grupos[0].id;
@@ -653,7 +654,7 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 			obj.responsable_id = parseInt(frmObj.responsable_id);
 
 		if($scope.editOnly)
-			obj.id = JSON.parse(sessionStorage.articulo).id;
+			obj.id = $scope.project.id;
 
 		obj.status = frmObj.status? frmObj.status : false;
 		obj.fecha_baja = null;
@@ -706,9 +707,9 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 					}
 					$scope.projectForm.$setPristine();
 					$scope.projectForm.$setUntouched();
-					if(sessionStorage.getItem('articulo'))
+					if(sessionStorage.editMode)
 					{
-						sessionStorage.removeItem('articulo');
+						sessionStorage.clear();
 						window.location = "#/inventario";
 					}
 				});

@@ -82,6 +82,7 @@ class ResponsableController extends Controller
                         $i = Inventario::find($articulo);
                         $i->responsable_id = $request->input('nuevo_responsable');
                         $i->area_id = $area;
+                        $i->folio_resguardo = null;
                         $i->status = true; // activo
 
                         $re = Responsable::find($i->responsable_id);
