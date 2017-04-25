@@ -23,7 +23,9 @@ angular.module('App').controller('InventarioCtrl', ['API', '$scope', '$interval'
 	  	$scope.$watch('status_activo', val => {
 	  		if(val == undefined)
 	  			return;
+
 	  		$scope.query.status = val;
+			$scope.query.page = 1,
 	  		$scope.selected = [];
 			$scope.getInventario();
 	  	});
