@@ -6,7 +6,7 @@ use \Carbon\Carbon;
 class AreaTableSeeder extends Seeder {
 	public function run(){
 		$now = Carbon::now();
-		DB::table('areas')->delete();
+		//DB::table('areas')->delete();
 		// datos de prueba
 		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [1,'ACLARACIONES',$now]);
 		DB::insert('insert into areas (id, area, created_at) values (?, ?, ?)', [2,'ADMINISTRATIVA',$now]);

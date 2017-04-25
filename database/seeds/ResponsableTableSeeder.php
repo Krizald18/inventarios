@@ -6,7 +6,7 @@ use \Carbon\Carbon;
 class ResponsableTableSeeder extends Seeder {
 	public function run(){
 		$now = Carbon::now();
-		DB::table('responsables')->delete();
+		//DB::table('responsables')->delete();
 		// datos de prueba
 		DB::insert('insert into responsables (id, responsable, oficialia_id, created_at) values (?,?,?,?)', [1,'ABRAHAM JARED CASILLAS GIL',null,$now]);
 		DB::insert('insert into responsables (id, responsable, oficialia_id, created_at) values (?,?,?,?)', [2,'ADAN EDUARDO PEREGRINA MENENDEZ',null,$now]);

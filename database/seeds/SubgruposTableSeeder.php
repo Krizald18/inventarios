@@ -6,7 +6,7 @@ use \Carbon\Carbon;
 class SubgruposTableSeeder extends Seeder {
 	public function run() {
 		$now = Carbon::now();
-		DB::table('subgrupos')->delete();
+		//DB::table('subgrupos')->delete();
 		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [1,'CPU', 1, $now]);
 		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [2,'COMPUTADORA ESCRITORIO', 1, $now]);
 		DB::insert('insert into subgrupos (id, subgrupo, grupo_id, created_at) values (?,?,?,?)', [3,'DETECTOR HUELLA DP', 1, $now]);

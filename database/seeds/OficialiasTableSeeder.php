@@ -6,7 +6,7 @@ use \Carbon\Carbon;
 class OficialiasTableSeeder extends Seeder {
 	public function run(){
 		$now = Carbon::now();
-		DB::table('oficialias')->delete();
+		//DB::table('oficialias')->delete();
 		DB::insert('insert into oficialias (id, municipio_id, oficialia, created_at) values (?,?,?,?)', ['01001',1,'VILLA DE AHOME',$now]);
 		DB::insert('insert into oficialias (id, municipio_id, oficialia, created_at) values (?,?,?,?)', ['01002',1,'VILLA GUSTAVO DIAZ ORDAZ',$now]);
 		DB::insert('insert into oficialias (id, municipio_id, oficialia, created_at) values (?,?,?,?)', ['01003',1,'UNIDAD ADMINISTRATIVA',$now]);

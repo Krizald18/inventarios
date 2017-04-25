@@ -6,7 +6,7 @@ use \Carbon\Carbon;
 class CaracteristicasTableSeeder extends Seeder {
 	public function run(){
 		$now = Carbon::now();
-		DB::table('caracteristicas')->delete();
+		//DB::table('caracteristicas')->delete();
 
 		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?,?,?)', [1,'SATA-300, 2 GB RAM DDR3, AMD Athlon II X2 B24 / 3 GHz',$now]);
 		DB::insert('insert into caracteristicas (id, caracteristica, created_at) values (?,?,?)', [2,'COLOR 4800 x 1200 dpi',$now]);

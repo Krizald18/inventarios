@@ -6,7 +6,7 @@ use \Carbon\Carbon;
 class MarcasTableSeeder extends Seeder {
 	public function run(){
 		$now = Carbon::now();
-		DB::table('marcas')->delete();
+		//DB::table('marcas')->delete();
 		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [1,'3COM',$now]);
 		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [2,'ACER',$now]);
 		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [3,'ALCATEL',$now]);

@@ -6,7 +6,7 @@ use \Carbon\Carbon;
 class ModelosTableSeeder extends Seeder {
 	public function run(){
 		$now = Carbon::now();
-		DB::table('modelos')->delete();
+		//DB::table('modelos')->delete();
 		/* pruebas caracteristica repetida en dos modelos diferentes
 		DB::insert('insert into modelos (id, marca_id, modelo, caracteristica_id, subgrupo_id, created_at) values (?,?,?,?,?,?)', [1,16,'6005',1,1,$now]);
 		DB::insert('insert into modelos (id, marca_id, modelo, caracteristica_id, subgrupo_id, created_at) values (?,?,?,?,?,?)', [2,16,'6006',1,1,$now]);

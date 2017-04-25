@@ -6,7 +6,7 @@ use \Carbon\Carbon;
 class GruposTableSeeder extends Seeder {
 	public function run(){
 		$now = Carbon::now();
-		DB::table('grupos')->delete();
+		//DB::table('grupos')->delete();
 
 		$grupos = array(
 			array(

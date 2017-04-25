@@ -5,9 +5,10 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
     // php artisan migrate:refresh --seed
+    
     public function run()
     {
-    	Eloquent::unguard();
+    	Eloquent::unguard();    
         $users = array(
             array(
                 'id' => 1,
@@ -28,7 +29,7 @@ class DatabaseSeeder extends Seeder
                 )
             );
         DB::table('admins')->insert($admin);
-
+        /*
         $this->call('GruposTableSeeder');
         $this->call('SubgruposTableSeeder');
         $this->call('MunicipiosTableSeeder');
@@ -39,7 +40,8 @@ class DatabaseSeeder extends Seeder
         $this->call('ModelosTableSeeder');
         $this->call('AreaTableSeeder');
         $this->call('ResponsableTableSeeder');     
-        $this->call('InventariosTableSeeder');
         $this->call('PerfilesTableSeeder');
+        $this->call('InventariosTableSeeder');
+        */
     }
 }

@@ -6,7 +6,7 @@ use \Carbon\Carbon;
 class MarcasSubgruposTableSeeder extends Seeder {
 	public function run(){
 		$now = Carbon::now();
-		DB::table('marca_subgrupo')->delete();
+		//DB::table('marca_subgrupo')->delete();
 
 		$marca_subgrupo = array(
 			array(

@@ -6,7 +6,7 @@ use \Carbon\Carbon;
 class MunicipiosTableSeeder extends Seeder {
 	public function run(){
 		$now = Carbon::now();
-		DB::table('municipios')->delete();
+		//DB::table('municipios')->delete();
 		DB::insert('insert into municipios (id, municipio, created_at) values (?, ?, ?)', [1,'AHOME',$now]);
 		DB::insert('insert into municipios (id, municipio, created_at) values (?, ?, ?)', [2,'ANGOSTURA',$now]);
 		DB::insert('insert into municipios (id, municipio, created_at) values (?, ?, ?)', [3,'BADIRAGUATO',$now]);
