@@ -41,8 +41,8 @@ angular.module('App').controller('InventarioCtrl', ['API', '$scope', '$interval'
 		}
 
 		var dt = response => {
-			$scope.inventario = response.data;
-			$scope.total = response.data.total;
+			$scope.inventario = response.data.data ? response.data: response;
+			$scope.total = response.data.total? response.data.total: response.total;
 			$scope.refreshbodyheight()
 		}
 
@@ -50,7 +50,7 @@ angular.module('App').controller('InventarioCtrl', ['API', '$scope', '$interval'
 
 		$scope.getInventario = () => {
 			$scope.loading = true;
-			API.all("inventario?").customGET("", $scope.query).catch(dt);
+			API.all("inventario?").customGET("", $scope.query).then(dt).catch(dt);
 		};
 		$scope.buscaArticulo = () => {
 			if($scope.strSearch.length == 0)

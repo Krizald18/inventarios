@@ -108,7 +108,7 @@ class InventarioController extends Controller
                             ->orderBy($order, $desc? 'desc': 'asc')
                             ->paginate($limit);
                 }
-                if($searchby == 2) // serie o inventario, 0 9
+                else if($searchby == 2) // serie o inventario, 0 9
                 {
                     $x = Inventario::with('area', 'responsable')
                             ->with(array('oficialia' => function($q){
@@ -124,59 +124,48 @@ class InventarioController extends Controller
                                 ->whereNotNull('fecha_baja')
                                 ->orderBy($order, $desc? 'desc': 'asc')
                                 ->paginate($limit);
-                    if($searchby == 3) // oficialia, responsable o serie, a Z
-                    {
-                        $a = Inventario::with('area', 'responsable')
-                            ->with(array('oficialia' => function($q){
-                                $q->with('municipio');
-                            }))
-                            ->with(array('modelo' => function($q){
-                                $q->with('marca');
-                                $q->with('caracteristica');
-                                $q->with('subgrupo');
-                            }))
-                            ->where('numero_serie', $txt)
-                            ->whereNotNull('fecha_baja')
-                            ->orderBy($order, $desc? 'desc': 'asc')
-                            ->paginate($limit);
+                }
+                else if($searchby == 3) // oficialia, responsable o serie, a Z
+                {
+                    $a = Inventario::with('area', 'responsable')
+                        ->with(array('oficialia' => function($q){
+                            $q->with('municipio');
+                        }))
+                        ->with(array('modelo' => function($q){
+                            $q->with('marca');
+                            $q->with('caracteristica');
+                            $q->with('subgrupo');
+                        }))
+                        ->where('numero_serie', $txt)
+                        ->whereNotNull('fecha_baja')
+                        ->orderBy($order, $desc? 'desc': 'asc')
+                        ->paginate($limit);
 
-                        if(count($a) == 1)
-                            return Response::json($a, 300);
+                    if(count($a) == 1)
+                        return Response::json($a, 300);
 
-                        $x = Inventario::with('area', 'responsable')
-                            ->with(array('modelo' => function($r){
-                                $r->with('marca');
-                                $r->with('caracteristica');
-                                $r->with('subgrupo');
-                            }))
-                            ->with(array('oficialia' => function($o){
-                                $o->with('municipio');
-                            }))
-                            ->whereHas('oficialia', function($q) use ($txt){
-                                $q->where('oficialia', 'LIKE', '%'.$txt.'%');
-                            })
-                            ->orwhereHas('responsable', function($s) use ($txt){
-                                $s->where('responsable', 'LIKE', '%'.$txt.'%');
-                            })
-                            ->whereNotNull('fecha_baja')
-                            ->orderBy($order, $desc? 'desc': 'asc')
-                            ->paginate($limit);
-                    }
-                    else
-                    {
-                        $x = Inventario::with('area', 'responsable')
-                            ->with(array('oficialia' => function($q){
-                                $q->with('municipio');
-                            }))
-                            ->with(array('modelo' => function($q){
-                                $q->with('marca');
-                                $q->with('caracteristica');
-                                $q->with('subgrupo');
-                            }))
-                                ->whereNotNull('fecha_baja')
-                                ->orderBy($order, $desc? 'desc': 'asc')
-                                ->paginate($limit);
-                    }
+                    $x = Inventario::with('area', 'responsable')
+                        ->with(array('modelo' => function($r){
+                            $r->with('marca');
+                            $r->with('caracteristica');
+                            $r->with('subgrupo');
+                        }))
+                        ->with(array('oficialia' => function($o){
+                            $o->with('municipio');
+                        }))
+                        ->where(function($query) use ($txt){
+                            return $query
+                                      ->whereHas('oficialia', function($q) use ($txt){
+                                            $q->where('oficialia', 'LIKE', '%'.$txt.'%');
+                                        })
+                                      ->orwhereHas('responsable', function($s) use ($txt){
+                                            $s->where('responsable', 'LIKE', '%'.$txt.'%');
+                                        });
+                        })
+                        ->whereNotNull('fecha_baja')
+                        ->orderBy($order, $desc? 'desc': 'asc')
+                        ->paginate($limit);
+                        return $x;
                 }
                 else
                 {
@@ -193,7 +182,6 @@ class InventarioController extends Controller
                             ->orderBy($order, $desc? 'desc': 'asc')
                             ->paginate($limit);
                 }
-
             }
             else
             {
@@ -213,7 +201,7 @@ class InventarioController extends Controller
                             ->orderBy($order, $desc? 'desc': 'asc')
                             ->paginate($limit);
                 }
-                if($searchby == 2) // serie o inventario, 0 9
+                else if($searchby == 2) // serie o inventario, 0 9
                 {
                     $x = Inventario::with('area', 'responsable')
                             ->with(array('oficialia' => function($q){
@@ -224,82 +212,70 @@ class InventarioController extends Controller
                                 $q->with('caracteristica');
                                 $q->with('subgrupo');
                             }))
-                                ->where('numero_serie', $txt)
-                                ->orwhere('numero_inventario', $txt)
+                            ->where(function($query) use ($txt){
+                                return $query
+                                    ->where('numero_serie', $txt)
+                                    ->orwhere('numero_inventario', $txt);
+                            })
                                 ->whereNull('fecha_baja')
                                 ->orderBy($order, $desc? 'desc': 'asc')
                                 ->paginate($limit);
-                    if($searchby == 3) // oficialia, responsable o serie, a Z
-                    {
-                        $a = Inventario::with('area', 'responsable')
-                            ->with(array('oficialia' => function($q){
-                                $q->with('municipio');
-                            }))
-                            ->with(array('modelo' => function($q){
-                                $q->with('marca');
-                                $q->with('caracteristica');
-                                $q->with('subgrupo');
-                            }))
-                            ->where('numero_serie', $txt)
-                            ->whereNull('fecha_baja')
-                            ->orderBy($order, 'desc')
-                            ->paginate($limit);
+                }
+                else if($searchby == 3) // oficialia, responsable o serie, a Z
+                {
+                    $a = Inventario::with('area', 'responsable')
+                        ->with(array('oficialia' => function($q){
+                            $q->with('municipio');
+                        }))
+                        ->with(array('modelo' => function($q){
+                            $q->with('marca');
+                            $q->with('caracteristica');
+                            $q->with('subgrupo');
+                        }))
+                        ->where('numero_serie', $txt)
+                        ->whereNull('fecha_baja')
+                        ->orderBy($order, 'desc')
+                        ->paginate($limit);
 
-                        if(count($a) == 1)
-                            return Response::json($a, 300);
+                    if(count($a) == 1)
+                        return Response::json($a, 300);
 
-                        $x = Inventario::with('area', 'responsable')
-                            ->with(array('modelo' => function($r){
-                                $r->with('marca');
-                                $r->with('caracteristica');
-                                $r->with('subgrupo');
-                            }))
-                            ->with(array('oficialia' => function($o){
-                                $o->with('municipio');
-                            }))
-                            ->whereHas('oficialia', function($q) use ($txt){
-                                $q->where('oficialia', 'LIKE', '%'.$txt.'%');
-                            })
-                            ->orwhereHas('responsable', function($s) use ($txt){
-                                $s->where('responsable', 'LIKE', '%'.$txt.'%');
-                            })
-                            ->whereNull('fecha_baja')
-                            ->orderBy($order, $desc? 'desc': 'asc')
-                            ->paginate($limit);
-
-                        return Response::json($x, 300);
-                    }
-                    else
-                    {
-                        $x = Inventario::with('area', 'responsable')
-                            ->with(array('oficialia' => function($q){
-                                $q->with('municipio');
-                            }))
-                            ->with(array('modelo' => function($q){
-                                $q->with('marca');
-                                $q->with('caracteristica');
-                                $q->with('subgrupo');
-                            }))
-                                ->whereNull('fecha_baja')
-                                ->orderBy($order, $desc? 'desc': 'asc')
-                                ->paginate($limit);
-                        return Response::json($x, 300);
-                    }
+                    $x = Inventario::with('area', 'responsable')
+                        ->with(array('modelo' => function($r){
+                            $r->with('marca');
+                            $r->with('caracteristica');
+                            $r->with('subgrupo');
+                        }))
+                        ->with(array('oficialia' => function($o){
+                            $o->with('municipio');
+                        }))
+                        ->where(function($query) use ($txt){
+                            return $query
+                                  ->whereHas('oficialia', function($q) use ($txt){
+                                        $q->where('oficialia', 'LIKE', '%'.$txt.'%');
+                                    })
+                                  ->orwhereHas('responsable', function($s) use ($txt){
+                                        $s->where('responsable', 'LIKE', '%'.$txt.'%');
+                                    });
+                        })
+                        ->whereNull('fecha_baja')
+                        ->orderBy($order, $desc? 'desc': 'asc')
+                        ->paginate($limit);
                 }
                 else
                 {
                     $x = Inventario::with('area', 'responsable')
-                            ->with(array('oficialia' => function($q){
-                                $q->with('municipio');
-                            }))
-                            ->with(array('modelo' => function($q){
-                                $q->with('marca');
-                                $q->with('caracteristica');
-                                $q->with('subgrupo');
-                            }))
-                                ->whereNull('fecha_baja')
-                                ->orderBy($order, $desc? 'desc': 'asc')
-                                ->paginate($limit);
+                        ->with(array('oficialia' => function($q){
+                            $q->with('municipio');
+                        }))
+                        ->with(array('modelo' => function($q){
+                            $q->with('marca');
+                            $q->with('caracteristica');
+                            $q->with('subgrupo');
+                        }))
+                            ->whereNull('fecha_baja')
+                            ->orderBy($order, $desc? 'desc': 'asc')
+                            ->paginate($limit);
                 }
             }
             return Response::json($x, 300);
