@@ -4,7 +4,7 @@
       <div layout="row">
         <md-input-container flex="50" class="md-block">
           <label>Número de Inventario</label>
-          <input name="numero_inv" type="text" md-maxlength="19" md-auto-hide="!editOnly" md-no-asterisk="" ng-model="project.numero_inventario" ng-required="!project.numero_inventario">
+          <input name="numero_inv" type="text" md-maxlength="19" md-auto-hide="!editOnly" md-no-asterisk="" ng-model="project.numero_inventario" ng-required="!project.numero_inventario && !project.numero_serie">
           <div ng-messages="projectForm.numero_inv.$error">
             <div ng-message="md-maxlength">El campo Número de Inventario debe ser máximo 19 caracteres</div>
             <div ng-message="required">El campo Número de Inventario es requerido</div>
@@ -12,7 +12,7 @@
         </md-input-container>
         <md-input-container flex="50" class="md-block">
           <label>Número de Serie</label>
-          <input name="numero_ser" type="text" md-maxlength="50" md-no-asterisk="" ng-model="project.numero_serie" ng-required="!project.numero_serie">
+          <input name="numero_ser" type="text" md-maxlength="50" md-no-asterisk="" ng-model="project.numero_serie" ng-required="!project.numero_serie && !project.numero_inventario">
           <div ng-messages="projectForm.numero_ser.$error">
             <div ng-message="md-maxlength">El campo Número de Serie debe ser máximo 50 caracteres</div>
             <div ng-message="required">El campo Número de Serie es requerido</div>
@@ -88,7 +88,7 @@
       <div layout="row">
         <md-input-container flex="50" class="md-block">
           <label>Municipio</label>
-          <md-select name ="municipio" ng-model="project.municipio" ng-change="cambioMunicipio();" ng-required="!project.municipio">
+          <md-select name ="municipio" ng-model="project.municipio" ng-change="cambioMunicipio();" ng-required="!project.municipio && !project.area_id">
             <md-option ng-repeat="x in municipios track by x.id" value="{{x}}"><small>{{x.id < 10 ? '0' + x.id: x.id}} - </small>{{x.municipio}}</md-option>
           </md-select>
           <div ng-messages="projectForm.municipio.$error">
@@ -98,7 +98,7 @@
 
         <md-input-container flex="50" class="md-block">
           <label>Oficialía</label>
-          <md-select name = "oficialia" ng-model="project.oficialia_id" ng-change = "cambioOficialia()" ng-required="!project.oficialia_id">
+          <md-select name = "oficialia" ng-model="project.oficialia_id" ng-change = "cambioOficialia()" ng-required="!project.oficialia_id && !project.area_id">
             <md-option ng-repeat="x in oficialias track by x.id" value="{{x.id}}"><small>{{x.id}} - </small>{{x.oficialia}}</md-option>
           </md-select>
           <div ng-messages="projectForm.oficialia.$error">
@@ -110,7 +110,7 @@
       <div layout="row">
         <md-input-container flex="50" class="md-block">
           <label>Área</label>
-          <md-select name ="area" ng-model="project.area_id" ng-required="!project.area_id">
+          <md-select name ="area" ng-model="project.area_id" ng-required="!project.area_id && !project.oficialia_id">
             <md-option ng-repeat="x in areas track by x.id" value="{{x.id}}">{{x.area}}</md-option>
           </md-select>
           <div ng-messages="projectForm.area.$error">

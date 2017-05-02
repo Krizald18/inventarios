@@ -84,8 +84,8 @@ angular.module('App').controller('InventarioCtrl', ['API', '$scope', '$interval'
 				}
 				else
 				{
-					// son solo numeros
-					$scope.query.searchby = 2;
+					// son solo numeros, si es de 5 caracteres buscar por opcion 4 (oficialia_id o numero de inventario)
+					$scope.query.searchby = y != 5? 2: 4;
 					$scope.getInventario();
 					// console.log('BUSCAR POR NUMERO DE INVETARIO O SERIE');
 				}

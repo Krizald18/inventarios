@@ -1,5 +1,5 @@
 <md-content>
-    <md-tabs class="" md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}" style="background-color:white; min-height: 600px; width: 1200px;" >
+    <md-tabs class="" md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}" style="background-color:white; min-height: 1100px; width: 1200px;" >
       <md-tab id="tab1">
         <md-tab-label>Inventario</md-tab-label>
         <md-tab-body>
@@ -18,7 +18,7 @@
                     <th md-column ng-if="!status_activo">Fecha de baja</th>
                     <th md-column>Subgrupo</th>
                     <th md-column>Marca y Modelo</th>
-                    <th md-column md-order-by="oficialia" ng-if="status_activo">Oficialía</th>
+                    <th md-column md-order-by="oficialia" ng-if="status_activo">Área u Oficialía</th>
                     <th md-column md-order-by="oficialia" ng-if="!status_activo">Área</th>
                     <th md-column md-order-by="responsable">Responsable</th>
                   </tr>
@@ -28,11 +28,12 @@
                     <td md-cell>{{objeto.numero_inventario}}</td>
                     <td md-cell>{{objeto.numero_serie}}</td>
                     <td md-cell ng-if="status_activo">{{objeto.status? "Activo": "En reparación"}}</td>
-                    <td md-cell ng-if="!status_activo">{{millisec(objeto.fecha_baja) | date:'dd/MM/yyyy'}}</td>
+                    <td md-cell ng-if="!status_activo && objeto.fecha_baja != '0000-00-00'">{{millisec(objeto.fecha_baja) | date:'dd/MM/yyyy'}}</td>
+                    <td md-cell ng-if="!status_activo && objeto.fecha_baja == '0000-00-00'">{{'01/01/1800'}}</td>
                     <td md-cell>{{objeto.modelo.subgrupo.subgrupo}}</td>
                     <td md-cell>{{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
-                    <td md-cell ng-if="status_activo">{{objeto.oficialia.oficialia}}</td>
-                    <td md-cell ng-if="!status_activo">{{objeto.area.area}}</td>
+                    <td md-cell ng-if="status_activo">{{objeto.oficialia.oficialia? objeto.oficialia.oficialia: objeto.area.area}}</td>
+                    <td md-cell ng-if="!status_activo">{{objeto.area.area? objeto.area.area: objeto.oficialia.oficialia}}</td>
                     <td md-cell>{{objeto.responsable.responsable}}</td>
                   </tr>
                 </tbody>
@@ -68,7 +69,7 @@
                   <th md-column>Numero de Serie</th>
                   <th md-column>Subgrupo</th>
                   <th md-column>Marca y Modelo</th>
-                  <th md-column>Oficialía</th>
+                  <th md-column>Área u Oficialía</th>
                   <th md-column>Responsable</th>
                 </tr>
               </thead>
@@ -78,7 +79,7 @@
                   <td md-cell>{{objeto.numero_serie}}</td>
                   <td md-cell>{{objeto.modelo.subgrupo.subgrupo}}</td>
                   <td md-cell>{{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
-                  <td md-cell>{{objeto.oficialia.oficialia}}</td>
+                  <td md-cell>{{objeto.oficialia.oficialia? objeto.oficialia.oficialia : objeto.area.area}}</td>
                   <td md-cell>{{objeto.responsable.responsable}}</td>
                 </tr>
               </tbody>

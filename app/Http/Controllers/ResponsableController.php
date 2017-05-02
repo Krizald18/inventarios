@@ -35,6 +35,7 @@ class ResponsableController extends Controller
                                     $q->with('caracteristica');
                                     $q->with('subgrupo');
                                 }));
+                                $a->whereNull('fecha_baja');
                             }))
                             ->with(array('oficialia' => function($q){
                                 $q->orderBy('oficialia', 'asc');

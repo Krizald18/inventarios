@@ -8,7 +8,8 @@ class DatabaseSeeder extends Seeder
     
     public function run()
     {
-    	Eloquent::unguard();    
+    	Eloquent::unguard();
+        /*
         $users = array(
             array(
                 'id' => 1,
@@ -29,7 +30,7 @@ class DatabaseSeeder extends Seeder
                 )
             );
         DB::table('admins')->insert($admin);
-        /*
+
         $this->call('GruposTableSeeder');
         $this->call('SubgruposTableSeeder');
         $this->call('MunicipiosTableSeeder');
@@ -41,7 +42,7 @@ class DatabaseSeeder extends Seeder
         $this->call('AreaTableSeeder');
         $this->call('ResponsableTableSeeder');     
         $this->call('PerfilesTableSeeder');
-        $this->call('InventariosTableSeeder');
         */
+        $this->call('InventariosTableSeeder');
     }
 }

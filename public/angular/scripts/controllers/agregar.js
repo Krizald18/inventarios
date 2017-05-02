@@ -516,6 +516,7 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 	$scope.cambioOficialia = () => {
 		if(!$scope.project.oficialia_id)
 			return;
+		$scope.project.area_id = 17;
 		if($scope.project.municipio)
 			var mun = JSON.parse($scope.project.municipio);
 		var oficialia = $.grep($scope.oficialias_bk, o => o.id == $scope.project.oficialia_id)[0];
