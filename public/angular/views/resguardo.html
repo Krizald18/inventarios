@@ -80,7 +80,7 @@
       <md-tab id="tab2" ng-if = "showing.articulos_asignados.length > 0" style="width: 920px;" ng-style="{{myStyle}}">
         <md-tab-label>Artículos Asignados</md-tab-label>
         <md-tab-body>
-          <md-switch class="md-primary" name="sinResguardo" ng-model="sinResguardo" style="margin-left: 62%;"  ng-show="showing.id != 244">
+          <md-switch class="md-primary" name="sinResguardo" ng-model="sinResguardo" style="margin-left: 78%;"  ng-show="showing.id != 244">
             <!--ng-disabled="showing.sin_resguardo.length == 0 || showing.con_resguardo.length == 0"-->
             {{sinResguardo? "Con reguardo": "Sin resguardo"}}
           </md-switch>
@@ -89,7 +89,7 @@
             <label>{{showing.id != 244? "Asignados sin resguardo": "Artículos"}}</span></label>
             <input type="text" name="" disabled="" />
           </md-input-container>
-          <md-table-container style="margin-top:-35px;width: 700px;">
+          <md-table-container style="margin-top:-35px;width: 860px;">
             <table md-table md-row-select multiple ng-model="selected2">
               <thead md-head>
                 <tr md-row>

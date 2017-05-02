@@ -45,11 +45,11 @@ angular.module('App').controller('InventarioCtrl', ['API', '$scope', '$interval'
 		var dt = response => {
 			$scope.inventario = response.data.data ? response.data: response;
 			$scope.total = response.data.total? response.data.total: response.total;
-			$scope.refreshbodyheight()
+			$scope.loading = false;
 		}
 
 		API.all("inventario").getList().catch(dt);
-
+		$scope.refreshbodyheight();
 		$scope.getInventario = () => {
 			$scope.loading = true;
 			API.all("inventario?").customGET("", $scope.query).then(dt).catch(dt);
