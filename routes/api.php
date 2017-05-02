@@ -21,7 +21,7 @@ Route::post('auth/password/email', 'Auth\PasswordResetController@sendResetLinkEm
 Route::get('auth/password/verify', 'Auth\PasswordResetController@verify');
 Route::post('auth/password/reset', 'Auth\PasswordResetController@reset');
 
-//protected API routes with JWT (logged in required)
+//protected API routes with JWT (log in required)
 Route::group(['prefix' => 'user'], function()
 {
 	Route::get('', ['uses' => 'UserController@allUsers']);
@@ -39,7 +39,7 @@ Route::group(['prefix' => 'downloader'], function()
 {
 	Route::get('{id}', ['uses' => 'DownloaderController@donwloadFile']);
 });
-//protected API resource routes with JWT (logged in required)
+//protected API resource routes with JWT (log in required)
 Route::resource('grupo', 'GrupoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('subgrupo', 'SubgrupoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('caracteristica', 'CaracteristicaController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
@@ -56,5 +56,5 @@ Route::resource('resguardo', 'ResguardoController', ['only' => ['index', 'store'
 Route::resource('evidencia', 'EvidenciaController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 // --
 
-//unprotected API routes, no JWT (logged in not required)
+//unprotected API routes, no JWT (log in not required)
 // --

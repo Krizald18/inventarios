@@ -52,6 +52,7 @@ angular.module('App').controller('InventarioCtrl', ['API', '$scope', '$interval'
 		$scope.refreshbodyheight();
 		$scope.getInventario = () => {
 			$scope.loading = true;
+			$scope.selected = [];
 			API.all("inventario?").customGET("", $scope.query).then(dt).catch(dt);
 		};
 		$scope.buscaArticulo = () => {
