@@ -41,7 +41,7 @@ class MarcaController extends Controller
         ]);
 
         $u = User::with('admin')->find($request->user);
-        if(!isset($u->admin) || isset($u->admin) && $u->admin->token <> $request->admin_token)
+        if(!isset($u->admin) || (isset($u->admin) && $u->admin->token <> $request->admin_token))
             return Response::json('Error al validar token', 401);
 
         $nextid = \DB::table('marcas')->max('id');
