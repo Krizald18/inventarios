@@ -134,7 +134,7 @@
               Eliminar Articulos
             </span>
           </a>
-        </li>-->
+        </li>
         <li id="liauth" ng-if="autenticado" hidden>
           <a href="#/baja">
             <i class="fa fa-minus fa-2x"></i>
@@ -143,6 +143,7 @@
             </span>
           </a>
         </li>
+        -->
       </ul>
       <ul class="logout" ng-if="autenticado">
         <li id="liauth" ng-if="autenticado && admin" hidden>
@@ -194,6 +195,9 @@
     <script src="js/angular-resource.min.js"></script>
     <script src="js/angular-route.min.js"></script>
     <script src="js/angular-sanitize.min.js"></script>
+    <script src="js/fusioncharts.js"></script>
+    <script src="js/fusioncharts.charts.js"></script>
+    <script src="js/angular-fusioncharts.min.js"></script>
     <!--<script src="js/angular-ui-router.min.js"></script>-->
     <script src="js/md-data-table.min.js"></script>
     <script src="js/satellizer.min.js"></script>    

@@ -52,6 +52,11 @@ Route::resource('responsable', 'ResponsableController', ['only' => ['index', 'st
 Route::resource('inventario', 'InventarioController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('resguardo', 'ResguardoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 
+Route::group(['prefix' => 'grafica'], function()
+{
+	Route::get('activos', ['uses' => 'GraficaController@activos']);
+	Route::get('bajas', ['uses' => 'GraficaController@bajas']);
+});
 // hiden -- remove these routes in production
 Route::resource('evidencia', 'EvidenciaController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 // --

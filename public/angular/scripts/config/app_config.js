@@ -49,11 +49,13 @@ angular.module('app.config')
 				controller: 'AgregarCtrl',
 				middleware: 'AuthenticatedOnly'
 			})
+			/*
 			.when('/baja', {
 				templateUrl: 'angular/views/main.html',
 				controller: 'MainCtrl',
 				middleware: 'AuthenticatedOnly'
 			})
+			*/
 			.when('/panel', {
 				templateUrl: 'angular/views/panel.html',
 				controller: 'PanelCtrl',

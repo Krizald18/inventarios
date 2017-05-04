@@ -18,7 +18,8 @@ angular
     'md.data.table',
     'material.svgAssetsCache',
     'lfNgMdFileInput',
-    'angularFileUpload'
+    'angularFileUpload',
+    'ng-fusioncharts'
   ]);
   /*.filter('moment', function() {
     return function(dateString, format) {
