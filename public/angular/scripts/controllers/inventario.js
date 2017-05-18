@@ -15,6 +15,7 @@ angular.module('App').controller('InventarioCtrl', ['API', '$scope', '$interval'
 			status: true
 		};
 		$scope.status_activo = true;
+		$scope.tab_size = 700 + "px";
 
 		$scope.$watch('strSearch', val => {
 			if(val && val.length > 0)
@@ -30,27 +31,45 @@ angular.module('App').controller('InventarioCtrl', ['API', '$scope', '$interval'
 			$scope.getInventario();
 	  	});
 
-		$scope.refreshbodyheight = () => {
-			var body = document.body,
-			    html = document.documentElement;
-			body.style.height = 100 + "%";
-			setTimeout(() => {
-				var height = Math.max( body.scrollHeight, body.offsetHeight, 
-			        html.clientHeight, html.scrollHeight, html.offsetHeight );
-				body.style.height = height + "px";
-			}, 500);
+		$scope.refreshbodyheight = (down) => {
+			var body = document.body;
+			var origninal = angular.copy(body.style.height);
+			var new_he = "";
+			if($scope.query.limit == 5)
+				new_he = 826 + "px";
+			else if($scope.query.limit == 10)
+				new_he = 956 + "px";
+			else if($scope.query.limit == 15)
+				new_he = 1256 + "px";
+			if(origninal != new_he)
+				body.style.height = new_he;
 			$scope.loading = false;
 		}
 
 		var dt = response => {
 			$scope.inventario = response.data.data ? response.data: response;
 			$scope.total = response.data.total? response.data.total: response.total;
-			$scope.loading = false;
+			$scope.refreshbodyheight();
 		}
 
 		API.all("inventario").getList().catch(dt);
-		$scope.refreshbodyheight();
 		$scope.getInventario = () => {
+			if($scope.query.limit == 5)
+				$scope.tab_size = 700 + "px";	
+			else if($scope.query.limit == 10)
+				$scope.tab_size = 830 + "px";
+			else if($scope.query.limit == 15)
+				$scope.tab_size = 1130 + "px";			
+			if($scope.inventario && $scope.inventario.data.length > $scope.query.limit)
+			{
+				var temp = [];
+				$.each($scope.inventario.data, (i,o) => {
+					if(i < $scope.query.limit)
+						temp.push(o);
+				});
+				$scope.inventario.data = temp;
+			}
+			$scope.refreshbodyheight();
 			$scope.loading = true;
 			$scope.selected = [];
 			API.all("inventario?").customGET("", $scope.query).then(dt).catch(dt);

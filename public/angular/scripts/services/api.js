@@ -24,6 +24,9 @@ angular.module('App')
 								for (let error in response.data.errors)
 									return ToastService.error(response.data.errors[error][0]);
 							break;
+						case 503:
+							location.reload();
+							break;
 						case 504:
 				        case 500:
 							return ToastService.error(response.statusText);
