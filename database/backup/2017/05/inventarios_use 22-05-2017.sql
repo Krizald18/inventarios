@@ -6,10 +6,10 @@
 -- Tiempo de generación: 22-05-2017 a las 16:49:36
 -- Versión del servidor: 10.1.21-MariaDB
 -- Versión de PHP: 5.6.25
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
+CREATE DATABASE inventarios_use;
+USE inventarios_use;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
