@@ -121,8 +121,8 @@ class InventarioController extends Controller
                             }))
                                 ->where(function($query) use ($txt) {
                                     return $query
-                                        ->where('numero_serie', 'LIKE', $txt.'%')
-                                        ->orwhere('numero_inventario', 'LIKE', $txt.'%');
+                                        ->where('numero_serie', 'LIKE', '%'.$txt.'%')
+                                        ->orwhere('numero_inventario', 'LIKE', '%'.$txt.'%');
                                 })
                                 ->whereNotNull('fecha_baja')
                                 ->orderBy($order, $desc? 'desc': 'asc')
@@ -259,8 +259,8 @@ class InventarioController extends Controller
                             }))
                             ->where(function($query) use ($txt){
                                 return $query
-                                    ->where('numero_serie', 'LIKE', $txt.'%')
-                                    ->orwhere('numero_inventario', 'LIKE', $txt.'%');
+                                    ->where('numero_serie', 'LIKE', '%'.$txt.'%')
+                                    ->orwhere('numero_inventario', 'LIKE', '%'.$txt.'%');
                             })
                                 ->whereNull('fecha_baja')
                                 ->orderBy($order, $desc? 'desc': 'asc')
