@@ -118,8 +118,15 @@ angular.module('App').controller('InventarioCtrl', ['API', '$scope', '$interval'
 				// console.log('BUSCAR POR OFICIALIA O RESPONSABLE O SERIE')
 			}
 		};
-		$scope.print = () => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
-		$scope.printqueueprint = () => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
+		$scope.print = () => {
+			if($scope.selected && $scope.selected[0].responsable_id)
+			{
+				sessionStorage.responsable_id = $scope.selected[0].responsable_id;
+				window.location.replace("#/resguardo");
+			}
+		}
+		//AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
+		//$scope.printqueueprint = () => AlertService.show("Función no implementada", "Esta funcón sera habilitada proximamente...");
 
 		$scope.printqueueAdd = () => {
 			if($scope.selected.length > 0)

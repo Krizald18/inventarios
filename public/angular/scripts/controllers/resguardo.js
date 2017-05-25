@@ -118,6 +118,7 @@ angular.module('App')
 	    })
 	    API.all("responsable").getList().then(res => {
 	    	$scope.responsables = res.plain();
+	    if(localStorage.responsable_id)
 	    	var re = sessionStorage.getItem('responsable_id');
 			if(re)
 			{
