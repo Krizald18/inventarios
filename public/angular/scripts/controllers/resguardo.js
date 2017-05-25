@@ -145,7 +145,7 @@ angular.module('App')
 	    }
 	    var createFilterFor = query =>{
 	      var lowercaseQuery = angular.uppercase(query);
-	      return resp => resp.responsable.indexOf(lowercaseQuery) === 0;
+	      return resp => resp.responsable.indexOf(lowercaseQuery) === 0 || (resp.oficialia_id && resp.oficialia_id.indexOf(lowercaseQuery) != -1);
 	    }
 	    $scope.generatePDF = resguardo => {
 	    	let dt = new Date();
