@@ -156,6 +156,7 @@ angular.module('App')
 	    		obj.numero_inventario = o.numero_inventario;
 	    		obj.numero_serie = o.numero_serie;
 	    		obj.articulo = o.modelo.subgrupo.subgrupo + ' ' + o.modelo.marca.marca + ' ' + o.modelo.modelo;
+	    		obj.caracteristicas = o.modelo.caracteristica.caracteristica;
 	    		return obj;
 	    	});
     		let pdf_data = {};
