@@ -163,9 +163,10 @@ class ResguardoController extends Controller
             $inv->save();
         }
         //dd($articulos);
+        // de 21 en 21 por hoja
         $data = [
             'id' => $folio,
-            'articulos' => $articulos,
+            'hojas' => array_chunk($articulos, 21),
             'oficial' => $o->oficial,
             'num_oficialia' => strlen(strval($o->num_oficialia)) < 5? '0'.strval($o->num_oficialia) : strval($o->num_oficialia),
             'oficialia' => $o->oficialia,

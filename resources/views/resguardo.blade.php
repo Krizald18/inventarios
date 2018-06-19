@@ -10,7 +10,7 @@
 		body {
 			color: #333;
 		    font-family: 'roboto', serif;
-		    font-size: 80%;
+		    font-size: 16px;
 		}
 		#date {
 			margin-top: -120px;
@@ -25,36 +25,57 @@
 		p{
 			text-align: center;
 		}
-		#content {
-			margin-left: 50px;
-			margin-right: 50px;
-		}
 		table {
 		    border-collapse: collapse;
 		    width: 100%;
 		}
 
 		td, th {
+			font-size: 0.8em;
 		    text-align: left;
 		    padding: 8px;
 		}
-
+		tr {
+			font-size: 0.9em;
+		}
 		tr:nth-child(even) {
 		    background-color: #f0f0f0;
+		}
+		header {
+			font-size: 0.9em;
+			height: 10em;
+			position: fixed;
+			width: 100%;
+		}
+		.contentx {
+			font-size: 0.9em;
+			margin-left: 1em;
+			margin-right: 1em;
+		}
+		footer {
+			font-size: 0.9em;
+		}
+		.firma {
+			text-align: center;
 		}
 	</style>
 	<!--border: 1px solid #eee;-->
 </head>
 <body>
-	<htmlpageheader name="page-header">
-		<br><br><br>
+@forelse ($hojas as $index => $hoja)
+	<header name="page-header">
 	    <div id="logo"><img src="images/gob-logo.jpg" alt="logo" height="112px" width="90px"></div>
-	    <div id="date"><img src="images/reg-logo.jpg" alt="logo" height="87px" width="110px"><br>Culiacán, Sinaloa {{$day}} de {{$month}} de {{$year}}<br>Núm. {{$id}}</div>
+	    <div id="date"><img src="images/reg-logo.jpg" alt="logo" height="87px" width="110px"><br>
+	    Culiacán, Sinaloa {{$day}} de {{$month}} de {{$year}}<br>Núm. {{$id}}</div>
 	    <p>DIRECCIÓN DEL REGISTRO CIVIL<br>PROYECTO DE MODERNIZACIÓN DEL REGISTRO CIVIL</p>
-	</htmlpageheader>
-	<div id="content">
-	<p><br><br><br><br><br><br><br><br><br><br><br><br></p>
-		Recibí por parte de la Dirección del Registro Civil: <br><br>
+	</header><br><br><br><br><br><br><br>
+	<div class="contentx">
+		@if (strlen($nota) > 0)
+			<small style="background: black; color: white; word-wrap: break-word;">NOTA: {{$nota}}</small><br>
+		@else
+			<br>
+		@endif
+		Recibí por parte de la Dirección del Registro Civil: <br>
 		<table>
 		  <tr>
 		  	<th>Núm.</th>
@@ -62,27 +83,40 @@
 		    <th>Número de Serie</th>
 		    <th>Artículo</th>
 		  </tr>
-		  @forelse ($articulos as $index => $articulo)
+		  @forelse ($hoja as $index2 => $articulo)
 		  	  <tr>
-			  	<td>{{$index + 1}}</td>
+			  	<td>{{($index * 21) + ($index2 + 1)}}</td>
 			  	<td>{{((object) $articulo)->numero_inventario? ((object) $articulo)->numero_inventario: '9999999999'}}</td>
 			    <td>{{((object) $articulo)->numero_serie? ((object) $articulo)->numero_serie: '9999999999'}}</td>
 			    <td>{{((object) $articulo)->articulo}}</td>
 			  </tr>
 		  @empty
-		    
 		  @endforelse
+		  @if (count($hoja) < 21)
+			@for ($i = 0; $i < 21 - count($hoja); $i++)
+				<tr>
+					<td>{{($index * 21) + count($hoja) + ($i + 1)}}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			@endfor
+		  @endif
 		</table>
-		@if (strlen($nota) > 0)
-			<div style="background-color:#f0f0f0; margin-top: 50px; word-wrap: break-word;">&nbsp;&nbsp;&nbsp;{{$nota}}</div>
-		@endif
 	</div>
-	<htmlpagefooter name="page-footer">
-		<p>_________________________________________________<br>{{$oficial}}<br>{{$oficialia && $num_oficialia != 0? 'OFICIAL '.$num_oficialia.' DE '.$oficialia.',':''}} 
-
-		{{$municipio? $municipio.', '.$estado.'.': ''}}<br><br><br><br></p>
-		<!--<p style="color: #555;">Unidad de Servicios Estatales. Blvd. Ducto Pemex y Pedro Infante, S/N, Sección IV del desarrollo urbano tres ríos.<br>Tel. 758-7000 Culiacán, Sinaloa. C.P. 8000</p>-->
-	    <br><br>
-	</htmlpagefooter>
+	<footer name="page-footer">
+		<br><br>
+		<div class="firma">
+			_________________________________________________<br>
+			{{$oficial}}<br>{{$oficialia && $num_oficialia != 0? 'OFICIAL '.$num_oficialia.' DE '.$oficialia.',':''}} 
+			{{$municipio? $municipio.', '.$estado.'.': ''}}<br>
+		</div>
+		@if ($index < count($hojas) - 1)
+			{{$index + 1}} de {{count($hojas)}}
+		@endif
+		<br><br>
+	</footer>
+@empty
+@endforelse
 </body>
 </html>
