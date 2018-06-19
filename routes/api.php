@@ -56,6 +56,7 @@ Route::group(['prefix' => 'grafica'], function()
 {
 	Route::get('activos', ['uses' => 'GraficaController@activos']);
 	Route::get('bajas', ['uses' => 'GraficaController@bajas']);
+	Route::get('actualizados', ['uses' => 'GraficaController@actualizados']);
 });
 // hiden -- remove these routes in production
 Route::resource('evidencia', 'EvidenciaController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
@@ -63,3 +64,7 @@ Route::resource('evidencia', 'EvidenciaController', ['only' => ['index', 'store'
 
 //unprotected API routes, no JWT (log in not required)
 // --
+
+//rutas turnero
+Route::get('nacimientos', ['uses' => 'PantallaController@nacimientos']);
+Route::get('matrimonios', ['uses' => 'PantallaController@matrimonios']);

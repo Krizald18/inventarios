@@ -4,9 +4,8 @@
       <div layout="row">
         <md-input-container flex="50" class="md-block">
           <label>Número de Inventario</label>
-          <input name="numero_inv" type="text" md-maxlength="19" md-auto-hide="!editOnly" md-no-asterisk="" ng-model="project.numero_inventario" ng-required="!project.numero_inventario && !project.numero_serie">
+          <input name="numero_inv" type="text" md-auto-hide="!editOnly" md-no-asterisk="" ng-model="project.numero_inventario" ng-required="!project.numero_inventario && !project.numero_serie">
           <div ng-messages="projectForm.numero_inv.$error">
-            <div ng-message="md-maxlength">El campo Número de Inventario debe ser máximo 19 caracteres</div>
             <div ng-message="required">El campo Número de Inventario es requerido</div>
           </div>
         </md-input-container>

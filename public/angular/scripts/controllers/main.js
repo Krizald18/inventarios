@@ -25,7 +25,7 @@ angular.module('App').controller('MainCtrl', ['$scope', '$auth', 'API', function
 		$scope.refreshbodyheight();
 	}, 1500);
 	$scope.attrs = {
-	    "caption": "Inventario - Activo y Bajas " + new Date().getFullYear(),
+	    "caption": "Inventario - Agregados y actualizados en " + new Date().getFullYear(),
 	    "numberprefix": "",
 	    "plotgradientcolor": "",
 	    "bgcolor": "FFFFFF",
@@ -52,7 +52,7 @@ angular.module('App').controller('MainCtrl', ['$scope', '$auth', 'API', function
 		        "data" : []
 	        },
 		    {
-		        "seriesname": "Bajas",
+		        "seriesname": "Actualizados",
 		        "data" : []
 			}
 		];
@@ -98,18 +98,19 @@ angular.module('App').controller('MainCtrl', ['$scope', '$auth', 'API', function
 	        ]
 	    }
 	];
-	API.all("grafica/bajas").customGET("", null).then(response => {
-		$scope.bajas = response.plain().data;
+	API.all("grafica/actualizados").customGET("", null).then(response => {
+		$scope.actualizados = response.plain();
+		console.log($scope.actualizados);
 		API.all("grafica/activos").customGET("", null).then(resp => {
 			$scope.activos = resp.plain().data;
 			$scope.dataset = [
 		    	{
-			        "seriesname": "Activo",
+			        "seriesname": "Agregados",
 			        "data" : $scope.activos
 		        },
 			    {
-			        "seriesname": "Bajas",
-			        "data" : $scope.bajas
+			        "seriesname": "Actualizados",
+			        "data" : $scope.actualizados
 				}
 			];
 		});

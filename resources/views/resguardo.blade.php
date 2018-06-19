@@ -65,8 +65,8 @@
 		  @forelse ($articulos as $index => $articulo)
 		  	  <tr>
 			  	<td>{{$index + 1}}</td>
-			  	<td>{{((object) $articulo)->numero_inventario}}</td>
-			    <td>{{((object) $articulo)->numero_serie}}</td>
+			  	<td>{{((object) $articulo)->numero_inventario? ((object) $articulo)->numero_inventario: '9999999999'}}</td>
+			    <td>{{((object) $articulo)->numero_serie? ((object) $articulo)->numero_serie: '9999999999'}}</td>
 			    <td>{{((object) $articulo)->articulo}}</td>
 			  </tr>
 		  @empty
@@ -74,7 +74,7 @@
 		  @endforelse
 		</table>
 		@if (strlen($nota) > 0)
-			<div style="background-color:#f0f0f0; margin-top: 50px;">&nbsp;&nbsp;&nbsp;{{$nota}}</div>
+			<div style="background-color:#f0f0f0; margin-top: 50px; word-wrap: break-word;">&nbsp;&nbsp;&nbsp;{{$nota}}</div>
 		@endif
 	</div>
 	<htmlpagefooter name="page-footer">

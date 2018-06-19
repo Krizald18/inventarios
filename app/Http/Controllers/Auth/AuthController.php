@@ -19,7 +19,7 @@ class AuthController extends Controller
     {
         $this->validate($request, [
             'username' => 'required|min:5',
-            'password' => 'required|min:8',
+            'password' => 'required|min:5',
         ]);
 
         $credentials = $request->only('username', 'password');
@@ -41,7 +41,7 @@ class AuthController extends Controller
             'nombre'   => 'required|min:3',
             'username' => 'required|min:5|unique:users',
             'email'    => 'required|email|unique:users',
-            'password' => 'required|min:8',
+            'password' => 'required|min:5',
         ]);
 
         $user = new User;

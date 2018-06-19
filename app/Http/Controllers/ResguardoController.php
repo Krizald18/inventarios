@@ -146,7 +146,7 @@ class ResguardoController extends Controller
                 $month = "Octubre";
                 break;
             case 11:
-                $month = "Nobiembre";
+                $month = "Noviembre";
                 break;
             case 12:
                 $month = "Diciembre";

@@ -59,7 +59,7 @@ class PasswordResetController extends Controller
         $this->validate($request, [
             'email'    => 'required|email',
             'token'    => "required|exists:password_resets,token,email,{$request->email}",
-            'password' => 'required|min:8|confirmed',
+            'password' => 'required|min:5|confirmed',
         ]);
 
         $user = User::whereEmail($request->email)->firstOrFail();

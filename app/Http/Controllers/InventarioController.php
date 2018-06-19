@@ -122,7 +122,9 @@ class InventarioController extends Controller
                                 ->where(function($query) use ($txt) {
                                     return $query
                                         ->where('numero_serie', 'LIKE', '%'.$txt.'%')
-                                        ->orwhere('numero_inventario', 'LIKE', '%'.$txt.'%');
+                                        ->orwhere('numero_serie', intval($txt))
+                                        ->orwhere('numero_inventario', 'LIKE', '%'.$txt.'%')
+                                        ->orwhere('numero_inventario', intval($txt));
                                 })
                                 ->whereNotNull('fecha_baja')
                                 ->orderBy($order, $desc? 'desc': 'asc')
@@ -260,7 +262,9 @@ class InventarioController extends Controller
                             ->where(function($query) use ($txt){
                                 return $query
                                     ->where('numero_serie', 'LIKE', '%'.$txt.'%')
-                                    ->orwhere('numero_inventario', 'LIKE', '%'.$txt.'%');
+                                    ->orwhere('numero_serie', intval($txt))
+                                    ->orwhere('numero_inventario', 'LIKE', '%'.$txt.'%')
+                                    ->orwhere('numero_inventario', intval($txt));
                             })
                                 ->whereNull('fecha_baja')
                                 ->orderBy($order, $desc? 'desc': 'asc')
@@ -380,10 +384,14 @@ class InventarioController extends Controller
         if($request->has('data'))
         {
             $o = (object) $request->input('data');
-            if(isset($o->id))
+            if(isset($o->id)) {
                 $j = Inventario::findOrFail($o->id);
-            else
+                $j->updated_at = new \DateTime('now');
+            }
+            else {
                 $j = new Inventario;
+                $j->updated_at = null;
+            }
 
             if(isset($o->numero_inventario) && !is_null($o->numero_inventario))
                 $j->numero_inventario = $o->numero_inventario;
@@ -438,6 +446,7 @@ class InventarioController extends Controller
             $ar->area_id = 5; // cambiar area a BODEGA
             $ar->responsable_id = 244; // cambiar responsable a Gobierno del Estado
             $ar->oficialia_id = null; // se quita de la oficialia
+            $ar->updated_at = new \DateTime('now');
             $ar->save();
             return $ar;
         }

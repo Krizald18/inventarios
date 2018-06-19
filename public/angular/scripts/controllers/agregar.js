@@ -177,11 +177,12 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 						$scope.project.marca_id = $scope.marcas[0].id;
 					$.each($scope.marcas, (i, marca) => {
 						// buscar todos los modelos de todas las marcas, solo para este subgrupo
-						if(marca.modelos && marca.modelos.length > 0)
+						if(marca.modelos && marca.modelos.length > 0){
 							$.each(marca.modelos, (l, modelo) => {
-								if(modelo.subgrupo_id == $scope.subgrupo.id)
+								if(modelo.subgrupo_id == $scope.subgrupo.id && $.grep($scope.modelos, m => m.id == modelo.id).length == 0)
 									$scope.modelos.push(modelo);
 							});
+						}
 					});
 				}
 			}
@@ -216,15 +217,17 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 				if($scope.project.marca_id)
 				{
 					if(marca.id == $scope.project.marca_id && marca.modelos && marca.modelos.length > 0)
+					{
 						$.each(marca.modelos, (l, modelo) => {
-							if(modelo.subgrupo_id == $scope.subgrupo.id)
+							if(modelo.subgrupo_id == $scope.subgrupo.id && $.grep($scope.modelos, m => m.id == modelo.id).length == 0)
 								$scope.modelos.push(modelo);
 						});
+					}
 				}
 				else
 				{
 					$.each(marca.modelos, (l, modelo) => {
-						if(modelo.subgrupo_id == $scope.subgrupo.id)
+						if(modelo.subgrupo_id == $scope.subgrupo.id && $.grep($scope.modelos, m => m.id == modelo.id).length == 0)
 							$scope.modelos.push(modelo);
 					});
 				}
@@ -286,7 +289,10 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 								{
 									ob.modelos = o.modelos.filter(modf => (modf.subgrupo_id == subgrupo.id) && (modf.marca_id == marca));
 									if(ob.modelos && ob.modelos.length > 0)
-										$.each(ob.modelos, (k,oo) => $scope.modelos.push(oo));
+										$.each(ob.modelos, (k,oo) => {
+											if($.grep($scope.modelos, m => m.id == oo.id).length == 0) 
+												$scope.modelos.push(oo);
+										});
 								}						
 								if($scope.marcas.length == 0)				
 									$scope.marcas.push(ob);
@@ -302,7 +308,12 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 								ob.modelos = o.modelos.filter(mdl => mdl.subgrupo_id == subgrupo.id);
 
 								if(o.modelos && o.modelos.length > 0)
-									$.each(o.modelos, (l, modelo) => $scope.modelos.push(modelo));
+								{
+									$.each(o.modelos, (l, modelo) => {
+											if($.grep($scope.modelos, m => m.id == modelo.id).length == 0) 
+												$scope.modelos.push(modelo);
+										});
+								}
 
 								if($scope.marcas.length == 0)
 								{
@@ -336,7 +347,8 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 									if(ob.modelos && ob.modelos.length > 0)
 									{
 										$.each(ob.modelos, (k,oo) => {
-											$scope.modelos.push(oo);
+											if($.grep($scope.modelos, m => m.id == oo.id).length == 0) 
+												$scope.modelos.push(oo);
 										});
 									}
 								}						
@@ -371,7 +383,12 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 							{
 								ob.modelos = o.modelos.filter(modf => (modf.subgrupo_id == subgrupo) && (modf.marca_id == marca));
 								if(ob.modelos && ob.modelos.length > 0)
-									$.each(ob.modelos, (k,oo) => $scope.modelos.push(oo));
+								{
+									$.each(ob.modelos, (k,oo) => {
+										if($.grep($scope.modelos, m => m.id == oo.id).length == 0) 
+											$scope.modelos.push(oo);
+									});
+								}
 							}						
 							if($scope.marcas.length == 0)				
 								$scope.marcas.push(ob);
@@ -386,8 +403,14 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 							// tiene solo subgrupo
 							ob.modelos = o.modelos.filter(mdl => mdl.subgrupo_id == subgrupo);
 
-							if(o.modelos && o.modelos.length > 0)
-								$.each(o.modelos, (l, modelo) => $scope.modelos.push(modelo));
+							if(o.modelos && o.modelos.length > 0){
+								if($.grep($scope.modelos, m => m.id == modelo.id).length == 0) {
+									$.each(o.modelos, (l, modelo) => {
+										if($.grep($scope.modelos, m => m.id == modelo.id).length == 0) 
+											$scope.modelos.push(modelo);
+									});
+								}
+							}
 
 							if($scope.marcas.length == 0)
 							{
@@ -418,8 +441,12 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 						ob.marca = o.marca;
 						ob.modelos = o.modelos;
 
-						if(o.modelos && o.modelos.length > 0)
-							$.each(o.modelos, (l, modelo) => $scope.modelos.push(modelo));
+						if(o.modelos && o.modelos.length > 0) {
+							$.each(o.modelos, (l, modelo) => {
+								if($.grep($scope.modelos, m => m.id == modelo.id).length == 0)
+									$scope.modelos.push(modelo);
+							});
+						}
 
 						if($scope.marcas.length == 0)
 						{
