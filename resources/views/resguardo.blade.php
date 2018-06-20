@@ -95,7 +95,7 @@
 		  @if (count($hoja) < 21)
 			@for ($i = 0; $i < 21 - count($hoja); $i++)
 				<tr>
-					<td>{{($index * 21) + count($hoja) + ($i + 1)}}</td>
+					<td style="height: 2.45em"></td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -105,16 +105,16 @@
 		</table>
 	</div>
 	<footer name="page-footer">
-		<br><br>
+		<br><br><br>
 		<div class="firma">
 			_________________________________________________<br>
-			{{$oficial}}<br>{{$oficialia && $num_oficialia != 0? 'OFICIAL '.$num_oficialia.' DE '.$oficialia.',':''}} 
-			{{$municipio? $municipio.', '.$estado.'.': ''}}<br>
+			{{$oficial}}<br>
+			{{$oficialia && $num_oficialia != 0? 'OFICIAL '.$num_oficialia.' DE '.$oficialia.',':''}} {{$municipio? $municipio.', '.$estado.'.': ''}}
 		</div>
+		{{$index + 1}} de {{count($hojas)}}
 		@if ($index < count($hojas) - 1)
-			{{$index + 1}} de {{count($hojas)}}
+			<br>
 		@endif
-		<br><br>
 	</footer>
 @empty
 @endforelse
