@@ -32,8 +32,8 @@
 
 		td, th {
 			font-size: 0.8em;
+			height: 2.35em;
 		    text-align: left;
-		    padding: 8px;
 		}
 		tr {
 			font-size: 0.9em;
@@ -58,6 +58,9 @@
 		.firma {
 			text-align: center;
 		}
+		.nota{
+			height: 3em;
+		}
 	</style>
 	<!--border: 1px solid #eee;-->
 </head>
@@ -70,11 +73,13 @@
 	    <p>DIRECCIÓN DEL REGISTRO CIVIL<br>PROYECTO DE MODERNIZACIÓN DEL REGISTRO CIVIL</p>
 	</header><br><br><br><br><br><br><br>
 	<div class="contentx">
+		<div class="nota">
 		@if (strlen($nota) > 0)
 			<small style="background: black; color: white; word-wrap: break-word;">NOTA: {{$nota}}</small><br>
 		@else
 			<br>
 		@endif
+		</div>
 		Recibí por parte de la Dirección del Registro Civil: <br>
 		<table>
 		  <tr>
@@ -95,7 +100,7 @@
 		  @if (count($hoja) < 21)
 			@for ($i = 0; $i < 21 - count($hoja); $i++)
 				<tr>
-					<td style="height: 2.45em"></td>
+					<td style="height: 2.35em"></td>
 					<td></td>
 					<td></td>
 					<td></td>
