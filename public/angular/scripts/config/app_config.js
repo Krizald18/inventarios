@@ -7,8 +7,8 @@ angular.module('app.config')
 		$authProvider.httpInterceptor = function() {
 			return true;
 		}
-		$authProvider.loginUrl = '/api/auth/login';
-		$authProvider.signupUrl = '/api/auth/register';
+		$authProvider.loginUrl = '/index.php/api/auth/login';
+		$authProvider.signupUrl = '/index.php/api/auth/register';
 		$authProvider.tokenRoot = 'data';//compensates success response macro
 	}])
 	.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {

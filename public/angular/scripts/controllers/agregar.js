@@ -694,7 +694,7 @@ angular.module('App').controller('AgregarCtrl', ['API', '$scope', 'AlertService'
 		let baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
 		let urlval = baseUrl;
 		
-		urlval += "api/inventario?numero_inventario=" + obj.numero_inventario;
+		urlval += "index.php/api/inventario?numero_inventario=" + obj.numero_inventario;
 		urlval += "&numero_serie=" + obj.numero_serie;
 		if($scope.editOnly)
 			urlval += "&id=" + obj.id;

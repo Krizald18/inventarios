@@ -8,7 +8,7 @@ angular.module('App')
 		};
 		return Restangular.withConfig(function(RestangularConfigurer) {
 			RestangularConfigurer
-				.setBaseUrl('/api/')
+				.setBaseUrl('/index.php/api/')
 				.setDefaultHeaders(headers)
 				.setErrorInterceptor(function(response) {
 				    switch(response.status) {
