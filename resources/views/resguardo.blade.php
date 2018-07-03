@@ -74,7 +74,7 @@
 	</header><br><br><br><br><br><br><br>
 	<div class="contentx">
 		<div class="nota">
-		@if (strlen($nota) > 0)
+		@if (isset($nota) && strlen($nota) > 0)
 			<small style="background: black; color: white; word-wrap: break-word;">NOTA: {{$nota}}</small><br>
 		@else
 			<br>
