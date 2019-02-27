@@ -80,7 +80,6 @@ angular.module('App')
 						return a;
 					});
 
-					console.log($scope.showing.articulos);
 						var heightCl = s.articulos_asignados.length > s.resguardos.length? s.articulos_asignados.length * 105: s.resguardos.length * 105;
 					$scope.myStyle = {
 							'height': heightCl + 'px',
@@ -99,21 +98,16 @@ angular.module('App')
 	    	}
 	    })
 	    API.all("responsable").getList().then(res => {
-	    	$scope.responsables = res.plain();
+				$scope.responsables = res.plain();
 	    	var re = sessionStorage.getItem('responsable_id');
 			if(re)
 			{
 				$scope.showing = $.grep($scope.responsables, r => r.id == re)[0];
-				if($scope.showing.resguardos.length == 0)
-				{
-					$scope.showing.con_resguardo = [];
-					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados;
-				}
-				else	
-				{
-					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a));
-					$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a));
-				}
+
+				$scope.showing.articulos = $scope.showing.articulos_asignados.map(a => {
+					a.resguardo = articuloConResguardo(a);
+					return a;
+				});
 				sessionStorage.removeItem('responsable_id');
 			}
 	    });
@@ -327,16 +321,10 @@ angular.module('App')
 				API.all("responsable").getList().then(res => {
 					$scope.responsables = res.plain();
 					$scope.showing = $.grep($scope.responsables, rsp => rsp.id == $scope.showing.id)[0];
-		    		if($scope.showing.resguardos.length == 0)
-					{
-						$scope.showing.con_resguardo = [];
-						$scope.showing.sin_resguardo = $scope.showing.articulos_asignados;
-					}
-					else	
-					{
-						$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a));
-						$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a));
-					}
+					$scope.showing.articulos = $scope.showing.articulos_asignados.map(a => {
+						a.resguardo = articuloConResguardo(a);
+						return a;
+					});
 					let s = angular.copy($scope.showing);
 		    		var heightCl = s.articulos_asignados.length > s.resguardos.length? s.articulos_asignados.length * 105: s.resguardos.length * 105;
 					$scope.myStyle = {

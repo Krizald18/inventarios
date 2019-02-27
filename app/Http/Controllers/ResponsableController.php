@@ -35,7 +35,7 @@ class ResponsableController extends Controller
                                     $q->with('caracteristica');
                                     $q->with('subgrupo');
                                 }));
-                                $a->whereNull('fecha_baja');
+                                // $a->whereNull('fecha_baja'); /* se necesita en resguardos para que muestre la lista de articulos asignados a gobierno del estado, estos articulos tienen fecha de baja */
                             }))
                             ->with(array('oficialia' => function($q){
                                 $q->orderBy('oficialia', 'asc');
