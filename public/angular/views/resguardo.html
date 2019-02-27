@@ -95,11 +95,11 @@
                 </tr>
               </thead>
               <tbody md-body>
-                <tr md-row md-select="objeto" md-select-id="name" md-auto-select ng-repeat="objeto in showing.articulos" ng-disabled="objeto.resguardo">
-                  <td md-cell ng-style="{color: objeto.resguardo? 'grey': 'black'}">{{objeto.numero_inventario}}</td>
-                  <td md-cell ng-style="{color: objeto.resguardo? 'grey': 'black'}">{{objeto.numero_serie}}</td>
-                  <td md-cell ng-style="{color: objeto.resguardo? 'grey': 'black'}">{{objeto.modelo.subgrupo.subgrupo}} {{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
-                  <td md-cell ng-if="showing.id == 244" ng-style="{color: objeto.resguardo? 'grey': 'black'}">{{objeto.status? "Activo": "Baja"}}</td>
+                <tr md-row md-select="objeto" md-select-id="name" md-auto-select ng-repeat="objeto in showing.articulos" ng-disabled="objeto.resguardo" ng-style="{background: objeto.resguardo? '#87CEFA': 'white'}"> 
+                  <td md-cell>{{objeto.numero_inventario}}</td>
+                  <td md-cell>{{objeto.numero_serie}}</td>
+                  <td md-cell>{{objeto.modelo.subgrupo.subgrupo}} {{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
+                  <td md-cell>{{objeto.status? "Activo": "Baja"}}</td>
                 </tr>
               </tbody>
             </table>
