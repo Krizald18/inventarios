@@ -6,7 +6,6 @@ angular.module('App')
 	    if(localStorage.admin_token)
     		$scope.admin = true;
 	    $scope.selected2 = [];
-	    $scope.sinResguardo = false;
 	    $scope.selectedItem  = null;
 	    $scope.searchText    = null;
 	    $scope.querySearch   = querySearch;
@@ -17,17 +16,7 @@ angular.module('App')
 	    }
 	    if(localStorage.admin_token)
 	    	$scope.admin = true;
-	    $scope.$watch('showing', val => {
-	    	if(val && val.id == 244)
-	    		$scope.sinResguardo = false;
-	    	else
-	    	{
-	    		$scope.selected2 = [];
-	    		setTimeout(() => {
-					$scope.sinResguardo = (!($scope.showing && $scope.showing.sin_resguardo && $scope.showing.sin_resguardo.length > 0));
-	    		}, 600);
-	    	}
-	    })
+
 	    $scope.millisec = date_str => new Date(date_str).getTime();
 	    $scope.refreshbodyheight = () => {
 			var body = document.body,
@@ -39,6 +28,9 @@ angular.module('App')
 				body.style.height = height + "px";
 			}, 500);
 			$scope.loading = false;
+		}
+		$scope.conResguardo = () => {
+			return $scope.showing && $scope.showing.articulos && $scope.showing.articulos.filter(a => a.resguardo).length || 0;
 		}
 		$scope.crearResguardo =  () => {
 			var obj = angular.copy($scope.selected2);
@@ -52,18 +44,12 @@ angular.module('App')
 				$scope.showing.articulos_asignados = $scope.showing.articulos_asignados.filter(o => $.grep($scope.selected2, p => o.id == p.id).length == 0);
 				$scope.selected2 = [];
 				$scope.showing = ad.plain();
-				if($scope.showing.resguardos.length == 0)
-				{
-					$scope.showing.con_resguardo = [];
-					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados;
-				}
-				else	
-				{
-					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a));
-					$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a));
-				}
-				
-				$scope.sinResguardo = ($scope.showing.sin_resguardo.length == 0);
+		
+				$scope.showing.articulos = $scope.showing.articulos_asignados.map(a => {
+					a.resguardo = articuloConResguardo(a);
+					return a;
+				});
+
 				AlertService.show("Guardado","Resguardo creado");
 				API.all("responsable").getList().then(res => $scope.responsables = res.plain());
 			});
@@ -87,31 +73,27 @@ angular.module('App')
 	    $scope.$watch('selectedItem', s => {
 	    	if(s)
 	    	{
-	    		$scope.showing = angular.copy(s);
-	    		if($scope.showing.resguardos.length == 0)
-				{
-					$scope.showing.con_resguardo = [];
-					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados;
-				}
-				else	
-				{
-					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a));
-					$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a));
-				}
-				$scope.sinResguardo = ($scope.showing.sin_resguardo.length == 0);
-	    		var heightCl = s.articulos_asignados.length > s.resguardos.length? s.articulos_asignados.length * 105: s.resguardos.length * 105;
-				$scope.myStyle = {
-			    	'height': heightCl + 'px',
-			    	'min-height': heightCl + 'px'
-				};
-				if($scope.selectedItem)
-	    			$scope.selectedItem = null;
-	    		
-	    		var activeElement = document.getElementById('fl-input-1');
+					$scope.showing = angular.copy(s);
 
-				if (activeElement) {
-				   activeElement.blur();
-				}
+					$scope.showing.articulos = $scope.showing.articulos_asignados.map(a => {
+						a.resguardo = articuloConResguardo(a);
+						return a;
+					});
+
+					console.log($scope.showing.articulos);
+						var heightCl = s.articulos_asignados.length > s.resguardos.length? s.articulos_asignados.length * 105: s.resguardos.length * 105;
+					$scope.myStyle = {
+							'height': heightCl + 'px',
+							'min-height': heightCl + 'px'
+					};
+					if($scope.selectedItem)
+							$scope.selectedItem = null;
+						
+						var activeElement = document.getElementById('fl-input-1');
+
+					if (activeElement) {
+						activeElement.blur();
+					}
 
 	    		$scope.refreshbodyheight();
 	    	}
@@ -132,7 +114,6 @@ angular.module('App')
 					$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a));
 					$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a));
 				}
-				$scope.sinResguardo = ($scope.showing.sin_resguardo.length == 0);
 				sessionStorage.removeItem('responsable_id');
 			}
 	    });
@@ -356,7 +337,6 @@ angular.module('App')
 						$scope.showing.sin_resguardo = $scope.showing.articulos_asignados.filter(a => !articuloConResguardo(a));
 						$scope.showing.con_resguardo = $scope.showing.articulos_asignados.filter(a => articuloConResguardo(a));
 					}
-					$scope.sinResguardo = ($scope.showing.sin_resguardo.length == 0);
 					let s = angular.copy($scope.showing);
 		    		var heightCl = s.articulos_asignados.length > s.resguardos.length? s.articulos_asignados.length * 105: s.resguardos.length * 105;
 					$scope.myStyle = {

@@ -67,7 +67,7 @@
                         <h5><strong>Artículos con resguardo:</strong></h5>
                       </td>
                       <td>
-                        <h5>{{showing.con_resguardo.length}}</h5>
+                        <h5>{{conResguardo()}}</h5>
                       </td>
                     </tr>
                   </tbody>
@@ -80,13 +80,8 @@
       <md-tab id="tab2" ng-if = "showing.articulos_asignados.length > 0" style="width: 920px;" ng-style="{{myStyle}}">
         <md-tab-label>Artículos Asignados</md-tab-label>
         <md-tab-body>
-          <md-switch class="md-primary" name="sinResguardo" ng-model="sinResguardo" style="margin-left: 78%;"  ng-show="showing.id != 244">
-            <!--ng-disabled="showing.sin_resguardo.length == 0 || showing.con_resguardo.length == 0"-->
-            {{sinResguardo? "Con reguardo": "Sin resguardo"}}
-          </md-switch>
-          <div ng-if="!sinResguardo">
           <md-input-container class="md-block">
-            <label>{{showing.id != 244? "Asignados sin resguardo": "Artículos"}}</span></label>
+            <label>Artículos</span></label>
             <input type="text" name="" disabled="" />
           </md-input-container>
           <md-table-container style="margin-top:-35px;width: 860px;">
@@ -100,44 +95,17 @@
                 </tr>
               </thead>
               <tbody md-body>
-                <tr md-row md-select="objeto" md-select-id="name" md-auto-select ng-repeat="objeto in showing.sin_resguardo">
-                  <td md-cell>{{objeto.numero_inventario}}</td>
-                  <td md-cell>{{objeto.numero_serie}}</td>
-                  <td md-cell>{{objeto.modelo.subgrupo.subgrupo}} {{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
-                  <td md-cell ng-if="showing.id == 244">{{objeto.status? "Activo": "Baja"}}</td>
+                <tr md-row md-select="objeto" md-select-id="name" md-auto-select ng-repeat="objeto in showing.articulos" ng-disabled="objeto.resguardo">
+                  <td md-cell ng-style="{color: objeto.resguardo? 'grey': 'black'}">{{objeto.numero_inventario}}</td>
+                  <td md-cell ng-style="{color: objeto.resguardo? 'grey': 'black'}">{{objeto.numero_serie}}</td>
+                  <td md-cell ng-style="{color: objeto.resguardo? 'grey': 'black'}">{{objeto.modelo.subgrupo.subgrupo}} {{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
+                  <td md-cell ng-if="showing.id == 244" ng-style="{color: objeto.resguardo? 'grey': 'black'}">{{objeto.status? "Activo": "Baja"}}</td>
                 </tr>
               </tbody>
             </table>
           </md-table-container><br>
           <md-button type="button" aria-label="crearResguardo" class="md-raised md-primary" ng-if="selected2.length > 0 && showing.id != 244" ng-click="crearResguardo();">Crear resguardo <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></md-button>
           <!--<md-button type="button" aria-label="crearResguardo" class="md-raised md-primary" ng-if="selected2.length > 0 && showing.id == 244" ng-click="transferirArticulos();">Transferir Artículo<span ng-show="selected2.length > 1">s</span> <span class="glyphicon glyphicon-random" aria-hidden="true"></span></md-button>-->
-        </div>
-        <div ng-if="sinResguardo">
-          <md-input-container class="md-block">
-            <label>{{showing.id != 244? "Asignados con resguardo": "Artículos"}}</label>
-            <input type="text" name="" disabled="" />
-          </md-input-container>
-          <md-table-container style="margin-top:-35px;width: 700px;">
-            <table md-table>
-              <thead md-head>
-                <tr md-row>
-                  <th md-column>Numero de Inventario</th>
-                  <th md-column>Numero de Serie</th>
-                  <th md-column>Artículo</th>
-                </tr>
-              </thead>
-              <tbody md-body>
-                <tr md-row md-select="objeto" md-select-id="name" md-auto-select ng-repeat="objeto in showing.con_resguardo">
-                  <td md-cell>{{objeto.numero_inventario}}</td>
-                  <td md-cell>{{objeto.numero_serie}}</td>
-                  <td md-cell>{{objeto.modelo.subgrupo.subgrupo}} {{objeto.modelo.marca.marca}} {{objeto.modelo.modelo}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </md-table-container>
-        </div>
-        </md-tab-body>
-      </md-tab>
       <md-tab id="tab3" ng-if = "showing.resguardos.length > 0" style="width: 920px">
         <md-tab-label>Resguardos</md-tab-label>
         <md-tab-body>
