@@ -32,7 +32,7 @@
 
         <md-input-container flex="50" class="md-block">
           <label>Subgrupo</label>
-          <md-select name="subgrupo" ng-model="project.subgrupo_id" ng-change="cambioSubgrupo();" ng-disabled = "!subgrupos || subgrupos.length == 0" ng-required="!project.subgrupo_id">
+          <md-select name="subgrupo" ng-model="project.subgrupo_id" ng-change="cambioSubgrupo();" ng-disabled="!subgrupos || subgrupos.length == 0" ng-required="!project.subgrupo_id">
             <md-option ng-repeat="x in subgrupos track by x.id" value="{{x.id}}">{{x.subgrupo}}</md-option>            
           </md-select>
           <div ng-messages="projectForm.subgrupo.$error">
@@ -54,7 +54,7 @@
 
         <md-input-container flex="50" class="md-block" ng-if="firstTime">
           <label>Modelo</label>
-          <md-select name = "modeloid" ng-model="project.modelo_id" ng-change="cambioModelo()" ng-disabled="!modelos || modelos.length == 0" ng-required = "firstTime && !project.modelo_id">
+          <md-select name="modeloid" ng-model="project.modelo_id" ng-change="cambioModelo()" ng-disabled="!modelos || modelos.length == 0" ng-required="firstTime && !project.modelo_id">
             <md-option ng-repeat="x in modelos track by x.id" value="{{x.id}}">{{x.modelo}}</md-option>
           </md-select>
           <div ng-messages="projectForm.modeloid.$error">
@@ -63,7 +63,7 @@
         </md-input-container>
         <md-input-container flex="50" class="md-block" ng-if="!firstTime">
           <label>Modelo</label>
-          <md-select name = "modelo" ng-model="project.modelo" ng-change="cambioModelo()" ng-disabled="!modelos || modelos.length == 0" ng-required = "!firstTime && !project.modelo">
+          <md-select name="modelo" ng-model="project.modelo" ng-change="cambioModelo()" ng-disabled="!modelos || modelos.length == 0" ng-required="!firstTime && !project.modelo">
             <md-option ng-repeat="x in modelos track by x.id" value="{{x}}">{{x.modelo}}</md-option>
           </md-select>
           <div ng-messages="projectForm.modelo.$error">
@@ -74,12 +74,12 @@
 
       <div layout="row">
         <md-input-container flex="100" class="md-block">
-          <label>Caracteristicas</label>
-          <md-select name = "caracteristica" ng-model="project.caracteristica_id" ng-change = "cambioCaracteristica();" ng-disabled="!caracteristicas || caracteristicas.length == 0" ng-required="!project.caracteristica_id">
+          <label>Características</label>
+          <md-select name="caracteristica" ng-model="project.caracteristica_id" ng-change="cambioCaracteristica();" ng-disabled="!caracteristicas || caracteristicas.length == 0" ng-required="!project.caracteristica_id">
             <md-option ng-repeat="x in caracteristicas track by x.id" value="{{x.id}}">{{x.caracteristica}}</md-option>
           </md-select>
           <div ng-messages="projectForm.caracteristica.$error">
-            <div ng-message="required">El campo Caracteristicas es requerido</div>
+            <div ng-message="required">El campo Características es requerido</div>
           </div>
         </md-input-container>
       </div>
@@ -97,11 +97,11 @@
 
         <md-input-container flex="50" class="md-block">
           <label>Oficialía</label>
-          <md-select name = "oficialia" ng-model="project.oficialia_id" ng-change = "cambioOficialia()" ng-required="!project.oficialia_id && !project.area_id">
+          <md-select name="oficialia" ng-model="project.oficialia_id" ng-change="cambioOficialia()" ng-required="!project.oficialia_id && !project.area_id">
             <md-option ng-repeat="x in oficialias track by x.id" value="{{x.id}}"><small>{{x.id}} - </small>{{x.oficialia}}</md-option>
           </md-select>
           <div ng-messages="projectForm.oficialia.$error">
-            <div ng-message="required">El campo Oficialia es requerido</div>
+            <div ng-message="required">El campo Oficialía es requerido</div>
           </div>
         </md-input-container>     
       </div>

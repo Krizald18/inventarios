@@ -1,11 +1,11 @@
 <style type="text/css">
-  button.md-raised.md-button{
+  button.md-raised.md-button {
     line-height: 27px !important;
     margin: 0px 0px !important;
     min-height: 25px !important;
   }
-  th.danger.md-column.ng-isolate-scope{
-    color:#f97070; 
+  th.danger.md-column.ng-isolate-scope {
+    color:#f97070;
     padding-right: 10px;
     height: 15px;
     width: 100px;
@@ -14,65 +14,114 @@
 <md-dialog aria-label="Baja">
   <form ng-cloak name="projectForm">
     <md-toolbar>
-      <div class="md-toolbar-tools" style="background-color: white; color: rgba(0,0,0,0.87);">
-        <h4 style="margin-top: 25px;margin-left: 20px;">{{editmode? 'Registrar usuario': 'Usuarios'}}</h4>
+      <div class="md-toolbar-tools"
+        style="background-color: white; color: rgba(0, 0, 0, 0.87);">
+        <h4 style="margin-top: 25px;margin-left: 20px;">
+          {{editmode ? 'Registrar usuario' : 'Usuarios'}}
+        </h4>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
-          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg"
+            aria-label="Close dialog">
+          </md-icon>
         </md-button>
-        <md-progress-circular md-mode="indeterminate" ng-if="loading"></md-progress-circular>
+        <md-progress-circular md-mode="indeterminate" ng-if="loading">
+        </md-progress-circular>
       </div>
     </md-toolbar>
     <md-dialog-content style="min-height: 200px; min-width: 500px;">
       <div class="md-dialog-content" style="margin: -30px 0px 0 0px;">
-        <div layout="row" ng-if="!editmode" style="width: 700px; margin-left: 20px;">
+        <div layout="row" ng-if="!editmode"
+          style="width: 700px; margin-left: 20px;">
           <md-table-container>
-          <table md-table style="width: 675px;">
-            <thead md-head>
-              <tr md-row>
-                <th md-column>Usuario</th>
-                <th md-column>Nombre</th>
-                <th md-column>Correo</th>
-                <!--<th md-column>Responsable</th>
-                <th md-column>Artículos</th>-->
-                <th md-column class="danger">Admin</th>
-                <th md-column class="danger">Eliminar</th>
-              </tr>
-            </thead>
-            <tbody md-body>
-              <tr md-row md-select="usuario" md-select-id="name" ng-repeat="usuario in usuarios">
-                <td md-cell style="padding-right: 5px; width: 164px;">
-                  <span>
-                    <i ng-if="usuario.perfil_id == 1" class="fa fa-bolt fa-fw" aria-hidden="true" style="left:3px;width: 5px;"></i>
-                    <span ng-if="usuario.perfil_id == 1" style="left:4px;position: relative;top: -5px;">&nbsp;{{usuario.username}}</span>
-                    <i ng-if="usuario.perfil_id != 1" class="fa fa-user fa-fw" aria-hidden="true" style="width: 5px;"></i>
-                    <span ng-if="usuario.perfil_id != 1" style="position: relative;top:-5px;">&nbsp;{{usuario.username}}</span>
-                  </span>
-                </td>
-                <td md-cell style="padding-right: 5px;">{{usuario.nombre}}</td>
-                <td md-cell style="padding-right: 5px;">{{usuario.email? usuario.email: 'Sin asignar'}}</td>
-                <!--<td md-cell>
-                  <md-button ng-if="!usuario.responsable" type="submit" aria-label="agregar" class="md-raised" ng-click="setResponsable(usuario);">Asignar <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                  </md-button>
-                  {{usuario.responsable? usuario.responsable.responsable:''}}</td>
-                <td md-cell>{{usuario.responsable.articulos_asignados? usuario.responsable.articulos_asignados.length : 0}}</td>-->
-                <td md-cell>
-                  <md-button class="md-icon-button" aria-label="admin" ng-click="$event.preventDefault(); toggleAdmin(usuario);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin">
-                    <span ng-if="usuario.perfil_id == 1" class="glyphicon glyphicon-ok" aria-hidden="true" style="color: #63ff8a;"></span>
-                    <span ng-if="usuario.perfil_id != 1" class="glyphicon glyphicon-remove" aria-hidden="true" style="color: #f24848;"></span>
-                  </md-button>
-                </td>
-                <td md-cell>
-                  <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(usuario);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                  </md-button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <table md-table style="width: 675px;">
+              <thead md-head>
+                <tr md-row>
+                  <th md-column>Usuario</th>
+                  <th md-column>Nombre</th>
+                  <th md-column>Correo</th>
+                  <!--<th md-column>Responsable</th>
+                  <th md-column>Artículos</th>-->
+                  <th md-column class="danger">Admin</th>
+                  <th md-column class="danger">Eliminar</th>
+                </tr>
+              </thead>
+              <tbody md-body>
+                <tr md-row md-select="usuario" md-select-id="name"
+                  ng-repeat="usuario in usuarios">
+                  <td md-cell style="padding-right: 5px; width: 164px;">
+                    <span>
+                      <i ng-if="usuario.perfil_id == 1"
+                        class="fa fa-bolt fa-fw" aria-hidden="true"
+                        style="left:3px;width: 5px;">
+                      </i>
+                      <span ng-if="usuario.perfil_id == 1"
+                        style="left:4px;position: relative;top: -5px;">
+                        &nbsp;{{usuario.username}}
+                      </span>
+                      <i ng-if="usuario.perfil_id != 1"
+                        class="fa fa-user fa-fw" aria-hidden="true"
+                        style="width: 5px;">
+                      </i>
+                      <span ng-if="usuario.perfil_id != 1"
+                        style="position: relative;top:-5px;">
+                        &nbsp;{{usuario.username}}
+                      </span>
+                    </span>
+                  </td>
+                  <td md-cell style="padding-right: 5px;">
+                    {{usuario.nombre}}
+                  </td>
+                  <td md-cell style="padding-right: 5px;">
+                    {{usuario.email ? usuario.email : 'Sin asignar'}}
+                  </td>
+                  <!-- <td md-cell>
+                    <md-button ng-if="!usuario.responsable" type="submit"
+                      aria-label="agregar" class="md-raised"
+                      ng-click="setResponsable(usuario);">
+                      Asignar 
+                      <span class="glyphicon glyphicon-ok" aria-hidden="true">
+                      </span>
+                    </md-button>
+                    {{usuario.responsable ?
+                      usuario.responsable.responsable :''}}
+                  </td>
+                  <td md-cell>
+                    {{usuario.responsable.articulos_asignados ?
+                      usuario.responsable.articulos_asignados.length : 0}}
+                  </td> -->
+                  <td md-cell>
+                    <md-button class="md-icon-button" aria-label="admin"
+                      ng-click="$event.preventDefault(); toggleAdmin(usuario);"
+                      style="margin-left: -7px;margin-right: 0px;"
+                      ng-disabled="!admin">
+                      <span ng-if="usuario.perfil_id == 1"
+                        class="glyphicon glyphicon-ok" aria-hidden="true"
+                        style="color: #63ff8a;">
+                      </span>
+                      <span ng-if="usuario.perfil_id != 1"
+                        class="glyphicon glyphicon-remove" aria-hidden="true"
+                        style="color: #f24848;">
+                      </span>
+                    </md-button>
+                  </td>
+                  <td md-cell>
+                    <md-button class="md-icon-button" aria-label="delete"
+                      ng-click="$event.preventDefault(); delete(usuario);"
+                      style="margin-left: -7px;margin-right: 0px;"
+                      ng-disabled="!admin">
+                      <span class="glyphicon glyphicon-remove"
+                        aria-hidden="true">
+                      </span>
+                    </md-button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </md-table-container>
         </div>
-        <div style="margin-left:20px;margin-top:25px;width: 450px;" ng-if="editmode">
+        <div style="margin-left: 20px; margin-top: 25px; width: 450px;"
+          ng-if="editmode">
           <form ng-submit="register()" style="margin-top:5%;">
             <div layout="row" >
               <div flex="70">
@@ -93,12 +142,21 @@
                   <input type="password" ng-model="nuevo_usuario.password">
                 </md-input-container>
                 <md-input-container class="RegisterForm-inputContainer">
-                  <md-button class="RegisterForm-submit md-primary md-raised" ng-disabled = "!nuevo_usuario.nombre || !nuevo_usuario.username || !nuevo_usuario.email || !nuevo_usuario.password || nuevo_usuario.password.length < 5" ng-click="register()">Registrar</md-button>
+                  <md-button class="RegisterForm-submit md-primary md-raised"
+                    ng-disabled="!nuevo_usuario.nombre ||
+                      !nuevo_usuario.username || !nuevo_usuario.email ||
+                      !nuevo_usuario.password ||
+                      nuevo_usuario.password.length < 5"
+                    ng-click="register()">
+                    Registrar
+                  </md-button>
                 </md-input-container>
               </div>
               <div flex="30">
-                <md-input-container class="RegisterForm-inputContainer" flex="30">
-                  <img src="images/adduser.png" alt="add" height="70" width="70" style="margin-left: 30px;">
+                <md-input-container class="RegisterForm-inputContainer"
+                  flex="30">
+                  <img src="images/adduser.png" alt="add" height="70"
+                    width="70" style="margin-left: 30px;"/>
                 </md-input-container>
               </div>
             </div>
@@ -109,11 +167,9 @@
     <md-dialog-actions layout="row">
       <span flex></span>
       <md-button ng-click="changemode()">
-        {{editmode? 'Atras': 'Agregar'}}
+        {{editmode? 'Atrás': 'Agregar'}}
       </md-button>
-      <md-button ng-click="cancel()">
-        Salir
-      </md-button>
+      <md-button ng-click="cancel()">Salir</md-button>
     </md-dialog-actions>
   </form>
 </md-dialog>

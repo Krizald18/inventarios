@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use \Carbon\Carbon;
 
 class GruposTableSeeder extends Seeder {
-	public function run(){
+	public function run() {
 		$now = Carbon::now();
 		//DB::table('grupos')->delete();
 

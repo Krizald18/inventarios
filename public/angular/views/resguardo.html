@@ -5,7 +5,7 @@
         <md-tab-label>Responsable</md-tab-label>
         <md-tab-body><br>
             <form ng-submit="$event.preventDefault()" name="searchForm">
-              <md-autocomplete flex ng-required = "!showing"
+              <md-autocomplete flex ng-required="!showing"
                 md-input-name="autocompleteField"
                 md-input-minlength="5"
                 md-input-maxlength="45"
@@ -22,12 +22,12 @@
               <div ng-messages="searchForm.autocompleteField.$error" ng-if="searchForm.autocompleteField.$touched">
                 <div ng-message="required">Usted debe seleccionar un responsable</div>
                 <div ng-message="minlength">Ingrese al menos 5 letras</div>
-                <div ng-message="maxlength">El texto ingresado es mas largo de lo permitido</div>
+                <div ng-message="maxlength">El texto ingresado es más largo de lo permitido</div>
                 <div ng-message="md-require-match"><span ng-if="searchText.length >= 5 && itemsfound.length == 0">No encontrado</span><span ng-if="searchText.length >= 5 && itemsfound.length > 0">Seleccione un responsable</span></div>
               </div>
               </md-autocomplete>
             </form>
-            <div layout="row" ng-show = "showing">
+            <div layout="row" ng-show="showing">
                 <table>
                   <tbody>
                     <tr>
@@ -73,11 +73,11 @@
                   </tbody>
                 </table>
             </div>
-            <br><hr ng-show = "showing">
+            <br><hr ng-show="showing">
             <md-button type="button" aria-label="crearResguardo" class="md-raised" ng-if="showing.articulos_asignados.length > 0" ng-click="transferirArticulos();" ng-disabled="!admin">Transferir Artículo<span ng-show="showing.articulos_asignados.length > 1">s</span> <span class="glyphicon glyphicon-random" aria-hidden="true"></span></md-button>
         </md-tab-body>
       </md-tab>
-      <md-tab id="tab2" ng-if = "showing.articulos_asignados.length > 0" style="width: 920px;" ng-style="{{myStyle}}">
+      <md-tab id="tab2" ng-if="showing.articulos_asignados.length > 0" style="width: 920px;" ng-style="{{myStyle}}">
         <md-tab-label>Artículos Asignados</md-tab-label>
         <md-tab-body>
           <md-input-container class="md-block">
@@ -106,7 +106,7 @@
           </md-table-container><br>
           <md-button type="button" aria-label="crearResguardo" class="md-raised md-primary" ng-if="selected2.length > 0 && showing.id != 244" ng-click="crearResguardo();">Crear resguardo <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></md-button>
           <!--<md-button type="button" aria-label="crearResguardo" class="md-raised md-primary" ng-if="selected2.length > 0 && showing.id == 244" ng-click="transferirArticulos();">Transferir Artículo<span ng-show="selected2.length > 1">s</span> <span class="glyphicon glyphicon-random" aria-hidden="true"></span></md-button>-->
-      <md-tab id="tab3" ng-if = "showing.resguardos.length > 0" style="width: 920px">
+      <md-tab id="tab3" ng-if="showing.resguardos.length > 0" style="width: 920px">
         <md-tab-label>Resguardos</md-tab-label>
         <md-tab-body>
           <md-input-container class="md-block">

@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use \Carbon\Carbon;
 
 class ModelosTableSeeder extends Seeder {
-	public function run(){
+	public function run() {
 		$now = Carbon::now();
 		//DB::table('modelos')->delete();
 		/* pruebas caracteristica repetida en dos modelos diferentes

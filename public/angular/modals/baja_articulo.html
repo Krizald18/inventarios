@@ -28,7 +28,11 @@
                   <h5><strong>Artículo:</strong></h5>
                 </td>
                 <td>
-                  <h5>{{articulo.modelo.subgrupo.subgrupo}} {{articulo.modelo.marca.marca}} {{articulo.modelo.modelo}}</h5>
+                  <h5>
+                    {{articulo.modelo.subgrupo.subgrupo}}
+                    {{articulo.modelo.marca.marca}}
+                    {{articulo.modelo.modelo}}
+                  </h5>
                 </td>
               </tr>
               <tr ng-if="articulo.responsable">
@@ -41,10 +45,12 @@
               </tr>
               <tr ng-if="articulo.oficialia">
                 <td class="col-md-6">
-                  <h5><strong>Oficialia:</strong></h5>
+                  <h5><strong>Oficialía:</strong></h5>
                 </td>
                 <td>
-                  <h5>{{articulo.oficialia.id}} {{articulo.oficialia.oficialia}}</h5>
+                  <h5>
+                    {{articulo.oficialia.id}} {{articulo.oficialia.oficialia}}
+                  </h5>
                 </td>
               </tr>
               <tr ng-if="articulo.area">
@@ -61,33 +67,39 @@
       </div>
       <div class="md-dialog-content">
         <div layout="row">
-          <md-input-container flex = "70" class="md-block">
+          <md-input-container flex="70" class="md-block">
             <label>Comentario</label>
-            <textarea name="comment" ng-model="articulo.comentario" md-maxlength="150" md-select-on-focus ng-required = "!articulo.comentario"></textarea>
-             <div ng-messages="projectForm.comment.$error">
-              <div ng-message="md-maxlength">El campo Comentario debe ser máximo 150 caracteres</div>
+            <textarea name="comment" ng-model="articulo.comentario"
+              md-maxlength="150"
+              md-select-on-focus ng-required="!articulo.comentario">
+            </textarea>
+            <div ng-messages="projectForm.comment.$error">
+              <div ng-message="md-maxlength">
+                El campo Comentario debe ser máximo 150 caracteres
+              </div>
               <div ng-message="required">El campo Comentario es requerido</div>
             </div>
           </md-input-container>
-          <md-input-container flex = "30" class="md-block">
+          <md-input-container flex="30" class="md-block">
             <label>Fecha de baja</label>
-            <md-datepicker ng-model="articulo.fecha_baja" md-placeholder="Seleccione Fecha" md-open-on-focus></md-datepicker>
+            <md-datepicker ng-model="articulo.fecha_baja"
+              md-placeholder="Seleccione Fecha" md-open-on-focus>
+            </md-datepicker>
           </md-input-container>
         </div>
       </div>
-      <div style="color: red; margin-left: 28px;" ng-if="articulo.resguardo_id">
-        Alerta, este artículo ya cuenta con un resguardo asignado, si continua con la baja el nuevo responsable del artículo será "Gobierno del Estado", se pondrá una nota en el resguardo existente.
+      <div style="color: red; margin-left: 28px;"
+        ng-if="articulo.resguardo_id">
+        Alerta, este artículo ya cuenta con un resguardo asignado, si continúa
+        con la baja el nuevo responsable del artículo será "Gobierno del
+        Estado", se pondrá una nota en el resguardo existente.
       </div>
       <br>
     </md-dialog-content>
     <md-dialog-actions layout="row">
       <span flex></span>
-      <md-button ng-click="confirm()">
-        Confirmar
-      </md-button>
-      <md-button ng-click="cancel()">
-        Cancelar
-      </md-button>
+      <md-button ng-click="confirm()">Confirmar</md-button>
+      <md-button ng-click="cancel()">Cancelar</md-button>
     </md-dialog-actions>
   </form>
 </md-dialog>

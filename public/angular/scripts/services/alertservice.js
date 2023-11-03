@@ -22,7 +22,7 @@ class AlertService {
 					);
 	}
 
-	error(content){
+	error(content) {
 		if (!content) {
 			return false;
 		}

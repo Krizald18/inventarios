@@ -1,76 +1,108 @@
 <md-dialog aria-label="Baja">
   <form ng-cloak name="projectForm">
     <md-toolbar>
-      <div class="md-toolbar-tools" style="background-color: white; color: rgba(0,0,0,0.87);">
-        <h4 style="margin-top: 25px;margin-left: 20px;">{{addmode? 'Agregar responsable': 'Responsables'}}</h4>
+      <div class="md-toolbar-tools"
+        style="background-color: white; color: rgba(0, 0, 0, 0.87);">
+        <h4 style="margin-top: 25px; margin-left: 20px;">
+          {{addmode ? 'Agregar responsable' : 'Responsables'}}
+        </h4>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
-          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg"
+            aria-label="Close dialog">
+          </md-icon>
         </md-button>
-        <md-progress-circular md-mode="indeterminate" ng-if="loading"></md-progress-circular>
+        <md-progress-circular md-mode="indeterminate" ng-if="loading">
+        </md-progress-circular>
       </div>
     </md-toolbar>
     <md-dialog-content style="min-height: 200px; width: 800px;">
-      <div class="md-dialog-content" style="margin: -30px 20px 0 20px; width: 760px;">
+      <div class="md-dialog-content"
+        style="margin: -30px 20px 0 20px; width: 760px;">
         <div layout="row">
           <md-table-container ng-if="!addmode">
-          <table md-table style="width: 705px;">
-            <thead md-head>
-              <tr md-row>
-                <th md-column>Oficialia o Area</th>
-                <th md-column>Responsable</th>
-                <th md-column>Articulos Asignados</th>
-                <th md-column style="color:#f97070; padding-right: 10px;height: 15px;width: 100px;">Eliminar</th>
-              </tr>
-            </thead>
-            <tbody md-body>
-              <tr md-row md-select="responsable" md-select-id="name" ng-repeat="responsable in responsables">
-                <td md-cell>{{responsable.oficialia.oficialia}}</td>
-                <td md-cell>{{responsable.responsable}}</td>
-                <td md-cell ng-click="jumpResguardos(responsable);">{{responsable.articulos_asignados.length}}</td>
-                <td md-cell>
-                  <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(responsable);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin || responsable.articulos_asignados.length > 0 || responsable.id == 244">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                  </md-button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <table md-table style="width: 705px;">
+              <thead md-head>
+                <tr md-row>
+                  <th md-column>Oficialía o Área</th>
+                  <th md-column>Responsable</th>
+                  <th md-column>Articulos Asignados</th>
+                  <th md-column
+                    style="color:#f97070; padding-right: 10px;height: 15px;
+                      width: 100px;">
+                    Eliminar
+                  </th>
+                </tr>
+              </thead>
+              <tbody md-body>
+                <tr md-row md-select="responsable" md-select-id="name"
+                  ng-repeat="responsable in responsables">
+                  <td md-cell>{{responsable.oficialia.oficialia}}</td>
+                  <td md-cell>{{responsable.responsable}}</td>
+                  <td md-cell ng-click="jumpResguardos(responsable);">
+                    {{responsable.articulos_asignados.length}}
+                  </td>
+                  <td md-cell>
+                    <md-button class="md-icon-button" aria-label="delete"
+                      ng-click="$event.preventDefault(); delete(responsable);"
+                      style="margin-left: -7px;margin-right: 0px;"
+                      ng-disabled="!admin ||
+                        responsable.articulos_asignados.length > 0 ||
+                        responsable.id == 244">
+                      <span class="glyphicon glyphicon-remove"
+                        aria-hidden="true">
+                      </span>
+                    </md-button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </md-table-container>
         </div>
         <div layout="row" ng-if="addmode" style="margin-top: 20px;">
           <md-input-container flex="50" class="md-block">
             <label>Responsable</label>
-            <input name="responsable" type="text" md-maxlength="50" md-no-asterisk="" ng-model="nuevo_responsable.responsable" ng-change="cambioResponsable()" required>
+            <input name="responsable" type="text" md-maxlength="50"
+              md-no-asterisk="" ng-model="nuevo_responsable.responsable"
+              ng-change="cambioResponsable()" required/>
             <div ng-messages="projectForm.responsable.$error">
-              <div ng-message="md-maxlength">El campo Responsable debe ser máximo 50 caracteres</div>
+              <div ng-message="md-maxlength">
+                El campo Responsable debe ser máximo 50 caracteres
+              </div>
               <div ng-message="required">El campo Responsable es requerido</div>
             </div>
           </md-input-container>
           <md-input-container flex="50" class="md-block">
-          <label>Oficialia</label>
-          <md-select name="oficialia" ng-model="nuevo_responsable.oficialia_id" ng-disabled="!oficialias || oficialias.length == 0">
-            <md-option ng-repeat="x in oficialias track by x.id" value="{{x.id}}">{{x.oficialia}}</md-option>
-          </md-select>
-          <!--
-          <div ng-messages="projectForm.oficialia.$error">
-            <div ng-message="required">El campo Oficialia es requerido</div>
-          </div>-->
-        </md-input-container>
+            <label>Oficialía</label>
+            <md-select name="oficialia"
+              ng-model="nuevo_responsable.oficialia_id"
+              ng-disabled="!oficialias || oficialias.length == 0">
+              <md-option ng-repeat="x in oficialias track by x.id"
+                value="{{x.id}}">
+                {{x.oficialia}}
+              </md-option>
+            </md-select>
+            <!-- <div ng-messages="projectForm.oficialia.$error">
+              <div ng-message="required">El campo Oficialía es requerido</div>
+            </div> -->
+          </md-input-container>
         </div>
         <div layout="row" ng-if="addmode">
-          <md-button flex="30" class="md-raised md-primary" ng-click="add();" style="height: 10px; margin-top: 20px; width: 22px;" ng-disabled="!nuevo_responsable.responsable">Guardar</md-button>
+          <md-button flex="30" class="md-raised md-primary" ng-click="add();"
+            style="height: 10px; margin-top: 20px; width: 22px;"
+            ng-disabled="!nuevo_responsable.responsable">
+            Guardar
+          </md-button>
         </div>
-      </div><br>
+      </div>
+      <br>
     </md-dialog-content>
     <md-dialog-actions layout="row">
       <span flex></span>
       <md-button ng-click="changemode()">
-        {{addmode? 'Atras': 'Agregar'}}
+        {{addmode? 'Atrás': 'Agregar'}}
       </md-button>
-      <md-button ng-click="cancel()">
-        Salir
-      </md-button>
+      <md-button ng-click="cancel()">Salir</md-button>
     </md-dialog-actions>
   </form>
 </md-dialog>

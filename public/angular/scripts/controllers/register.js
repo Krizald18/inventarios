@@ -1,14 +1,14 @@
 'use strict';
 angular.module('App')
-	.controller('RegisterCtrl', ['$scope', 'ToastService', '$auth', function ($scope, ToastService, $auth) {
-		if($auth.isAuthenticated())
+	.controller('RegisterCtrl', ['$scope', 'ToastService', '$auth', function($scope, ToastService, $auth) {
+		if ($auth.isAuthenticated())
 			window.location = '/';
 		$scope.nombre = '';
 		$scope.username = '';
 		$scope.email = '';
 		$scope.password = '';
 		$scope.$watch('nombre', n => {
-			if($scope.nombre)
+			if ($scope.nombre)
 				$scope.nombre = n.charAt(0).toUpperCase() + n.slice(1);
 		})
 		$scope.register = () => {
@@ -24,7 +24,7 @@ angular.module('App')
 					//remove this if you require email verification
 					$auth.setToken(response.data);
 
-					if(response.data.data.user.perfil_id == 1)
+					if (response.data.data.user.perfil_id == 1)
 						localStorage.setItem('admin_token', response.data.data.user.admin.token);
 					localStorage.setItem('user', response.data.data.user.id);
 					localStorage.setItem('nombre', response.data.data.user.nombre);

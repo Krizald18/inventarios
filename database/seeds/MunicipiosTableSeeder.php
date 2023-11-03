@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use \Carbon\Carbon;
 
 class MunicipiosTableSeeder extends Seeder {
-	public function run(){
+	public function run() {
 		$now = Carbon::now();
 		//DB::table('municipios')->delete();
 		DB::insert('insert into municipios (id, municipio, created_at) values (?, ?, ?)', [1,'AHOME',$now]);

@@ -4,51 +4,41 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Municipio;
 
-class MunicipioController extends Controller
-{
-    public function __construct()
-    {
-        $this->middleware(['cors', 'auth:api']);
-    }
+class MunicipioController extends Controller {
+  public function __construct() {
+    $this->middleware(['cors', 'auth:api']);
+  }
 
-    public function index()
-    {
-        return Municipio::orderBy('id', 'asc')->get();
-    }
+  public function index() {
+    return Municipio::orderBy('id', 'asc')->get();
+  }
 
-    public function create()
-    {
-        //
-    }
+  public function create() {
+    //
+  }
 
-    public function store(Request $request)
-    {
-        //
-    }
+  public function store(Request $request) {
+    //
+  }
 
-    public function show($id)
-    {
-        return Municipio::find($id);
-    }
+  public function show($id) {
+    return Municipio::find($id);
+  }
 
-    public function edit($id)
-    {
-        //
-    }
+  public function edit($id) {
+    //
+  }
 
-    public function update(Request $request, $id)
-    {
-        //
-    }
+  public function update(Request $request, $id) {
+    //
+  }
 
-    public function destroy($id)
-    {
-        return 'Jamaz!';
-        /*
-        $obj = Municipio::find($id);
-        $obj->delete();
-
-        return Municipio::orderBy('id', 'asc')->get();
-        */
-    }
+  public function destroy($id) {
+    return 'Jamaz!';
+    /*
+    $obj = Municipio::find($id);
+    $obj->delete();
+    return Municipio::orderBy('id', 'asc')->get();
+    */
+  }
 }

@@ -8,67 +8,63 @@ use App\PasswordReset;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class PasswordResetController extends Controller
-{
-    public function sendResetLinkEmail(Request $request)
-    {
-        $this->validate($request, [
-            'email' => 'required|email|exists:users,email',
-        ]);
+class PasswordResetController extends Controller {
+  public function sendResetLinkEmail(Request $request) {
+    $this->validate($request, [
+      'email' => 'required|email|exists:users,email',
+    ]);
 
-        //invalidate old tokens
-        PasswordReset::whereEmail($request->email)->delete();
+    //invalidate old tokens
+    PasswordReset::whereEmail($request->email)->delete();
 
-        $email = $request->email;
-        $reset = PasswordReset::create([
-            'email' => $email,
-            'token' => str_random(10),
-        ]);
+    $email = $request->email;
+    $reset = PasswordReset::create([
+      'email' => $email,
+      'token' => str_random(10),
+    ]);
 
-        $token = $reset->token;
+    $token = $reset->token;
 
-        Mail::send('auth.reset_link', compact('email', 'token'), function ($mail) use ($email) {
-            $mail->to($email)
-            ->from('noreply@example.com')
-            ->subject('Password reset link');
-        });
+    Mail::send('auth.reset_link', compact('email', 'token'), function($mail) use ($email) {
+      $mail->to($email)
+      ->from('noreply@example.com')
+      ->subject('Password reset link');
+    });
 
-        return response()->success(true);
+    return response()->success(true);
+  }
+
+  public function verify(Request $request) {
+    $this->validate($request, [
+      'email' => 'required|email',
+      'token' => 'required',
+    ]);
+
+    $check = PasswordReset::whereEmail($request->email)
+    ->whereToken($request->token)
+    ->first();
+
+    if (! $check) {
+      return response()->error('Email does not exist', 422);
     }
 
-    public function verify(Request $request)
-    {
-        $this->validate($request, [
-            'email' => 'required|email',
-            'token' => 'required',
-        ]);
+    return response()->success(true);
+  }
 
-        $check = PasswordReset::whereEmail($request->email)
-        ->whereToken($request->token)
-        ->first();
+  public function reset(Request $request) {
+    $this->validate($request, [
+      'email'    => 'required|email',
+      'token'    => "required|exists:password_resets,token,email,{$request->email}",
+      'password' => 'required|min:5|confirmed',
+    ]);
 
-        if (! $check) {
-            return response()->error('Email does not exist', 422);
-        }
+    $user = User::whereEmail($request->email)->firstOrFail();
+    $user->password = bcrypt($request->password);
+    $user->save();
 
-        return response()->success(true);
-    }
+    //delete pending resets
+    PasswordReset::whereEmail($request->email)->delete();
 
-    public function reset(Request $request)
-    {
-        $this->validate($request, [
-            'email'    => 'required|email',
-            'token'    => "required|exists:password_resets,token,email,{$request->email}",
-            'password' => 'required|min:5|confirmed',
-        ]);
-
-        $user = User::whereEmail($request->email)->firstOrFail();
-        $user->password = bcrypt($request->password);
-        $user->save();
-
-        //delete pending resets
-        PasswordReset::whereEmail($request->email)->delete();
-
-        return response()->success(true);
-    }
+    return response()->success(true);
+  }
 }

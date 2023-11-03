@@ -1,64 +1,89 @@
 <md-dialog aria-label="Baja">
   <form ng-cloak name="projectForm">
     <md-toolbar>
-      <div class="md-toolbar-tools" style="background-color: white; color: rgba(0,0,0,0.87);">
-        <h4 style="margin-top: 25px;margin-left: 20px;">{{addmode? 'Agregar área': 'Áreas'}}</h4>
+      <div class="md-toolbar-tools"
+        style="background-color: white; color: rgba(0, 0, 0, 0.87);">
+        <h4 style="margin-top: 25px;margin-left: 20px;">
+          {{addmode ? 'Agregar área' : 'Áreas'}}
+        </h4>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
-          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg"
+            aria-label="Close dialog">
+          </md-icon>
         </md-button>
-        <md-progress-circular md-mode="indeterminate" ng-if="loading"></md-progress-circular>
+        <md-progress-circular md-mode="indeterminate" ng-if="loading">
+        </md-progress-circular>
       </div>
     </md-toolbar>
     <md-dialog-content style="min-height: 200px; width: 650px;">
-      <div class="md-dialog-content" style="margin: -30px 20px 0 20px;width: 615px;">
+      <div class="md-dialog-content"
+        style="margin: -30px 20px 0 20px; width: 615px;">
         <div layout="row">
           <md-table-container ng-if="!addmode">
-          <table md-table style="width: 555px;">
-            <thead md-head>
-              <tr md-row>
-                <th md-column>Área</th>
-                <th md-column>Fecha de creación</th>
-                <th md-column style="color:#f97070;padding-right: 10px;height: 15px;width: 100px;">Eliminar</th>
-              </tr>
-            </thead>
-            <tbody md-body>
-              <tr md-row md-select="area" md-select-id="name" ng-repeat="area in areas">
-                <td md-cell>{{area.area}}</td>
-                <td md-cell>{{millisec(area.created_at) | date:'dd/MM/yyyy'}}</td>
-                <td md-cell>
-                  <md-button class="md-icon-button" aria-label="delete" ng-click="$event.preventDefault(); delete(area);" style="margin-left: -7px;margin-right: 0px;" ng-disabled="!admin || area.articulos.length > 0">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                  </md-button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <table md-table style="width: 555px;">
+              <thead md-head>
+                <tr md-row>
+                  <th md-column>Áreas</th>
+                  <th md-column>Fecha de creación</th>
+                  <th md-column
+                    style="color: #f97070; padding-right: 10px; height: 15px;
+                      width: 100px;">
+                    Eliminar
+                  </th>
+                </tr>
+              </thead>
+              <tbody md-body>
+                <tr md-row md-select="area" md-select-id="name"
+                  ng-repeat="area in areas">
+                  <td md-cell>{{area.area}}</td>
+                  <td md-cell>
+                    {{millisec(area.created_at) | date:'dd/MM/yyyy'}}
+                  </td>
+                  <td md-cell>
+                    <md-button class="md-icon-button" aria-label="delete"
+                      ng-click="$event.preventDefault(); delete(area);"
+                      style="margin-left: -7px;margin-right: 0px;"
+                      ng-disabled="!admin || area.articulos.length > 0">
+                      <span class="glyphicon glyphicon-remove"
+                        aria-hidden="true">
+                      </span>
+                    </md-button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </md-table-container>
         </div>
         <div layout="row" ng-if="addmode" style="margin-top: 20px;">
           <md-input-container flex="100" class="md-block">
             <label>Área</label>
-            <input name="area" type="text" md-maxlength="50" md-no-asterisk="" ng-model="nueva_area.area" ng-change="cambioArea()" required>
+            <input name="area" type="text" md-maxlength="50" md-no-asterisk=""
+              ng-model="nueva_area.area" ng-change="cambioArea()" required/>
             <div ng-messages="projectForm.area.$error">
-              <div ng-message="md-maxlength">El campo Área debe ser máximo 50 caracteres</div>
+              <div ng-message="md-maxlength">
+                El campo Área debe ser máximo 50 caracteres.
+              </div>
               <div ng-message="required">El campo Área es requerido</div>
             </div>
           </md-input-container>
         </div>
         <div layout="row" ng-if="addmode">
-          <md-button flex="30" class="md-raised md-primary" ng-click="add();" style="height: 10px; margin-top: 20px; width: 22px;" ng-disabled="!nueva_area.area">Guardar</md-button>
+          <md-button flex="30" class="md-raised md-primary" ng-click="add();"
+            style="height: 10px; margin-top: 20px; width: 22px;"
+            ng-disabled="!nueva_area.area">
+            Guardar
+          </md-button>
         </div>
-      </div><br>
+      </div>
+      <br>
     </md-dialog-content>
     <md-dialog-actions layout="row">
       <span flex></span>
       <md-button ng-click="changemode()">
-        {{addmode? 'Atras': 'Agregar'}}
+        {{addmode ? 'Atrás' : 'Agregar'}}
       </md-button>
-      <md-button ng-click="cancel()">
-       	Salir
-      </md-button>
+      <md-button ng-click="cancel()">Salir</md-button>
     </md-dialog-actions>
   </form>
 </md-dialog>

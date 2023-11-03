@@ -1,9 +1,9 @@
 'use strict';
 angular.module('App')
 	.controller('ResguardoCtrl', ['$scope', '$mdDialog', '$timeout', '$window', '$q', 'API', 'FileUploader', 'AlertService', 
-		function ($scope, $mdDialog, $timeout, $window, $q, API, FileUploader, AlertService) {
+		function($scope, $mdDialog, $timeout, $window, $q, API, FileUploader, AlertService) {
 	    // list of `state` value/display objects
-	    if(localStorage.admin_token)
+	    if (localStorage.admin_token)
     		$scope.admin = true;
 	    $scope.selected2 = [];
 	    $scope.selectedItem  = null;
@@ -14,7 +14,7 @@ angular.module('App')
 	    	'height': '650px',
 	    	'min-height': '650px'
 	    }
-	    if(localStorage.admin_token)
+	    if (localStorage.admin_token)
 	    	$scope.admin = true;
 
 	    $scope.millisec = date_str => new Date(date_str).getTime();
@@ -34,7 +34,7 @@ angular.module('App')
 		}
 		$scope.crearResguardo =  () => {
 			var obj = angular.copy($scope.selected2);
-			if(!obj || (obj && obj.length == 0))
+			if (!obj || (obj && obj.length == 0))
 				return;
 			let articulos = $scope.selected2.map(obj => obj.id);
 			let data = {};
@@ -59,19 +59,19 @@ angular.module('App')
 			let x = $scope.showing.resguardos;
 			$.each(x, (j, r) => {
 				$.each(r.articulos, (i,articulo) => {
-					if(a.id == articulo.id)
+					if (a.id == articulo.id)
 					{
 						b = true;
 						return false;
 					}
 				});
-				if(b)
+				if (b)
 					return false;
 			});			
 			return b;
 		}
 	    $scope.$watch('selectedItem', s => {
-	    	if(s)
+	    	if (s)
 	    	{
 					$scope.showing = angular.copy(s);
 
@@ -85,7 +85,7 @@ angular.module('App')
 							'height': heightCl + 'px',
 							'min-height': heightCl + 'px'
 					};
-					if($scope.selectedItem)
+					if ($scope.selectedItem)
 							$scope.selectedItem = null;
 						
 						var activeElement = document.getElementById('fl-input-1');
@@ -100,7 +100,7 @@ angular.module('App')
 	    API.all("responsable").getList().then(res => {
 				$scope.responsables = res.plain();
 	    	var re = sessionStorage.getItem('responsable_id');
-			if(re)
+			if (re)
 			{
 				$scope.showing = $.grep($scope.responsables, r => r.id == re)[0];
 
@@ -118,7 +118,7 @@ angular.module('App')
 	      $scope.itemsfound = results;
 	      return deferred.promise;
 	    }
-	    var createFilterFor = query =>{
+	    var createFilterFor = query => {
 	      var lowercaseQuery = angular.uppercase(query);
 	      return resp => resp.responsable.indexOf(lowercaseQuery) === 0 || (resp.oficialia_id && resp.oficialia_id.indexOf(lowercaseQuery) != -1);
 	    }
@@ -142,7 +142,7 @@ angular.module('App')
     		pdf_data.oficialia = $scope.showing.oficialia && $scope.showing.oficialia.oficialia? $scope.showing.oficialia.oficialia: null;
     		pdf_data.municipio = $scope.showing.oficialia && $scope.showing.oficialia.municipio? $scope.showing.oficialia.municipio.municipio: null;
     		pdf_data.articulos = articulos;
-    		API.all('resguardo').post({pdf_data}).then(pdfEncoded =>{
+    		API.all('resguardo').post({pdf_data}).then(pdfEncoded => {
 				downloadURI("data:application/pdf;base64," + pdfEncoded, name);
 				API.one('resguardo', resguardo.id).get()
 				.then( res => {
@@ -154,7 +154,7 @@ angular.module('App')
 
 	    }
 	    $scope.uploadPDF = (ev, resguardo) => {
-	    	if(!resguardo)
+	    	if (!resguardo)
 	    		return;
 	    	var id  = resguardo.id;
 		    $mdDialog.show({
@@ -176,10 +176,10 @@ angular.module('App')
 		            url: 'api/uploader/' + id,
 		            alias: 'file'
 		        });
-		       	if(files && files.length > 0)
+		       	if (files && files.length > 0)
 		       	{
 		       		$.each(files, (i, o) => {
-		       			if(o.lfFile.type == "application/pdf")
+		       			if (o.lfFile.type == "application/pdf")
 		       			{
 			       			var pdf = new FileUploader.FileItem($scope.uploader, o.lfFile);
 							pdf.progress = 100;
@@ -188,7 +188,7 @@ angular.module('App')
 							$scope.uploader.queue.push(pdf);
 						}
 		       		});
-		       		if($scope.uploader.queue.length > 1)
+		       		if ($scope.uploader.queue.length > 1)
 		       			localStorage.multiple_upload = true;
 					$scope.uploader.queue.forEach((item, i) => {
 		                item.formData.push({
@@ -198,33 +198,33 @@ angular.module('App')
 		                });
 		                item.upload();
 		                setTimeout(() => {
-							if(item.isUploading)
+							if (item.isUploading)
 							{
 								setTimeout(() => {
-									if(item.isUploading)
+									if (item.isUploading)
 									{
 										setTimeout(() => {
-											if(item.isUploading)
+											if (item.isUploading)
 											{
 												setTimeout(() => {
-													if(item.isUploading)
+													if (item.isUploading)
 													{
 														setTimeout(() => {
-															if(item.isUploading)
+															if (item.isUploading)
 															{
 																setTimeout(() => {
-																	if(item.isUploading)
+																	if (item.isUploading)
 																	{
 																		setTimeout(() => {
-																			if(item.isUploading)
+																			if (item.isUploading)
 																			{
 																				setTimeout(() => {
-																					if(item.isUploading)
+																					if (item.isUploading)
 																					{
 																						setTimeout(() => {
-																							if(item.isUploading)
+																							if (item.isUploading)
 																							{
-																								if(item.isUploading)
+																								if (item.isUploading)
 																									AlertService.error('Error al cargar archivo, se ha exedido el tiempo de espera, 5 seg.');
 																								else if (i == $scope.uploader.queue.length - 1)
 																									done(id);
@@ -269,7 +269,7 @@ angular.module('App')
 		    });
 	    }
 	    $scope.downloadSigned = resg => {
-	    	if(!resg)
+	    	if (!resg)
 	    		return;
 	    	localStorage.resguardo_id = resg.id;
 			$mdDialog.show({
@@ -280,7 +280,7 @@ angular.module('App')
 				fullscreen: true // Only for -xs, -sm breakpoints.
 		    }).then(rs => {}, res => {
 		    	// handle cancel from mdDialog (salir)
-		    	if(res)
+		    	if (res)
 		    		resg.pdf_firmado = res.pdf_firmado;
 		    });
 	    }
@@ -292,11 +292,11 @@ angular.module('App')
 				resguardo.updated_at = res.updated_at;
 				resguardo.evidencias = res.evidencias;
 				let m = localStorage.multiple_upload;
-				if(m)
+				if (m)
 					AlertService.show("Listo!", "Se han cargado los documentos");
 				else
 					AlertService.show("Listo!", "Se ha cargado el documento");
-				if(localStorage.multiple_upload != undefined)
+				if (localStorage.multiple_upload != undefined)
 					localStorage.removeItem('multiple_upload');
 	    	});
 	    }
@@ -333,11 +333,11 @@ angular.module('App')
 					};
 		    		// $scope.selectedItem = null;
 		    		$scope.refreshbodyheight();
-		    		if(files_length)
+		    		if (files_length)
 		    		{
 		    			if (files_length > 1)
 		    				AlertService.show("Transferencia completa", "Se completó la transferencia de " + files_length + " artículos.");
-		    			else if(files_length == 1)
+		    			else if (files_length == 1)
 		    				AlertService.show("Transferencia completa", "Se completó la transferencia del artículo.");
 		    		}
 				});
@@ -367,7 +367,7 @@ angular.module('App')
 		      	API.all('resguardo').post({data:data})
 		      		.then(response => resguardo = response);
 		    }, function() {
-		    	if(resguardo.observaciones != obs_orig)
+		    	if (resguardo.observaciones != obs_orig)
 		    		resguardo.observaciones = obs_orig;
 		    });
 		 };
@@ -379,14 +379,14 @@ angular.module('App')
 		    $scope.answer = () => $mdDialog.hide($scope.files01);
 		}
 		var TransferirController = ($scope, $mdDialog, API) => {
-			if(localStorage.admin_token)
+			if (localStorage.admin_token)
 	    		$scope.admin = true;
 			$scope.disableConfirm = false;
 			API.all("responsable").getList().then(res => $scope.allresp = res.plain());
 			$scope.confirmado = false;
 			$scope.seleccionados = [];
 			$scope.articulos = JSON.parse(localStorage.articulos);
-			if(localStorage.articulos)
+			if (localStorage.articulos)
 				localStorage.removeItem('articulos');
 			$scope.back = () => {
 				$scope.confirmado = false;
@@ -394,16 +394,16 @@ angular.module('App')
 			};
 		    $scope.cancel = () => $mdDialog.cancel();
 		    $scope.confirmar = () => {
-		    	if(!$scope.confirmado)
+		    	if (!$scope.confirmado)
 		    	{
 		    		$scope.responsables = $scope.allresp.filter(r => r.id != $scope.seleccionados[0].responsable_id);
 					API.all("area").getList().then(res => $scope.areas_all = res.plain());
 		    		$scope.confirmado = true;
-		    		if($scope.nuevo_responsable)
+		    		if ($scope.nuevo_responsable)
 		    		{
-		    			if($scope.areas.length > 0)
+		    			if ($scope.areas.length > 0)
 		    			{
-		    				if($scope.area_id)
+		    				if ($scope.area_id)
 		    					$scope.disableConfirm = false;
 		    				else
 		    					$scope.disableConfirm = true;
@@ -417,7 +417,7 @@ angular.module('App')
 		    	else
 		    	{
 		    		$scope.frmTrans.$setSubmitted();
-		    		if($scope.nuevo_responsable && (($scope.areas.length > 0 && $scope.area_id) || $scope.areas.length == 0))
+		    		if ($scope.nuevo_responsable && (($scope.areas.length > 0 && $scope.area_id) || $scope.areas.length == 0))
 		    		{
 		    			let data = {
 		    				'articulos': $scope.seleccionados.map(s => s.id),
@@ -426,7 +426,7 @@ angular.module('App')
 		    				'command': 'transfer'
 		    			};
 		    			API.all('responsable').post(data).then(ad => {
-		    				if(localStorage.tiene_oficialia)
+		    				if (localStorage.tiene_oficialia)
 								localStorage.removeItem('tiene_oficialia');
 	    					$mdDialog.hide($scope.seleccionados.length);
 		    			});
@@ -434,18 +434,18 @@ angular.module('App')
 		    	}
 		    }
 		    $scope.$watch('nuevo_responsable', a => {
-		    	if(a)
+		    	if (a)
 		    	{
 		    		$scope.disableConfirm = false;
 		    		let r = $.grep($scope.responsables, re => re.id == a)[0];
-		    		if(r.oficialia_id)
+		    		if (r.oficialia_id)
 		    		{
 		    			localStorage.tiene_oficialia = true;
 		    			$scope.areas = angular.copy($scope.areas_all);
 		    		}
 		    		else
 		    		{
-		    			if(localStorage.tiene_oficialia)
+		    			if (localStorage.tiene_oficialia)
 							localStorage.removeItem('tiene_oficialia');
 		    			$scope.areas = [];	
 		    		}
@@ -454,14 +454,14 @@ angular.module('App')
 		    	else
 		    		$scope.areas = [];
 		    });
-		    $scope.$watch('area_id', a =>{
-		    	if($scope.nuevo_responsable)
+		    $scope.$watch('area_id', a => {
+		    	if ($scope.nuevo_responsable)
 		    	{
-		    		if(a)
+		    		if (a)
 		    			$scope.disableConfirm = false;
 		    		else
 		    		{
-			    		if(localStorage.tiene_oficialia)
+			    		if (localStorage.tiene_oficialia)
 			    			$scope.disableConfirm = true;
 			    		else
 			    			$scope.disableConfirm = false;
@@ -471,10 +471,10 @@ angular.module('App')
 		}
 		var BajarEvidenciasController = ($scope, $mdDialog, API) => {
 			$scope.millisec = date_str => new Date(date_str).getTime();
-			if(localStorage.admin_token)
+			if (localStorage.admin_token)
 	    		$scope.admin = true;
 			let id = localStorage.resguardo_id;
-			if(localStorage.resguardo_id)
+			if (localStorage.resguardo_id)
 				localStorage.removeItem('resguardo_id');
 			API.one('resguardo', id).get()
 	    	.then(res => $scope.evidencias = res.evidencias, () => { /* catch error */ });
@@ -489,7 +489,7 @@ angular.module('App')
 		    	API.one('downloader', evidencia.id).get(data).then(pdfEncoded => downloadURI("data:application/pdf;base64," + pdfEncoded, evidencia.file));
 		    };
 		    $scope.delete = evidencia => {
-		    	if(!evidencia)
+		    	if (!evidencia)
 		    		return;
 		    	$scope.seleccionados = [];
 		    	let prot = {
@@ -500,14 +500,14 @@ angular.module('App')
 		    	.then(res => {
 		    		var resguardo = res.plain();
 		    		$scope.evidencias = resguardo.evidencias;
-		    		if(resguardo.evidencias.length == 0)
+		    		if (resguardo.evidencias.length == 0)
 		    		{
 		    			AlertService.show("Sin archivos", "Se han eliminado todos los archivos");
 		    			$mdDialog.cancel(resguardo);
 		    		}
-	    		}).catch(err =>{
+	    		}).catch(err => {
 	    			AlertService.show("Error interno", "Se ha producido un error de autenticación, es necesario volver a iniciar sesión");
-	    			setTimeout(()=>{
+	    			setTimeout(()=> {
 	    				localStorage.removeItem('satellizer_token');
 						localStorage.removeItem('admin_token');
 						localStorage.removeItem('user');

@@ -2,6 +2,7 @@ angular.module('app.config')
 	.config(['$qProvider', function($qProvider) {
 		$qProvider.errorOnUnhandledRejections(false);
 	}])
+
 	.config(['$authProvider', function($authProvider) {
 		'ngInject';
 		$authProvider.httpInterceptor = function() {
@@ -9,9 +10,11 @@ angular.module('app.config')
 		}
 		$authProvider.loginUrl = '/index.php/api/auth/login';
 		$authProvider.signupUrl = '/index.php/api/auth/register';
-		$authProvider.tokenRoot = 'data';//compensates success response macro
+		$authProvider.tokenRoot = 'data'; // compensates success response macro
 	}])
-	.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+
+	.config(['$routeProvider', '$locationProvider',
+		function($routeProvider, $locationProvider) {
 		$locationProvider.hashPrefix('');
 		$routeProvider
 			.when('/', {
@@ -65,6 +68,7 @@ angular.module('app.config')
 				redirectTo: '/'
 			});
 	}])
+
 	.config(['$middlewareProvider', function($middlewareProvider) {
 		$middlewareProvider.map({
 			/* Redirect if not authenticated // validate token structure */
@@ -77,41 +81,36 @@ angular.module('app.config')
 					if (token.split('.').length === 3) {
 						// Could be a valid JWT or an access token with the same format
 						try {
-						var base64Url = token.split('.')[1];
-						var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-						var exp = JSON.parse($window.atob(base64)).exp;
-						// JWT with an optonal expiration claims
-						if (exp) {
-							var isExpired = Math.round(new Date().getTime() / 1000) >= exp;
-							if (isExpired) {
-							// FAIL: Expired token
-								pass = false;
-							} else {
-								// PASS: Non-expired token
+							var base64Url = token.split('.')[1];
+							var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+							var exp = JSON.parse($window.atob(base64)).exp;
+							// JWT with an optonal expiration claims
+							if (exp) {
+								var isExpired = Math.round(new Date().getTime() / 1000) >= exp;
+								if (isExpired) {
+									// FAIL: Expired token
+									pass = false;
+								} else {
+									// PASS: Non-expired token
 									pass = true;
 								}
 							}
 						} catch(e) {
-						// PASS: Non-JWT token that looks like JWT
+							// PASS: Non-JWT token that looks like JWT
 							pass = false;
 						}
-					}
-					else
-					{
+					} else {
 						pass = false;
 						// PASS: All other tokens
 						// pass = true;
 					}
-				}
-				else
-				{
+				} else {
 					// FAIL: No token at all
 					pass = false;
 				}
-				if(pass)
+				if (pass) {
 					this.next();
-				else
-				{
+				} else {
 					localStorage.clear();
 					sessionStorage.clear();
 					this.redirectTo('/login');
@@ -122,21 +121,26 @@ angular.module('app.config')
 				this.next();
 			}
 		});
-	}]).config(['$mdThemingProvider', function($mdThemingProvider) {
+	}])
 
-	}]).directive('ngEnter', function () {
-		return function (scope, element, attrs) {
-			element.bind("keydown keypress", function (event) {
-				if(event.which === 13) {
-					scope.$apply(function (){
+	.config(['$mdThemingProvider', function($mdThemingProvider) {
+
+	}])
+
+	.directive('ngEnter', function() {
+		return function(scope, element, attrs) {
+			element.bind("keydown keypress", function(event) {
+				if (event.which === 13) {
+					scope.$apply(function() {
 						scope.$eval(attrs.ngEnter);
 					});
-	 
 					event.preventDefault();
 				}
 			});
 		};
-	}).filter('num', function() {
+	})
+	
+	.filter('num', function() {
 		return function(input) {
 			return parseInt(input, 10);
 		}

@@ -1,6 +1,6 @@
 class ToastService {
 
-	constructor($mdToast){
+	constructor($mdToast) {
 		this.$mdToast = $mdToast;
 		this.pos = 'bottom right';
 		this.act = 'OK';
@@ -19,7 +19,7 @@ class ToastService {
 		);
 	}
 
-	error(content){
+	error(content) {
 		if (!content) {
 			return false;
 		}

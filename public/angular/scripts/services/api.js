@@ -18,7 +18,7 @@ angular.module('App')
 							window.location.replace('#/login');
 							break;
 						case 422:
-							if(response.data.errors == undefined)
+							if (response.data.errors == undefined)
 								return ToastService.error(response.data.error);
 							else
 								for (let error in response.data.errors)

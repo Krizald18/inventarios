@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use \Carbon\Carbon;
 
 class MarcasTableSeeder extends Seeder {
-	public function run(){
+	public function run() {
 		$now = Carbon::now();
 		//DB::table('marcas')->delete();
 		DB::insert('insert into marcas (id, marca, created_at) values (?, ?, ?)', [1,'3COM',$now]);

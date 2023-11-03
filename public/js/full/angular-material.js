@@ -2710,7 +2710,7 @@ function attachToDocument( $mdGesture, $$MdGestureHandler ) {
     var handler;
     for (var name in HANDLERS) {
       handler = HANDLERS[name];
-      if( handler instanceof $$MdGestureHandler ) {
+      if ( handler instanceof $$MdGestureHandler ) {
 
         if (handlerEvent === 'start') {
           // Run cancel to reset any handlers' state
@@ -4267,7 +4267,7 @@ angular.module('material.core.meta', [])
         var i, j, instance;
         for(i = 0, j = instances.length; i < j; i++) {
           instance = instances[i];
-          if(instance.$$mdHandle === handle) {
+          if (instance.$$mdHandle === handle) {
             return instance;
           }
         }
@@ -13327,7 +13327,7 @@ MdNavBarController.prototype._updateInkBarStyles = function(tab, newIndex, oldIn
 
   this._inkbar.css({display: newIndex < 0 ? 'none' : ''});
 
-  if(tab){
+  if (tab){
     var tabEl = tab.getButtonEl();
     var left = tabEl.offsetLeft;
 
@@ -16492,7 +16492,7 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
         }, 100);
       })
       .on('focus', function() {
-        if(scope.mouseActive === false) {
+        if (scope.mouseActive === false) {
           rgCtrl.$element.addClass('md-focused');
         }
       })
@@ -17043,7 +17043,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
     element.empty().append(valueEl);
     element.append(selectTemplate);
 
-    if(!attr.tabindex){
+    if (!attr.tabindex){
       attr.$set('tabindex', 0);
     }
 
@@ -19057,7 +19057,7 @@ function SliderContainerDirective() {
         elem.attr('md-vertical', '');
       }
 
-      if(!slider.attr('flex')) {
+      if (!slider.attr('flex')) {
         slider.attr('flex', '');
       }
 
@@ -19356,7 +19356,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     }
 
     function clearTicks() {
-      if(tickCanvas && tickCtx) {
+      if (tickCanvas && tickCtx) {
         var dimensions = getSliderDimensions();
         tickCtx.clearRect(0, 0, dimensions.width, dimensions.height);
       }
@@ -21890,7 +21890,7 @@ VirtualRepeatContainerController.prototype.scrollTo = function(position) {
 VirtualRepeatContainerController.prototype.scrollToIndex = function(index) {
   var itemSize = this.repeater.getItemSize();
   var itemsLength = this.repeater.itemsLength;
-  if(index > itemsLength) {
+  if (index > itemsLength) {
     index = itemsLength - 1;
   }
   this.scrollTo(itemSize * index);
@@ -21904,7 +21904,7 @@ VirtualRepeatContainerController.prototype.resetScroll = function() {
 VirtualRepeatContainerController.prototype.handleScroll_ = function() {
   var doc = angular.element(document)[0];
   var ltr = doc.dir != 'rtl' && doc.body.dir != 'rtl';
-  if(!ltr && !this.maxSize) {
+  if (!ltr && !this.maxSize) {
     this.scroller.scrollLeft = this.scrollSize;
     this.maxSize = this.scroller.scrollLeft;
   }
@@ -22160,7 +22160,7 @@ VirtualRepeatController.prototype.containerUpdated = function() {
   // If itemSize is unknown, attempt to measure it.
   if (!this.itemSize) {
     // Make sure to clean up watchers if we can (see #8178)
-    if(this.unwatchItemSize_ && this.unwatchItemSize_ !== angular.noop){
+    if (this.unwatchItemSize_ && this.unwatchItemSize_ !== angular.noop){
       this.unwatchItemSize_();
     }
     this.unwatchItemSize_ = this.$scope.$watchCollection(
@@ -24256,7 +24256,7 @@ MdChipCtrl.prototype.chipKeyDown = function(event) {
  * Handles the double click event
  */
 MdChipCtrl.prototype.chipMouseDown = function() {
-  if(this.getChipIndex() == this.parentController.selectedChip &&
+  if (this.getChipIndex() == this.parentController.selectedChip &&
     this.enableChipEdit &&
     !this.isEditting) {
     this.goInEditMode();
@@ -24620,7 +24620,7 @@ MdChipsCtrl.prototype.getCursorPosition = function(element) {
  * @param chipContents
  */
 MdChipsCtrl.prototype.updateChipContents = function(chipIndex, chipContents){
-  if(chipIndex >= 0 && chipIndex < this.items.length) {
+  if (chipIndex >= 0 && chipIndex < this.items.length) {
     this.items[chipIndex] = chipContents;
     this.ngModelCtrl.$setDirty();
   }
@@ -25357,7 +25357,7 @@ MdChipsCtrl.prototype.hasFocus = function () {
 
         $mdTheming(element);
         var mdChipsCtrl = controllers[0];
-        if(chipTemplate) {
+        if (chipTemplate) {
           // Chip editing functionality assumes we are using the default chip template.
           mdChipsCtrl.enableChipEdit = false;
         }
@@ -27882,7 +27882,7 @@ function MdContactChips($mdTheming, $mdUtil) {
 
           if (!mdInputContainer.label) {
             $mdAria.expect(element, 'aria-label', attr.mdPlaceholder);
-          } else if(!mdNoAsterisk) {
+          } else if (!mdNoAsterisk) {
             attr.$observe('required', function(value) {
               mdInputContainer.label.toggleClass('md-required', !!value);
             });
@@ -28827,7 +28827,7 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
       if (parent.attr('aria-label') || parent.text()) {
         return true;
       }
-      else if(parent.parent().attr('aria-label') || parent.parent().text()) {
+      else if (parent.parent().attr('aria-label') || parent.parent().text()) {
         return true;
       }
       return false;
@@ -31249,7 +31249,7 @@ function MdProgressCircularDirective($window, $mdProgressCircular, $mdTheming,
 
     // If the mode is indeterminate, it doesn't need to
     // wait for the next digest. It can start right away.
-    if(scope.mdMode === MODE_INDETERMINATE){
+    if (scope.mdMode === MODE_INDETERMINATE){
       startIndeterminateAnimation();
     }
 
@@ -32868,7 +32868,7 @@ function MdTabsDummyWrapper ($mdUtil, $window) {
         ctrl.updateInkBarStyles();
       };
 
-      if('MutationObserver' in $window) {
+      if ('MutationObserver' in $window) {
         var config = {
           childList: true,
           subtree: true,

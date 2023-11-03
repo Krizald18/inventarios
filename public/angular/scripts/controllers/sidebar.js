@@ -1,6 +1,6 @@
 angular.module('App')
-	.controller('SidebarCtrl', ['$scope', '$auth', function ($scope, $auth) {
-		if(localStorage.admin_token)
+	.controller('SidebarCtrl', ['$scope', '$auth', function($scope, $auth) {
+		if (localStorage.admin_token)
 	    	$scope.admin = true;
 	    else
 	    	$scope.admin = false;
@@ -9,13 +9,13 @@ angular.module('App')
 			else
 				$scope.autenticado = false;
 		$scope.$watch(() => localStorage.admin_token, (newVal,oldVal) => {
-			if(newVal)
+			if (newVal)
 	    		$scope.admin = true;
 	    	else
 	    		$scope.admin = false;
 		});
 		$scope.$watch(() => localStorage.nombre, (newVal,oldVal) => {
-			if(newVal)
+			if (newVal)
 	    		$scope.nombre = newVal;
 	    	else
 	    		$scope.nombre = null;
